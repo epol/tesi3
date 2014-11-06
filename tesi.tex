@@ -6,6 +6,8 @@
 \usepackage{xfrac}
 \usepackage[all]{xy}
 \usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
 %\usepackage{fullpage}
 \usepackage{hyperref}
 \usepackage[utf8x]{inputenc}
@@ -88,9 +90,142 @@
 
 \chapter{Camminimi minimi su grafi}
 
-\section{Cammini minimi fra una coppia di nodi}
+\begin{mydef}[Grafo]
+  Chiamiamo grafo la coppia $G = (V,E)$ dove $V$ è un insieme finito
+  di elementi detti \textit{nodi} e $E\subseteq V \times V$ di
+  relazioni chiamate archi.
+\end{mydef}
+
+Se non specificato diversamente definiamo $N = \abs{V}$ e $M =
+\abs{E}$.
+
+Diciamo che gli archi di un grafo sono pesati se esiste una funzione
+\textit{peso}
+\[ w : E \rightarrow \mathbb{R} \]
+Per noi il peso di un arco rappresenta la sua lunghezza, per questo
+chiameremo con \textit{lunghezza di un arco} il suo peso.
+
+Nel caso non pesato ci riconduciamo al caso pesato prendendo $w$
+costante a $1$.
+
+Siamo interessati a considerare grafi diretti, cioè gli archi sono
+orientati, nel caso indiretto possiamo ridurci a questo caso
+considerando l'insieme di archi 
+\[ V' = V \cup \set{ (w,v) \mid (v,w) \in V } \]
+
+\begin{mydef}[Cammino]
+  Chiamiamo \textit{cammino} sul grafo $G$ una successione ordinata
+  finita di nodi $p = ( v_0, v_1, ..., v_k)$ tale che 
+  \[ \forall i \in \set{ 1, ... , k} \;\;\; (v_{i-1}, v_{i} ) \in E\]
+\end{mydef}
+
+Diciamo che $p$ congiunge $v_0$ a $v_k$. Dati due nodi $v,w$ chiamiamo
+$P(v,w)$ l'insieme (eventualmente vuoto) dei cammini che congiungono
+$v$ a $w$
+
+Dati due cammini $p = ( v_0, v_1, ..., v_k)$ e $q = ( w_0, w_1, ...,
+w_{h})$ tali che $v_k = w_0$ chiamiamo somma dei due cammini il
+cammino
+\[ p+q = ( v_0, v_1, ..., v_k= w_0, w_1, ..., w_{h}) \]
+
+Dato un cammino $p = ( v_0, v_1, ..., v_k)$ chiamiamo
+\textit{sottocammino} di $p$ un cammino $q = ( v_i , v_{i+1}, ... ,
+v_j )$ con $o \le i \le j \le k$.
+
+\begin{mydef}[Lunghezza di un cammino]
+  Chiamiamo lunghezza di un cammino $p$ la quantità
+  \[ w(p) = \sum _{i=1} ^k w(v_{i-1}, v_i ) \]
+\end{mydef}
+
+Osserivamo che la lunghezza della somma di due cammini è uguale alla
+somma delle lunghezze.
+
+Siamo interessati a trattare grafi in cui gli archi hanno lunghezza
+non negativa, per cui da ora usiamo l'ipotesi $\forall e \in E \; w(e)
+\ge 0$.
+
+\begin{mydef}[Distanza di due punti]
+  \[ \delta(v,w) = \left\{
+    \begin{matrix}
+      \min \limits_{p \in P(v,w)} { w(p) } & \; P(v,w) \neq \emptyset \\
+      \infty & \; P(v,w) = \emptyset
+    \end{matrix}
+    \right.
+    \]
+\end{mydef}
+
+Per $P(v,w) \neq \emptyset$ chiamiamo \textit{cammino minimo} fra $v$
+e $w$ un cammino la cui lunghezza realizza il minimo.
+
+Osserviamo che questa distanza verifica le proprietà
+\begin{itemize}
+\item $\delta(v,v) = 0$ infatti il cammino $(v)$ ha lunghezza $0$
+\item $\delta(v,z) \le \delta(v,w) + \delta(w,z)$ infatti sommando il
+  cammino minimo tra $v$ e $w$ e quello tra $w$ e $z$ si ottiene un
+  cammino in $P(v,z)$
+\end{itemize}
+Questa distanza, però, in generale non è simmetica, quindi definisce
+una pseudometrica. Nel caso di grafi non orientati allora $\delta$
+diventa una distanza.
+
+Osserviamo, infine, che ogni sottocammino di un cammino minimo è
+ancora minimo.
+
+
+
+\section{Cammini minimi da una sorgente unica}
+
+Fissiamo un nodo $s \in V$ che chiameremo sorgente. Siamo interessati
+a calcolare:
+\begin{itemize}
+\item le distanze $\delta(s,v)$ al variare di $v\in V$
+\item i cammini minimi tra $s$ ed ogni nodo $v\in V$
+\end{itemize}
+
+Se scegliamo un cammino minimo da $s$ a $v$ per ogni $v\in V$ e
+consideriamo l'insieme degl'archi che compaiono in questi archi
+otteniamo un albero\footnote{TODO: In realtà i cammini vanno scelti
+  bene}
+
+Per questo per ogni nodo $v\in V$ definiamo
+\begin{itemize}
+\item $v.d = \delta(s,v)$
+\item $v.p$ il predecessore di $v$ nel cammino minimo scelto
+\end{itemize}
 
 \subsection{Archi non pesati: BFS}
+
+Nel caso in cui tutti gli archi hanno lunghezza $1$ l'albero dei
+cammini minimi può essere costruito con una visita in ampiezza (BFS:
+breadth-first search).
+
+\begin{algorithmic}
+  \For {v $\in$ V}
+    \State{v.d = $\infty$}
+    \State{v.p = v}
+  \EndFor
+  \State{s.d = 0}
+  \State{q = Queue()}
+  \State{q.push(s)}
+  \While{ ! q.empty()}
+    \State{v = q.pop()}
+    \For{w $\in$ v.neigh}
+      \If{w.d = $\infty$}
+        \State{w.d = v.d + 1}
+        \State{w.p = v}
+        \State{q.push(w)}
+      \EndIf
+    \EndFor
+  \EndWhile
+\end{algorithmic}
+
+Vogliamo dimostrare la correttezza dell'algoritmo. Per farlo definiamo,
+ad ogni passaggio dell'algoritmo, l'insieme $S = \set{ v \in V \mid
+  v.d \neq \infty}$. 
+
+\begin{mylem}
+  Se $v \in S$ allora $v.d = \delta(s,v)$
+\end{mylem}
 
 \subsection{Archi pesati: Dijkstra}
 
