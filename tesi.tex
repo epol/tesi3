@@ -1,5 +1,10 @@
 \documentclass[a4paper,10pt]{amsbook}
 
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8x]{inputenc}
+\usepackage[italian]{babel}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -10,8 +15,8 @@
 \usepackage[noend]{algpseudocode}
 %\usepackage{fullpage}
 \usepackage{hyperref}
-\usepackage[utf8x]{inputenc}
-\usepackage[italian]{babel}
+
+
 
 %\setlength{\parindent}{0in}
 
@@ -113,6 +118,8 @@ orientati, nel caso indiretto possiamo ridurci a questo caso
 considerando l'insieme di archi 
 \[ V' = V \cup \set{ (w,v) \mid (v,w) \in V } \]
 
+\section{Proprietà dei cammini minimi}
+
 \begin{mydef}[Cammino]
   Chiamiamo \textit{cammino} sul grafo $G$ una successione ordinata
   finita di nodi $p = ( v_0, v_1, ..., v_k)$ tale che 
@@ -130,11 +137,11 @@ cammino
 
 Dato un cammino $p = ( v_0, v_1, ..., v_k)$ chiamiamo
 \textit{sottocammino} di $p$ un cammino $q = ( v_i , v_{i+1}, ... ,
-v_j )$ con $o \le i \le j \le k$.
+v_j )$ con $0 \le i \le j \le k$.
 
 \begin{mydef}[Lunghezza di un cammino]
   Chiamiamo lunghezza di un cammino $p$ la quantità
-  \[ w(p) = \sum _{i=1} ^k w(v_{i-1}, v_i ) \]
+  \[ w(p) = \sum _{i=1} ^k w \pa{ (v_{i-1}, v_i) } \]
 \end{mydef}
 
 Osserivamo che la lunghezza della somma di due cammini è uguale alla
@@ -168,10 +175,14 @@ Questa distanza, però, in generale non è simmetica, quindi definisce
 una pseudometrica. Nel caso di grafi non orientati allora $\delta$
 diventa una distanza.
 
-Osserviamo, infine, che ogni sottocammino di un cammino minimo è
-ancora minimo.
-
-
+Osserviamo inoltre che
+\begin{itemize}
+\item Ogni sottocammino di un cammino minimo è ancora minimo
+\item Possiamo sempre scegliere un cammino minimo aciclico, infatti i
+  cicli contenuti in un cammino minimo devono avere lunghezza nulla
+  (visto che lavoriamo in ipotesi di lunghezze non negative) e quindi
+  può essere eliminato
+\end{itemize}
 
 \section{Cammini minimi da una sorgente unica}
 
@@ -182,12 +193,53 @@ a calcolare:
 \item i cammini minimi tra $s$ ed ogni nodo $v\in V$
 \end{itemize}
 
-Se scegliamo un cammino minimo da $s$ a $v$ per ogni $v\in V$ e
-consideriamo l'insieme degl'archi che compaiono in questi archi
-otteniamo un albero\footnote{TODO: In realtà i cammini vanno scelti
-  bene}
+Possiamo costruire il grafo dei cammini minimi con sorgente in $s$ che
+chiamiamo $G_s = (V,E_s)$ dove
+\[ E_s = \set{ e\in E | e\text{ compare in un cammino minimo con
+    sorgente }s} \]
 
-Per questo per ogni nodo $v\in V$ definiamo
+Questo grafo rappresenta tutti i cammini minimi con sorgente $s$.
+
+\begin{mypro}
+  Se gli archi hanno lunghezza strettamente positiva $G_s$ definito
+  come sopra è un DAG (grafo aciclico diretto)
+\end{mypro}
+\begin{proof}
+  Supponiamo, per assurdo, che esista un ciclo $(v_0,v_1,...,v_k)$ e
+  siano rispettivamente $d_0,d_1,...,d_k$ le distanze di questi nodi
+  dalla sorgente $s$.
+
+  Per ogni arco $(v_{i-1},v_i)$ abbiamo supposto che esista un cammino
+  minimo che lo attraversi, troncando questo cammino otteniamo un
+  cammino minimo da $s$ a $v_i$ e, troncandolo ulteriormente, un
+  cammino minimo da $s$ a $v_{i-1}$. Quindi
+  \[ d_k = d_{k-1} + w\pa{ (v_{i-1} , v_i ) } \Rightarrow d_i >
+  d_{i-1} \]
+  
+  Applicando lo stesso argomento all'arco $(v_k,v_0)$ otteniamo $d_0 >
+  d_k$. Unendo queste disuguaglianze otteniamo
+  \[ d_0 < d_1 < \dots < d_k < d_0 \Rightarrow d_0 < d_0 \]
+  Assurdo.
+\end{proof}
+
+Se invece scegliamo (in modo opportuno) un cammino minimo per ogni
+nodo otteniamo un albero di cammini minimi. Per ottenere questa
+struttura procediamo in modo induttivo
+
+\textbf{Caso base:} inseriamo la sorgente $s$ nell'albero
+
+\textbf{Passo induttivo:} scegliamo un nodo $v$ non ancora incluso
+nell'albero, sia $\tilde p = (s=v_0,v_1,..., v_{k-1}, v_k=v)$ un cammino minimo da
+$s$ a $v$. Prendiamo ora $h = \max\set{ i \mid v_i \text{ appartiene
+    all'albero}}$ e $q$ il cammino minimo nell'albero da $s$ a
+$v_h$. Allora $p = q + (v_{h+1}, \dots , v)$ è un cammino minimo da $s$ a
+$v$, aggiungiamo i nodi $\pa{ v_i } _{i>h}$ e gli archi
+  $\pa{(v_{i-1},v_i)}_{i>h}$ all'albero.
+
+Osserviamo che nel passo induttivo non abbiamo aggiunto nessun ciclo
+all'albero, quindi il passo induttivo trasforma alberi in alberi.
+
+Dato un albero di cammini minimi, per ogni nodo $v\in V$ definiamo:
 \begin{itemize}
 \item $v.d = \delta(s,v)$
 \item $v.p$ il predecessore di $v$ nel cammino minimo scelto
@@ -209,25 +261,57 @@ breadth-first search).
   \State{q.push(s)}
   \While{ ! q.empty()}
     \State{v = q.pop()}
-    \For{w $\in$ v.neigh}
-      \If{w.d = $\infty$}
-        \State{w.d = v.d + 1}
-        \State{w.p = v}
-        \State{q.push(w)}
+    \For{u $\in$ v.neigh}
+      \If{u.d = $\infty$}
+        \State{u.d = v.d + 1}
+        \State{u.p = v}
+        \State{q.push(u)}
       \EndIf
     \EndFor
   \EndWhile
 \end{algorithmic}
 
 Vogliamo dimostrare la correttezza dell'algoritmo. Per farlo definiamo,
-ad ogni passaggio dell'algoritmo, l'insieme $S = \set{ v \in V \mid
-  v.d \neq \infty}$. 
+ad ogni passaggio dell'algoritmo. TODO
 
-\begin{mylem}
-  Se $v \in S$ allora $v.d = \delta(s,v)$
-\end{mylem}
+L'algoritmo termina in $\Omega (M)$ infatti ogni nodo viene inserito
+ed estratto dalla coda esattamente una volta e ogni arco viene
+visitato una volta durante la visita del nodo di di partenza. TODO.
+
+TODO: correttezza
+
+TODO: disegnini
 
 \subsection{Archi pesati: Dijkstra}
+
+Nel caso in cui gli archi non abbiano tutti lunghezza unitaria, ma
+comunque non negativa, dobbiamo usare l'algoritmo di Dijkstra
+
+\begin{algorithmic}
+  \For {v $\in$ V}
+    \State{v.d = $\infty$}
+    \State{v.p = v}
+  \EndFor
+  \State{S = $\emptyset$}
+  \State{s.d = 0}
+  \State{q = PriorityQueue()}
+  \State{q.push(s,s.d)}
+  \While{ ! q.empty()}
+    \State{v = q.extract\_min()}
+    \State{S = S $\cup$ \{v\}}
+    \For{u $\in$ v.neigh}
+      \If{u.d > v.d + w((v,u))}
+        \State{u.d = v.d + 1}
+        \State{u.p = v}
+        \State{q.push(u,u.d)}
+      \EndIf
+    \EndFor
+  \EndWhile
+\end{algorithmic}
+
+TODO: è corretto
+
+TODO: disegnini
 
 \section{Cammini minimi fra ogni coppia}
 
