@@ -282,6 +282,8 @@ TODO: correttezza
 
 TODO: disegnini
 
+TODO: come trovare tutti i cammini
+
 \subsection{Archi pesati: Dijkstra}
 
 Nel caso in cui gli archi non abbiano tutti lunghezza unitaria, ma
@@ -313,7 +315,80 @@ TODO: è corretto
 
 TODO: disegnini
 
+TODO: come trovare tutti i cammini
+
 \section{Cammini minimi fra ogni coppia}
+
+Abbiamo visto che siamo in grado, data una sorgente $s\in V$, di
+trovare tutti i cammini minimi da $s$ ad ogni nodo $v\in V$ e di
+salvarci le distanze di ogni nodo dalla sorgente fissata. Ripetendo
+questo procedimento al variare di $s\in V$ otteniamo questa
+informazione per ogni coppia di nodi $(v,u)$ del grafo.
+
+Ci chiediamo se esiste un metodo più veloce per estrarre alcune di
+queste informazioni, possiamo sperare di riuscire a fare di meglio
+evitando di fissare la sorgente.
+
+Gli algoritmi che vedremo utilizzeranno la matrice di adiacenza del
+grafo, cioè supponiamo i aver numerato i nodi da $0$ a $N-1$, allora
+definiamo la matrice di adiacenza di $G$ come la matrice $W$ con
+elementi
+\[
+  w_{i,j} = \left\{
+    \begin{matrix}
+      0 & \text{se } i = j \\
+      w\pa{(i,j)} & \text{se } i\neq j,\; (i,j) \in E \\
+      \infty & \text{se } i\neq j,\; (i,j) \not\in E
+    \end{matrix}
+  \right.
+\]
+
+Avendo supposto archi di peso non negativo, questa matrice avrà
+elementi non negativi, inoltre se il grafo è indiretto questa matrice
+diventa simmetrica.
+
+\subsection{Tabella delle distanze}
+
+Vogliamo calcolare la matrice delle distanze $D$ che ha per elementi
+$d_{i,j} = \delta(i,j)$.
+
+Consideriamo la matrice $L^{(m)}$ dove $l^{(m)}_{i,j}$ è il minimo
+peso di un cammino da $i$ a $j$ che utilizzi al più $m$ archi. \`E
+evidente che $L^{(N)} = D$\footnote{Infatti un cammino minimo al più
+  tocca tutti i nodi}, quindi cerchiamo un metodo induttivo per
+calcolare $L^{(m)}$.
+
+\textbf{Caso base:} per $m=0$ allora si ha
+\[ l^{(0)} _{i,j} = \left\{
+  \begin{matrix}
+    0 & \text{se } i = j\\
+    \infty & \text{se } i \neq j
+  \end{matrix}
+  \right.
+\]
+
+\textbf{Passo induttivo:} supponiamo di conoscere $L^{(m-1)}$, un
+cammino con al più $m$ archi da $i$ a $j$ può avere:
+\begin{itemize}
+\item $m-1$ archi, quindi avrà lunghezza minima $l^{(m-1)}
+  _{i,j}$ da cui $l^{(m)}_{i,j} \le l^{(m-1)} _{i,j}$
+\item $m$ archi, allora lo possiamo spezzare come un cammino di
+  $m-1$ archi (che arriverà ad un nodo che chiamiamo $k$) più un
+  cammino di $1$ arco di lunghezza $w\pa{(k,j)}$. Per questo possiamo
+  scrivere 
+  \[ \forall k \in V\;\;\; l^{(m)}_{i,j} \le l^{(m-1)} _{i,k} + w\pa{
+    (k,j) } \]
+\end{itemize}
+Quindi possiamo scrivere
+\[ l^{(m)}_{i,j} = \min\set{ l^{(m-1)} _{i,j} , \min _{0\le k\le N-1}
+  \set{ l^{(m-1)} _{i,k} + w_{k,j}} }  =  \min _{0\le k\le N-1}
+  \set{ l^{(m-1)} _{i,k} + w_{k,j}} \]
+Dove l'ultima uguaglianza possiamo scriverela perché abbiamo imposto
+$w_{i,i} = 0$.
+
+Implementando questa procedura impieghiamo $O(N)$ per calcolare un
+$l^{(m)}_{i,j}$, $O(N^2)$ per calcolare tutta la matrice $L^{(m)}$ da
+cui $O(N^4)$ per risolvere il problema.
 
 \subsection{Un cammino per ogni coppia}
 
