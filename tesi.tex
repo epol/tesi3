@@ -56,6 +56,8 @@
 \newcommand{\bra}[1]{\left[#1\right]}
 \newcommand{\abs}[1]{\left|#1\right|}
 \newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\floor}[1]{\left\lfloor#1\right\rfloor}
 
 \newcommand{\pfrac}[2]{\pa{\frac{#1}{#2}}}
 \newcommand{\bfrac}[2]{\bra{\frac{#1}{#2}}}
@@ -325,6 +327,9 @@ salvarci le distanze di ogni nodo dalla sorgente fissata. Ripetendo
 questo procedimento al variare di $s\in V$ otteniamo questa
 informazione per ogni coppia di nodi $(v,u)$ del grafo.
 
+Nel nostro caso (archi di peso non negativo) possiamo applicare
+Dijkstra su ogni nodo ottenendo un tempo di $O(NM\log N)$
+
 Ci chiediamo se esiste un metodo più veloce per estrarre alcune di
 queste informazioni, possiamo sperare di riuscire a fare di meglio
 evitando di fissare la sorgente.
@@ -349,14 +354,14 @@ diventa simmetrica.
 
 \subsection{Tabella delle distanze}
 
-TODO: proprietà della matrice: triangolare
+%TODO: proprietà della matrice: triangolare
 
 Vogliamo calcolare la matrice delle distanze $D$ che ha per elementi
 $d_{i,j} = \delta(i,j)$.
 
 Consideriamo la matrice $L^{(m)}$ dove $l^{(m)}_{i,j}$ è il minimo
 peso di un cammino da $i$ a $j$ che utilizzi al più $m$ archi. \`E
-evidente che $L^{(N)} = D$\footnote{Infatti un cammino minimo al più
+evidente che $L^{(N-1)} = D$\footnote{Infatti un cammino minimo al più
   tocca tutti i nodi}, quindi cerchiamo un metodo induttivo per
 calcolare $L^{(m)}$.
 
@@ -390,7 +395,56 @@ $w_{i,i} = 0$.
 
 Implementando questa procedura impieghiamo $O(N)$ per calcolare un
 $l^{(m)}_{i,j}$, $O(N^2)$ per calcolare tutta la matrice $L^{(m)}$ da
-cui $O(N^4)$ per risolvere il problema.
+cui $O(N^4)$ per risolvere il problema, questo tempo è peggiore di
+applicare Dijkstra per ogni sorgente, infatti abbiamo osservato che
+con quel metodo si impiega $O(NM\log N) = O( N^3 \log (N) )$ tempo.
+
+Vediamo, però, come leggere l'aggiornamento della matrice $L$ come un
+prodotto fra matrici. Ricordiamo che le entrate del prodotto fra
+matrici possono essere scritte come
+\[ c_{i,j} = \sum _k a_{i,k} \cdot b_{k,j} \] quindi considerando
+$\mathbb{R}\cup \set{+\infty}$ con le operazioni di $\min$ e $+$
+(rispettivamente al posto di $+$ e $\cdot$) otteniamo che
+\[ L^{(m)} = L^{(m-1)} * W \]
+dove $*$ è il prodotto di matrici con le nuove operazioni.
+
+$\pa{\mathbb{R}\cup \set{+\infty} ,\min,+}$ ha le seguenti propietà:
+\begin{itemize}
+\item $\min$ è associativa
+\item $\min$ ha elemento neutro $\infty$
+\item $\min$ è commutativa
+\item $+$ è associativa
+\item $+$ ha elemento neutro $0$
+\item $+$ è commutativa
+\item $+$ è distributiva rispetto a $\min$ (sia a destra che a sinistra)
+\end{itemize}
+
+Possiamo scrivere
+\begin{align*}
+  L^{(1)} & = & L^{(0)} * W & = & W \\
+  L^{(1)} & = & L^{(1)} * W & = & W^2 \\
+  & & \vdots & & \\
+  L^{(N-1)} & = & L^{(N-2)} * W & = & W^{N-1} 
+\end{align*}
+
+Allora, visto che non siamo interessati alle matrici intermedie, ma
+solo a $L^{(N-1)}$, possiamo calcolare induttivamente $W^{2^k}$ con la
+formula
+\[ W ^{2^k} = \pa{W ^{2^{k-1}}} ^2 \]
+osservando che $L^{(m)} = L^{(N-1)}$ per $m \ge N-1$ si ha
+\[ L^{(N-1)} = W^{2 ^{\ceil {\log \pa{ N-1} } } } \]
+
+Siamo riusciti, in questo modo, a ridurre il tempo a $O\pa{ N^3 \log
+  (N)}$
+simile a quello di Dijkstra nel caso di grafo denso.
+
+Potremmo pensare di migliorare questo metodo utilizzando la
+moltiplicazione veloce fra matrici (che impiega $O\pa{pN^\omega}$
+tempo dove $p$ è il tempo di un prodotto fra due entrate, $N$ la
+dimensione della matrice e $2 \le \omega <3$ un esponente legato al
+metodo). In questo caso, però, non lo possiamo applicare direttamente
+perché la struttura di $\pa{ \mathbb{R}, \min , +}$ non è un anello in
+quanto non esiste un inverso per $\min$.
 
 \subsection{Un cammino per ogni coppia}
 
