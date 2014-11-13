@@ -443,8 +443,37 @@ moltiplicazione veloce fra matrici (che impiega $O\pa{pN^\omega}$
 tempo dove $p$ è il tempo di un prodotto fra due entrate, $N$ la
 dimensione della matrice e $2 \le \omega <3$ un esponente legato al
 metodo). In questo caso, però, non lo possiamo applicare direttamente
-perché la struttura di $\pa{ \mathbb{R}, \min , +}$ non è un anello in
+perché la struttura di $\pa{ \mathbb{R} \cup \set{\infty}, \min , +}$ non è un anello in
 quanto non esiste un inverso per $\min$.
+
+Consideriamo il prodotto $\min +$, supponiamo che le matrici $A,B$ di
+cui vogliamo calcolare il prodotto siano a coefficienti interi, allora
+scriviamo le matrici $A'$ e $B'$ con coefficienti
+\[ a'_{i,j} = x ^{a_{i,j}} \;\;\; b'_{i,j} = x ^{b_{i,j}} \]
+dove $x$ è un'indeterminata. Sia allora
+\[ C' = A' \cdot B' \]
+Dove stimao usando il prodotto fra matrici, ma con coefficienti
+nell'anello dei polinomi. Se scriviamo ora 
+\[ c _{i,j} = \mathrm{first}\pa{c'_{i,j}} \]
+Dove $\mathrm{first}$ ritorna il grado del monomio di grado più
+piccolo in $c'_{i,j}$.
+
+È facile convincersi che $C = A * B$, infatti 
+\[ c'_{i,j} = \sum _k x^{a_{i,k} + b_{k,j}} \Rightarrow c_{i,j} =
+\mathrm{first} \pa{c'_{i,j}} = \min _k \set{ a_{i,k} + b_{k,j} } \]
+
+Quindi, nel caso di archi di lunghezza intera, siamo in grado di fare
+il prodotto fra le matrici $L^{(i)}$ in $O\pa{pN^\omega }$ dove $p$ è
+il costo di un prodotto fra polinomi. TODO: si dice che $p = O(M)$
+(con $M$ lugnhezza massima di un arco), ma non ne sono convinto,
+secondo me dovrebbe essere 2.diametro del grafo (che potrebbe essere
+$O(N)$).
+
+TODO: qui potrebbe starci floyd-warshal
+
+TODO: e c'è anche l'algoritmo veramente ganzo con il prodotto fra
+matrici. Ma è lungo.
+
 
 \subsection{Un cammino per ogni coppia}
 
