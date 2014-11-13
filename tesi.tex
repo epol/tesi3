@@ -95,7 +95,7 @@
 
 \tableofcontents
 
-\chapter{Camminimi minimi su grafi}
+\chapter{Cammini minimi su grafi}
 
 \begin{mydef}[Grafo]
   Chiamiamo grafo la coppia $G = (V,E)$ dove $V$ è un insieme finito
@@ -156,15 +156,15 @@ non negativa, per cui da ora usiamo l'ipotesi $\forall e \in E \; w(e)
 \begin{mydef}[Distanza di due punti]
   \[ \delta(v,w) = \left\{
     \begin{matrix}
-      \min \limits_{p \in P(v,w)} { w(p) } & \; P(v,w) \neq \emptyset \\
-      \infty & \; P(v,w) = \emptyset
+      \min \limits_{p \in P(v,u)} { w(p) } & \; P(v,u) \neq \emptyset \\
+      \infty & \; P(v,u) = \emptyset
     \end{matrix}
     \right.
     \]
 \end{mydef}
 
-Per $P(v,w) \neq \emptyset$ chiamiamo \textit{cammino minimo} fra $v$
-e $w$ un cammino la cui lunghezza realizza il minimo.
+Per $P(v,u) \neq \emptyset$ chiamiamo \textit{cammino minimo} fra $v$
+e $u$ un cammino la cui lunghezza realizza il minimo.
 
 Osserviamo che questa distanza verifica le proprietà
 \begin{itemize}
@@ -362,8 +362,6 @@ diventa simmetrica.
 
 \subsection{Tabella delle distanze}
 
-%TODO: proprietà della matrice: triangolare
-
 Vogliamo calcolare la matrice delle distanze $D$ che ha per elementi
 $d_{i,j} = \delta(i,j)$.
 
@@ -463,8 +461,8 @@ Strassen utilizzando l'inverso della prima operazione.
 
 Consideriamo il prodotto $\min +$, supponiamo che le matrici $A,B$ di
 cui vogliamo calcolare il prodotto siano a coefficienti interi (cio\`e
-supponiamo che $w:\; E \to \set{1,...,k}$), allora scriviamo le matrici
-$A'$ e $B'$ con coefficienti
+supponiamo che $w:\; E \to \set{0, 1,...,k}$), allora scriviamo le
+matrici $A'$ e $B'$ con coefficienti
 \[ a'_{i,j} = x ^{a_{i,j}} \;\;\; b'_{i,j} = x ^{b_{i,j}} \]
 dove $x$ è un'indeterminata. Sia quindi
 \[ C' = A' \cdot B' \]
@@ -480,20 +478,56 @@ piccolo in $c'_{i,j}$.
 
 Quindi, nel caso di archi di lunghezza intera, siamo in grado di fare
 il prodotto fra le matrici $L^{(i)}$ in $O\pa{pN^\omega }$ dove $p$ è
-il costo di un prodotto fra polinomi. TODO: si dice che $p = O(M)$
-(con $M$ lugnhezza massima di un arco), ma non ne sono convinto,
-secondo me dovrebbe essere 2.diametro del grafo (che potrebbe essere
-$O(N)$).
+il costo di un prodotto fra polinomi. Si pu\`o scriver $p = O\pa{d
+  \log d}$ dove $d$ \`e il diametro del grafo da cui otteniamo che
+questo algoritmo utilizza $O\pa{ d N ^\omega \log d \log n}$
+operazioni aritmentiche. Quindi, nel caso di grafi con diametri
+piccoli ($d = O(1)$), come possono essere le reti sociali, abbiamo
+migliorato le prestazioni del prodotto.
 
-TODO: qui potrebbe starci floyd-warshal
-
-TODO: e c'è anche l'algoritmo veramente ganzo con il prodotto fra
-matrici. Ma è lungo.
+In \cite{funnymult} viene analizzato questo particolare prodotto tra
+matrici proveniente da problemi di ricerca dei cammini minimi.
 
 
-\subsection{Un cammino per ogni coppia}
+Esistono altri algoritmi per calcolare la tabella delle distanze, per
+esempio l'algoritmo di Floyd–Warshall calcola la tabella delle
+distanze (per un grafo senza cicli negativi) in $\Theta\pa{ N^3}$,
+citiamo anche il risultato di \cite{apspfmp} dove viene calcolata la
+tabella delle distanze di un grafo con archi di peso intero positivo
+in $\tilde O\pa{ kN^\omega}$ dove $k$ è la massima lunghezza di un
+arco utilizzando, ancora una volta, il prodotto fra matrici.
 
-\subsection{Tutti i cammini per ogni coppia}
+\subsection{I cammini minimi}
+
+Ora che sappiamo calcolare le distanze tra due nodi del grafo,
+possiamo concentrarci sull'estrarre i cammini minimi. Vale il seguente
+lemma:
+\begin{mylem}
+  \label{lem:vicinibuoni}
+  Dati $u,v \in V$ e $u'$ vicino di $u$ si ha che esiste un cammino
+  minimo che utilizza l'arco $(u,u')$ se e solo se
+  \[ \delta \pa{ u,v} = w\pa{ (u,u') } + \delta \pa{ u',v} \]
+\end{mylem}
+
+Grazie a questo lemma possiamo costruire ricorsivamente i cammini
+minimi, supponiamo di essere interessati ai cammini minimi da $u$ a
+$v$, se ce ne interessa solo uno ci basta sceglire un vicino $u'$
+``buono'' (cioè che rispetta l'uguaglianza del lemma) di $u$ e poi,
+ricorsivamente, proseguire costruendo un cammino minimo da $u'$ a
+$v$. Se invece siamo interessati a conoscere tutti i cammini minimi
+allora dobbiamo calcolarci i cammini minimi per \emph{tutti} i vicini
+``buoni'' di $u$.
+
+Il numero di cammini minimi tra due vertici può essere esponenziale
+come si vede in questo semplice esempio:
+
+TODO: disegno
+
+Vedremo nel capitolo \ref{chap:oracolotutticammini} come salvare
+queste informazioni in modo efficiente.
+
+\section{Problema dei $k$-cammini minimi}
+
 
 \chapter{Oracoli per distanze}
 
@@ -524,7 +558,8 @@ http://www.sciencedirect.com/science/article/pii/S0304397510003130
 
 https://www.ics.uci.edu/~eppstein/pubs/Epp-TR-94-26.pdf
 
-\chapter{Tutti i cammini minimi}
+\chapter{Oracolo per scrivere tutti i cammini minimi}
+\label{chap:oracolotutticammini}
 
 \section{Un primo algoritmo}
 
@@ -551,6 +586,9 @@ $O(n^{2.5})$ con il separation theorem
 \section{Un caso difficile}
 
 
+
+\bibliographystyle{alpha}
+\bibliography{funnymult,apspfmp}
 
 
 
