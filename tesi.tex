@@ -183,7 +183,7 @@ Osserviamo inoltre che
 \item Possiamo sempre scegliere un cammino minimo aciclico, infatti i
   cicli contenuti in un cammino minimo devono avere lunghezza nulla
   (visto che lavoriamo in ipotesi di lunghezze non negative) e quindi
-  può essere eliminato
+  possono essere eliminati
 \end{itemize}
 
 \section{Cammini minimi da una sorgente unica}
@@ -231,12 +231,12 @@ struttura procediamo in modo induttivo
 \textbf{Caso base:} inseriamo la sorgente $s$ nell'albero
 
 \textbf{Passo induttivo:} scegliamo un nodo $v$ non ancora incluso
-nell'albero, sia $\tilde p = (s=v_0,v_1,..., v_{k-1}, v_k=v)$ un cammino minimo da
-$s$ a $v$. Prendiamo ora $h = \max\set{ i \mid v_i \text{ appartiene
-    all'albero}}$ e $q$ il cammino minimo nell'albero da $s$ a
-$v_h$. Allora $p = q + (v_{h+1}, \dots , v)$ è un cammino minimo da $s$ a
-$v$, aggiungiamo i nodi $\pa{ v_i } _{i>h}$ e gli archi
-  $\pa{(v_{i-1},v_i)}_{i>h}$ all'albero.
+nell'albero ma raggiungibile da $s$, sia $\tilde p = (s=v_0,v_1,...,
+v_{k-1}, v_k=v)$ un cammino minimo da $s$ a $v$. Prendiamo ora $h =
+\max\set{ i \mid v_i \text{ appartiene all'albero}}$ e $q$ il cammino
+minimo nell'albero da $s$ a $v_h$. Allora $p = q + (v_{h+1}, \dots ,
+v)$ è un cammino minimo da $s$ a $v$, aggiungiamo i nodi $\pa{ v_i }
+_{i>h}$ e gli archi $\pa{(v_{i-1},v_i)}_{i>h}$ all'albero.
 
 Osserviamo che nel passo induttivo non abbiamo aggiunto nessun ciclo
 all'albero, quindi il passo induttivo trasforma alberi in alberi.
@@ -244,7 +244,8 @@ all'albero, quindi il passo induttivo trasforma alberi in alberi.
 Dato un albero di cammini minimi, per ogni nodo $v\in V$ definiamo:
 \begin{itemize}
 \item $v.d = \delta(s,v)$
-\item $v.p$ il predecessore di $v$ nel cammino minimo scelto
+\item $v.p$ il predecessore di $v$ nel cammino minimo scelto (che può
+  essere indefinito nel caso in cui $v$ non sia raggiungibile da $s$
 \end{itemize}
 
 \subsection{Archi non pesati: BFS}
@@ -273,18 +274,19 @@ breadth-first search).
   \EndWhile
 \end{algorithmic}
 
-Vogliamo dimostrare la correttezza dell'algoritmo. Per farlo definiamo,
-ad ogni passaggio dell'algoritmo. TODO
-
-L'algoritmo termina in $\Omega (M)$ infatti ogni nodo viene inserito
-ed estratto dalla coda esattamente una volta e ogni arco viene
-visitato una volta durante la visita del nodo di di partenza. TODO.
-
-TODO: correttezza
+Non dimostreremo che questo algoritmo è corretto; osserviamo solamente
+che l'algoritmo termina in $\Omega (M)$, infatti ogni nodo viene
+inserito ed estratto dalla coda esattamente una volta e ogni arco
+viene visitato una volta durante la visita del nodo di partenza.
 
 TODO: disegnini
 
-TODO: come trovare tutti i cammini
+I cammini minimi possono essere estratti in modo ricorsivo:
+\begin{itemize}
+\item \textbf{Caso base:} il cammino minimo da $s$ a $s$ \`e $(s)$.
+\item \textbf{Passo induttivo:} un cammino minimo da $s$ a $v$ \`e
+  $\tilde p + (v)$ dove $\tilde p$ \`e un cammino minimo da $s$ a $v.p$.
+\end{itemize}
 
 \subsection{Archi pesati: Dijkstra}
 
@@ -313,11 +315,17 @@ comunque non negativa, dobbiamo usare l'algoritmo di Dijkstra
   \EndWhile
 \end{algorithmic}
 
-TODO: è corretto
+Anche questa volta possiamo disegnare l'albero dei cammini minimi con
+la stessa procedura usata per il caso della BFS.
+
+Per la complessit\`a vediamo che ogni arco viene visitato una volta e,
+per ogni visita, viene effettuato un inserimento nella
+PriorityQueue. Il numero di estrazioni dalla PriorityQueue \`e
+maggiorato dal numero di inserimenti, quindi la complessit\`a di
+Dijkstra \`e $O(M\log N)$ utilizzando una coda di priorit\`a
+implementata con un min-heap.
 
 TODO: disegnini
-
-TODO: come trovare tutti i cammini
 
 \section{Cammini minimi fra ogni coppia}
 
@@ -360,9 +368,10 @@ Vogliamo calcolare la matrice delle distanze $D$ che ha per elementi
 $d_{i,j} = \delta(i,j)$.
 
 Consideriamo la matrice $L^{(m)}$ dove $l^{(m)}_{i,j}$ è il minimo
-peso di un cammino da $i$ a $j$ che utilizzi al più $m$ archi. \`E
-evidente che $L^{(N-1)} = D$\footnote{Infatti un cammino minimo al più
-  tocca tutti i nodi}, quindi cerchiamo un metodo induttivo per
+peso di un cammino da $i$ a $j$ che utilizzi al più $m$ archi. Siccome
+un cammino tocca ogni nodo del grafo al pi\`u una
+volta\footnote{Ricordiamoci che scegliamo cammini minimi aciclici} \`e
+evidente che $L^{(N-1)} = D$, quindi cerchiamo un metodo induttivo per
 calcolare $L^{(m)}$.
 
 \textbf{Caso base:} per $m=0$ allora si ha
@@ -399,16 +408,18 @@ cui $O(N^4)$ per risolvere il problema, questo tempo è peggiore di
 applicare Dijkstra per ogni sorgente, infatti abbiamo osservato che
 con quel metodo si impiega $O(NM\log N) = O( N^3 \log (N) )$ tempo.
 
-Vediamo, però, come leggere l'aggiornamento della matrice $L$ come un
-prodotto fra matrici. Ricordiamo che le entrate del prodotto fra
-matrici possono essere scritte come
+Vediamo come, leggendo l'aggiornamento della matrice $L$ come un
+prodotto fra matrici, possiamo migliorare le prestazioni
+dell'algoritmo. Ricordiamo che le entrate del prodotto fra matrici
+possono essere scritte come
 \[ c_{i,j} = \sum _k a_{i,k} \cdot b_{k,j} \] quindi considerando
 $\mathbb{R}\cup \set{+\infty}$ con le operazioni di $\min$ e $+$
 (rispettivamente al posto di $+$ e $\cdot$) otteniamo che
 \[ L^{(m)} = L^{(m-1)} * W \]
 dove $*$ è il prodotto di matrici con le nuove operazioni.
 
-$\pa{\mathbb{R}\cup \set{+\infty} ,\min,+}$ ha le seguenti propietà:
+Lo spazio $\pa{\mathbb{R}\cup \set{+\infty} ,\min,+}$ ha le seguenti
+propietà:
 \begin{itemize}
 \item $\min$ è associativa
 \item $\min$ ha elemento neutro $\infty$
@@ -418,6 +429,9 @@ $\pa{\mathbb{R}\cup \set{+\infty} ,\min,+}$ ha le seguenti propietà:
 \item $+$ è commutativa
 \item $+$ è distributiva rispetto a $\min$ (sia a destra che a sinistra)
 \end{itemize}
+In particolare osserviamo che $\min$ \emph{non} ammette inverso,
+quindi il nostro spazio non \`e un anello.
+
 
 Possiamo scrivere
 \begin{align*}
@@ -443,14 +457,16 @@ moltiplicazione veloce fra matrici (che impiega $O\pa{pN^\omega}$
 tempo dove $p$ è il tempo di un prodotto fra due entrate, $N$ la
 dimensione della matrice e $2 \le \omega <3$ un esponente legato al
 metodo). In questo caso, però, non lo possiamo applicare direttamente
-perché la struttura di $\pa{ \mathbb{R} \cup \set{\infty}, \min , +}$ non è un anello in
-quanto non esiste un inverso per $\min$.
+perché abbiamo osservato che la struttura di $\pa{ \mathbb{R} \cup
+  \set{\infty}, \min , +}$ non è un anello e algoritmi come quello di
+Strassen utilizzando l'inverso della prima operazione.
 
 Consideriamo il prodotto $\min +$, supponiamo che le matrici $A,B$ di
-cui vogliamo calcolare il prodotto siano a coefficienti interi, allora
-scriviamo le matrici $A'$ e $B'$ con coefficienti
+cui vogliamo calcolare il prodotto siano a coefficienti interi (cio\`e
+supponiamo che $w:\; E \to \set{1,...,k}$), allora scriviamo le matrici
+$A'$ e $B'$ con coefficienti
 \[ a'_{i,j} = x ^{a_{i,j}} \;\;\; b'_{i,j} = x ^{b_{i,j}} \]
-dove $x$ è un'indeterminata. Sia allora
+dove $x$ è un'indeterminata. Sia quindi
 \[ C' = A' \cdot B' \]
 Dove stimao usando il prodotto fra matrici, ma con coefficienti
 nell'anello dei polinomi. Se scriviamo ora 
