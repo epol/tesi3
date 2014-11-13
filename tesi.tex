@@ -110,7 +110,7 @@ Diciamo che gli archi di un grafo sono pesati se esiste una funzione
 \textit{peso}
 \[ w : E \rightarrow \mathbb{R} \]
 Per noi il peso di un arco rappresenta la sua lunghezza, per questo
-chiameremo con \textit{lunghezza di un arco} il suo peso.
+chiameremo \textit{lunghezza di un arco} il suo peso.
 
 Nel caso non pesato ci riconduciamo al caso pesato prendendo $w$
 costante a $1$.
@@ -118,7 +118,7 @@ costante a $1$.
 Siamo interessati a considerare grafi diretti, cioè gli archi sono
 orientati, nel caso indiretto possiamo ridurci a questo caso
 considerando l'insieme di archi 
-\[ V' = V \cup \set{ (w,v) \mid (v,w) \in V } \]
+\[ V' = V \cup \set{ (v,u) \mid (u,v) \in V } \]
 
 \section{Proprietà dei cammini minimi}
 
@@ -129,13 +129,13 @@ considerando l'insieme di archi
 \end{mydef}
 
 Diciamo che $p$ congiunge $v_0$ a $v_k$. Dati due nodi $v,w$ chiamiamo
-$P(v,w)$ l'insieme (eventualmente vuoto) dei cammini che congiungono
-$v$ a $w$
+$P(u,v)$ l'insieme (eventualmente vuoto) dei cammini che congiungono
+$u$ a $v$
 
-Dati due cammini $p = ( v_0, v_1, ..., v_k)$ e $q = ( w_0, w_1, ...,
-w_{h})$ tali che $v_k = w_0$ chiamiamo somma dei due cammini il
+Dati due cammini $p = ( v_0, v_1, ..., v_k)$ e $q = ( u_0, u_1, ...,
+u_{h})$ tali che $v_k = u_0$ chiamiamo somma dei due cammini il
 cammino
-\[ p+q = ( v_0, v_1, ..., v_k= w_0, w_1, ..., w_{h}) \]
+\[ p+q = ( v_0, v_1, ..., v_k= u_0, u_1, ..., u_{h}) \]
 
 Dato un cammino $p = ( v_0, v_1, ..., v_k)$ chiamiamo
 \textit{sottocammino} di $p$ un cammino $q = ( v_i , v_{i+1}, ... ,
@@ -154,24 +154,24 @@ non negativa, per cui da ora usiamo l'ipotesi $\forall e \in E \; w(e)
 \ge 0$.
 
 \begin{mydef}[Distanza di due punti]
-  \[ \delta(v,w) = \left\{
+  \[ \delta(u,v) = \left\{
     \begin{matrix}
-      \min \limits_{p \in P(v,u)} { w(p) } & \; P(v,u) \neq \emptyset \\
-      \infty & \; P(v,u) = \emptyset
+      \min \limits_{p \in P(u,v)} { w(p) } & \; P(u,v) \neq \emptyset \\
+      \infty & \; P(u,v) = \emptyset
     \end{matrix}
     \right.
     \]
 \end{mydef}
 
-Per $P(v,u) \neq \emptyset$ chiamiamo \textit{cammino minimo} fra $v$
-e $u$ un cammino la cui lunghezza realizza il minimo.
+Per $P(u,v) \neq \emptyset$ chiamiamo \textit{cammino minimo} fra $u$
+e $v$ un cammino la cui lunghezza realizza il minimo.
 
 Osserviamo che questa distanza verifica le proprietà
 \begin{itemize}
 \item $\delta(v,v) = 0$ infatti il cammino $(v)$ ha lunghezza $0$
-\item $\delta(v,z) \le \delta(v,w) + \delta(w,z)$ infatti sommando il
-  cammino minimo tra $v$ e $w$ e quello tra $w$ e $z$ si ottiene un
-  cammino in $P(v,z)$
+\item $\delta(u,z) \le \delta(u,v) + \delta(v,z)$ infatti sommando il
+  cammino minimo tra $u$ e $v$ e quello tra $v$ e $z$ si ottiene un
+  cammino in $P(u,z)$
 \end{itemize}
 Questa distanza, però, in generale non è simmetica, quindi definisce
 una pseudometrica. Nel caso di grafi non orientati allora $\delta$
@@ -275,7 +275,7 @@ breadth-first search).
 \end{algorithmic}
 
 Non dimostreremo che questo algoritmo è corretto; osserviamo solamente
-che l'algoritmo termina in $\Omega (M)$, infatti ogni nodo viene
+che l'algoritmo termina in $O (M)$, infatti ogni nodo viene
 inserito ed estratto dalla coda esattamente una volta e ogni arco
 viene visitato una volta durante la visita del nodo di partenza.
 
@@ -318,8 +318,8 @@ comunque non negativa, dobbiamo usare l'algoritmo di Dijkstra
 Anche questa volta possiamo disegnare l'albero dei cammini minimi con
 la stessa procedura usata per il caso della BFS.
 
-Per la complessit\`a vediamo che ogni arco viene visitato una volta e,
-per ogni visita, viene effettuato un inserimento nella
+Per la complessit\`a vediamo che ogni arco viene visitato esattamente
+una volta e, per ogni visita, viene effettuato un inserimento nella
 PriorityQueue. Il numero di estrazioni dalla PriorityQueue \`e
 maggiorato dal numero di inserimenti, quindi la complessit\`a di
 Dijkstra \`e $O(M\log N)$ utilizzando una coda di priorit\`a
@@ -333,7 +333,7 @@ Abbiamo visto che siamo in grado, data una sorgente $s\in V$, di
 trovare tutti i cammini minimi da $s$ ad ogni nodo $v\in V$ e di
 salvarci le distanze di ogni nodo dalla sorgente fissata. Ripetendo
 questo procedimento al variare di $s\in V$ otteniamo questa
-informazione per ogni coppia di nodi $(v,u)$ del grafo.
+informazione per ogni coppia di nodi $(u,v)$ del grafo.
 
 Nel nostro caso (archi di peso non negativo) possiamo applicare
 Dijkstra su ogni nodo ottenendo un tempo di $O(NM\log N)$
@@ -478,10 +478,10 @@ piccolo in $c'_{i,j}$.
 
 Quindi, nel caso di archi di lunghezza intera, siamo in grado di fare
 il prodotto fra le matrici $L^{(i)}$ in $O\pa{pN^\omega }$ dove $p$ è
-il costo di un prodotto fra polinomi. Si pu\`o scriver $p = O\pa{d
+il costo di un prodotto fra polinomi. Si pu\`o scrivere $p = O\pa{d
   \log d}$ dove $d$ \`e il diametro del grafo da cui otteniamo che
 questo algoritmo utilizza $O\pa{ d N ^\omega \log d \log n}$
-operazioni aritmentiche. Quindi, nel caso di grafi con diametri
+operazioni aritmetiche. Quindi, nel caso di grafi con diametri
 piccoli ($d = O(1)$), come possono essere le reti sociali, abbiamo
 migliorato le prestazioni del prodotto.
 
@@ -495,7 +495,7 @@ distanze (per un grafo senza cicli negativi) in $\Theta\pa{ N^3}$,
 citiamo anche il risultato di \cite{apspfmp} dove viene calcolata la
 tabella delle distanze di un grafo con archi di peso intero positivo
 in $\tilde O\pa{ kN^\omega}$ dove $k$ è la massima lunghezza di un
-arco utilizzando, ancora una volta, il prodotto fra matrici.
+arco utilizzando, ancora una volta, il prodotto veloce tra matrici.
 
 \subsection{I cammini minimi}
 
@@ -541,7 +541,7 @@ Questo problema è molto studiato in letteratura e noi non lo
 tratteremo, citeremo solo alcuni risultati.
 
 In \cite{kshortest} vengono forniti algoritmi su grafi diretti per
-trovare
+trovare:
 \begin{itemize}
 \item dati $u,v \in V$ trovare i primi $k$ cammini più brevi in
   $P\pa{u,v}$ in tempo $O\pa{m + n\log n + k}$
@@ -584,10 +584,6 @@ http://www.sciencedirect.com/science/article/pii/S0304397510003130
 
 \subsection{Possibile generalizzazione: archi pesati}
 
-
-\chapter{Problema dei $k$ cammini minimi}
-
-https://www.ics.uci.edu/~eppstein/pubs/Epp-TR-94-26.pdf
 
 \chapter{Oracolo per scrivere tutti i cammini minimi}
 \label{chap:oracolotutticammini}
