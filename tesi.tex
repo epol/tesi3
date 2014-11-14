@@ -254,6 +254,13 @@ Nel caso in cui tutti gli archi hanno lunghezza $1$ l'albero dei
 cammini minimi può essere costruito con una visita in ampiezza (BFS:
 breadth-first search).
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{preBFS}
+  \caption{Esempio di un grafo indiretto non pesato}
+  \label{fig:preBFS}
+\end{figure}
+
 \begin{algorithmic}
   \For {v $\in$ V}
     \State{v.d = $\infty$}
@@ -279,7 +286,15 @@ che l'algoritmo termina in $O (M)$, infatti ogni nodo viene
 inserito ed estratto dalla coda esattamente una volta e ogni arco
 viene visitato una volta durante la visita del nodo di partenza.
 
-TODO: disegnini
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{BFS}
+  \caption{Il grafo precedente dopo aver applicato una BFS con
+    sorgente $0$, in blu gli archi scelti per l'albero, in rosso gli
+    archi non scelti ma comunque appartenenti al DAG dei cammini
+    minimi, in verde gli archi non appartenenti a cammini minimimi}
+  \label{fig:BFS}
+\end{figure}
 
 I cammini minimi possono essere estratti in modo ricorsivo:
 \begin{itemize}
