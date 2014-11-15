@@ -584,19 +584,37 @@ dell'algoritmo di Eppstein cioè $O\pa{m + n\log n + k}$.
 
 \chapter{Oracoli per distanze}
 
+Ora che sappiamo calcolare la tabella delle distanze ci poniamo il
+problema di salvarle. Il metodo banale di farlo (salvare la matrice
+delle distanze $D$) richiede $O\pa{ N^2 \log d}$ bit dove $d$ è il
+diametro del grafo ($d = O\pa{N}$ nel caso non pesato).
+
+\`E naturale porsi due probelmi:
+\begin{itemize}
+\item si può trovare una struttura dati che restituisca
+  un'approssimazione della distanza tra due nodi in $O\pa{1}$ tempo ma
+  occupando meno spazio? Vedremo questo problema nella sezione
+  \ref{sec:oracoliapprossimati}
+\item continuando a chiedere tempo di query $O\pa{1}$, ma richiedendo
+  anche che la distanza restituita sia esatta, si può fare di meglio?
+  Vedremo questo nella sezione \ref{sec:oracoliesatti}
+\end{itemize}
+
 \section{Oracoli approssimati}
+\label{sec:oracoliapprossimati}
 
 \subsection{Graph spanners}
 
 \subsection{Risultati noti}
 
 \section{Oracoli esatti}
+\label{sec:oracoliesatti}
 
 Tutte le distanze in $O(n^2)$ spazio con query costanti
 
 http://www.sciencedirect.com/science/article/pii/S0304397510003130
 
-\subsection{Risuluzione tramite alberi di ricoprimento etichettati}
+\subsection{Risoluzione tramite alberi di ricoprimento etichettati}
 
 \subsection{Compressione degli alberi}
 
