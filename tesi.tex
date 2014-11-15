@@ -591,19 +591,118 @@ diametro del grafo ($d = O\pa{N}$ nel caso non pesato).
 
 \`E naturale porsi due probelmi:
 \begin{itemize}
-\item si può trovare una struttura dati che restituisca
-  un'approssimazione della distanza tra due nodi in $O\pa{1}$ tempo ma
-  occupando meno spazio? Vedremo questo problema nella sezione
-  \ref{sec:oracoliapprossimati}
-\item continuando a chiedere tempo di query $O\pa{1}$, ma richiedendo
-  anche che la distanza restituita sia esatta, si può fare di meglio?
-  Vedremo questo nella sezione \ref{sec:oracoliesatti}
+\item è possibile salvarsi una struttura dati pi\`u piccola ($o
+  \pa{ N^2}$) in modo da poter dare ancora una buona approssimazione
+  della distanza tra due vertici? Vedremo questo problema nella
+  sezione \ref{sec:oracoliapprossimati}
+\item qual'\`e la struttura dati pi\`u piccola che contiene le
+  informazioni esatte sulle distanza di un grafo? Vedremo questo nella
+  sezione \ref{sec:oracoliesatti}
 \end{itemize}
 
 \section{Oracoli approssimati}
 \label{sec:oracoliapprossimati}
 
+Come gi\`a anticipato, in questa sezione ci poniamo il problema di
+usare poco spazio in memoria pur continuando a saper stimare (ma senza
+pretendere di restituire il valore esatto) la distanza fra due punti
+in un grafo.
+
+Ricordiamo che salvare il grafo completo richiede $O\pa{ N + M } =
+O\pa{ N^2}$, per cui dobbiamo cercare degli approci alternativi.
+
+\begin{mydef}[$r$-approssimazione]
+  Diciamo che un certo algoritmo ritorna una $r$-approsimazione della
+  distanza tra due punti se per ogni $u,v \in V$, detta $d(u,v)$ la
+  distanza ritornata dall'algoritmo, si ha che
+  \[ d\pa{u,v} \le r \delta\pa{u,v} \]
+\end{mydef}
+
+Per questo capitolo useremo grafi non pesati, \`e comunque studiato
+anche il caso pesato ma noi lo tralasceremo per semplicit\`a.
+
 \subsection{Graph spanners}
+
+Un metodo molto usato (introdotto in \cite{graphspanners}) consiste
+nel salvare (e poi eventualmente preelaborare) un $t$-spanner del
+grafo.
+
+\begin{mydef}[$t$-spanner]
+  Dato $G = (V,E)$ grafo diciamo che $G' = (V, E')$ \`e un $t$-spanner
+  di $G$ se $E' \subseteq E$ e
+  \[ \forall u,v \in V \;\; \delta _{G'} \pa{ u,v} \le t \delta _{G}
+    \pa{ u,v} \]
+  cio\`e la distanza di $G'$ \`e una $t$-approsimazione della distanza
+  in $G$.
+\end{mydef}
+
+Se quindi troviamo un grafo $G'$ con $o\pa{ N^2}$ archi (per esempio
+$O(N)$) con questa propriet\`a allora occupiamo $\tilde O(N \log N)$
+spazio per salvarlo e sappiamo rispondere ad una query di distanza in
+$O(N)$ (il tempo di eseguire una BFS).
+
+Possiamo caratterizzare un $t$-spanner anche con
+\begin{mylem}
+  $G' = (V,E')$ con $E' \subseteq E$ \`e un $t$-spanner per $G$ se
+  \[ \forall (u,v) \in E\;\; \delta_{G'} (u,v) \le t \]
+\end{mylem}
+\begin{proof}
+  Dalla definizione di $t$ spanner otteniamo facilmente questa
+  uguaglianza, per l'implicazione inversa osseriviamo che, dati $u,v
+  \in V$, preso un cammino minimo $p \in P(u,v)$ otteniamo la
+  disuguaglianza della definizione applicando la disuguaglianza del
+  lemma per ogni arco in $p$
+\end{proof}
+
+Questo semplice risultato ci mostra che ci sono delle limitazioni
+negli spanner che possiamo costruire
+\begin{mypro}
+  In un grafo indiretto $G = (V,E)$ sia $k$ la lunghezza minima di un
+  ciclo non banale in $G$, allora se $G' = (V,E')$ \`e un $t$-spanner
+  di $G$ con $t < k-1$ si ha $G = G'$
+\end{mypro}
+\begin{proof}
+  Supponiamo per assurdo che esista $(u,v) \in E' \setminus E$,
+  siccome
+  \[ \delta_{G'} (u,v) \le t < n -1 \] 
+
+  Si ha che esiste un cammino aciclico composto da $h$ archi di $E'$
+  da $u$ a $v$ con $h<k-1$, allora ricordando che $(u,v) \not\in E'$
+  si ha che se aggiungiamo $(v,u)$ al cammino otteniamo un ciclo di
+  lunghezza $h+1 < k$ da cui l'assuro.
+\end{proof}
+
+Ci poniamo allora il problema di dire quando esistono dei $t$-spanner
+di un grafo con un certo numero di archi, purtroppo si ha che (teorema
+che non dimostriamo)
+\begin{myteo}
+  Dato un grafo $G = (V,E)$ e due numeri $t,m\ge 1$ il problema di
+  determinare se esiste un $t$-spanner di $G$ con al pi\`u $m$ archi
+  \`e NP-completo.
+\end{myteo}
+
+Nonostante questo teorema \`e possibile studiare il problema in modo
+asintotico.
+
+Sempre in \cite{graphspanners} vengono dati i seguenti risultati:
+
+\begin{myteo}
+  Dato un grafo di $N$ vertici $G$ e $1<k<N$ esiste (ed \`e
+  costruibile in tempo polinomiale) un $(4\log _k N +1)$-spanner con
+  al pi\`u $kN$ archi.
+\end{myteo}
+
+\begin{mycor}
+  Dato un grafo di $N$ vertici $G$ esiste (ed \`e costruibile in tempo
+  polinomiale) un $O\pa{\log N}$-spanner con $O(N)$ archi.
+\end{mycor}
+
+\begin{mycor}
+  Dato un grafo di $N$ vertici $G$ e per ogni $r\ge 1$ esiste (ed \`e
+  costruibile in tempo polinomiale) un $(4r+1)$-spanner con
+  $O(N^{1+1/r})$ archi.
+\end{mycor}
+
 
 \subsection{Risultati noti}
 
@@ -655,7 +754,7 @@ $O(n^{2.5})$ con il separation theorem
 
 
 \bibliographystyle{alpha}
-\bibliography{funnymult,apspfmp,kshortest,kspheur}
+\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners}
 
 
 
