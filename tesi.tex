@@ -81,8 +81,9 @@
 
 \DeclareMathOperator{\im}{Im}
 
-
-
+\makeatletter
+\@beginparpenalty=10
+\makeatother
 
 \title{Tesi}
 \author{Enrico Polesel}
@@ -92,6 +93,8 @@
 \maketitle
 
 \setcounter{tocdepth}{5}
+
+
 
 \tableofcontents
 
@@ -256,31 +259,27 @@ breadth-first search).
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.8\textwidth]{preBFS}
+  \includegraphics[width=0.9\textwidth]{preBFS}
   \caption{Esempio di un grafo indiretto non pesato}
   \label{fig:preBFS}
 \end{figure}
 
-\begin{algorithmic}
-  \For {v $\in$ V}
-    \State{v.d = $\infty$}
-    \State{v.p = v}
-  \EndFor
-  \State{s.d = 0}
-  \State{q = Queue()}
-  \State{q.push(s)}
-  \While{ ! q.empty()}
-    \State{v = q.pop()}
-    \For{u $\in$ v.neigh}
-      \If{u.d = $\infty$}
-        \State{u.d = v.d + 1}
-        \State{u.p = v}
-        \State{q.push(u)}
-      \EndIf
-    \EndFor
-  \EndWhile
-\end{algorithmic}
 
+\begin{figure}[H]
+  \begin{algorithmic}
+    \For {v $\in$ V} \State{v.d = $\infty$} \State{v.p = v}
+    \EndFor
+    \State{s.d = 0} \State{q = Queue()} \State{q.push(s)} \While{ !
+      q.empty()} \State{v = q.pop()} \For{u $\in$ v.neigh} \If{u.d =
+      $\infty$} \State{u.d = v.d + 1} \State{u.p = v}
+    \State{q.push(u)}
+    \EndIf
+    \EndFor
+    \EndWhile
+  \end{algorithmic}
+%  \caption{Pseudocodice per la BFS}
+\label{fig:BFScode}
+\end{figure}
 Non dimostreremo che questo algoritmo è corretto; osserviamo solamente
 che l'algoritmo termina in $O (M)$, infatti ogni nodo viene
 inserito ed estratto dalla coda esattamente una volta e ogni arco
@@ -288,7 +287,7 @@ viene visitato una volta durante la visita del nodo di partenza.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.8\textwidth]{BFS}
+  \includegraphics[width=0.9\textwidth]{BFS}
   \caption{Il grafo precedente dopo aver applicato una BFS con
     sorgente $0$, in blu gli archi scelti per l'albero, in rosso gli
     archi non scelti ma comunque appartenenti al DAG dei cammini
@@ -308,28 +307,21 @@ I cammini minimi possono essere estratti in modo ricorsivo:
 Nel caso in cui gli archi non abbiano tutti lunghezza unitaria, ma
 comunque non negativa, dobbiamo usare l'algoritmo di Dijkstra
 
-\begin{algorithmic}
-  \For {v $\in$ V}
-    \State{v.d = $\infty$}
-    \State{v.p = v}
-  \EndFor
-  \State{S = $\emptyset$}
-  \State{s.d = 0}
-  \State{q = PriorityQueue()}
-  \State{q.push(s,s.d)}
-  \While{ ! q.empty()}
-    \State{v = q.extract\_min()}
-    \State{S = S $\cup$ \{v\}}
-    \For{u $\in$ v.neigh}
-      \If{u.d > v.d + w((v,u))}
-        \State{u.d = v.d + 1}
-        \State{u.p = v}
-        \State{q.push(u,u.d)}
-      \EndIf
+\begin{figure}[H]
+  \begin{algorithmic}
+    \For {v $\in$ V} \State{v.d = $\infty$} \State{v.p = v}
     \EndFor
-  \EndWhile
-\end{algorithmic}
-
+    \State{S = $\emptyset$} \State{s.d = 0} \State{q =
+      PriorityQueue()} \State{q.push(s,s.d)} \While{ ! q.empty()}
+    \State{v = q.extract\_min()} \State{S = S $\cup$ \{v\}} \For{u
+      $\in$ v.neigh} \If{u.d > v.d + w((v,u))} \State{u.d = v.d + 1}
+    \State{u.p = v} \State{q.push(u,u.d)}
+    \EndIf
+    \EndFor
+    \EndWhile
+  \end{algorithmic}
+%\caption{Pseudocodice per Dijkstra}
+\end{figure}
 Anche questa volta possiamo disegnare l'albero dei cammini minimi con
 la stessa procedura usata per il caso della BFS.
 
@@ -340,7 +332,16 @@ maggiorato dal numero di inserimenti, quindi la complessit\`a di
 Dijkstra \`e $O(M\log N)$ utilizzando una coda di priorit\`a
 implementata con un min-heap.
 
-TODO: disegnini
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth]{dijkstra}
+  \caption{Un grafo diretto pesato a cui è stato applicato Dijkstra
+    con sorgente $0$, in blu gli archi scelti per l'albero, in rosso gli
+    archi non scelti ma comunque appartenenti al DAG dei cammini
+    minimi, in verde gli archi non appartenenti a cammini minimimi}
+  \label{fig:dijkstra}
+\end{figure}
+
 
 \section{Cammini minimi fra ogni coppia}
 
@@ -357,8 +358,8 @@ Ci chiediamo se esiste un metodo più veloce per estrarre alcune di
 queste informazioni, possiamo sperare di riuscire a fare di meglio
 evitando di fissare la sorgente.
 
-Gli algoritmi che vedremo utilizzeranno la matrice di adiacenza del
-grafo, cioè supponiamo i aver numerato i nodi da $0$ a $N-1$, allora
+Gli algoritmi che vedremo utilizzano la matrice di adiacenza del
+grafo. Supponiamo i aver numerato i nodi da $0$ a $N-1$, allora
 definiamo la matrice di adiacenza di $G$ come la matrice $W$ con
 elementi
 \[
@@ -481,10 +482,10 @@ matrici $A'$ e $B'$ con coefficienti
 \[ a'_{i,j} = x ^{a_{i,j}} \;\;\; b'_{i,j} = x ^{b_{i,j}} \]
 dove $x$ è un'indeterminata. Sia quindi
 \[ C' = A' \cdot B' \]
-Dove stimao usando il prodotto fra matrici, ma con coefficienti
-nell'anello dei polinomi. Se scriviamo ora 
+Dove stiamo usando il prodotto fra matrici, ma con coefficienti
+nell'anello dei polinomi. Possiamo scrivere ora 
 \[ c _{i,j} = \mathrm{first}\pa{c'_{i,j}} \]
-Dove $\mathrm{first}$ ritorna il grado del monomio di grado più
+dove $\mathrm{first}$ ritorna il grado del monomio di grado più
 piccolo in $c'_{i,j}$.
 
 È facile convincersi che $C = A * B$, infatti 
@@ -507,7 +508,7 @@ matrici proveniente da problemi di ricerca dei cammini minimi.
 Esistono altri algoritmi per calcolare la tabella delle distanze, per
 esempio l'algoritmo di Floyd–Warshall calcola la tabella delle
 distanze (per un grafo senza cicli negativi) in $\Theta\pa{ N^3}$,
-citiamo anche il risultato di \cite{apspfmp} dove viene calcolata la
+citiamo anche il risultato di \cite{apspfmp}: possiamo calcolare la
 tabella delle distanze di un grafo con archi di peso intero positivo
 in $\tilde O\pa{ kN^\omega}$ dove $k$ è la massima lunghezza di un
 arco utilizzando, ancora una volta, il prodotto veloce tra matrici.
@@ -526,7 +527,7 @@ lemma:
 
 Grazie a questo lemma possiamo costruire ricorsivamente i cammini
 minimi, supponiamo di essere interessati ai cammini minimi da $u$ a
-$v$, se ce ne interessa solo uno ci basta sceglire un vicino $u'$
+$v$, se ne vogliamo trovare solo uno ci basta sceglire un vicino $u'$
 ``buono'' (cioè che rispetta l'uguaglianza del lemma) di $u$ e poi,
 ricorsivamente, proseguire costruendo un cammino minimo da $u'$ a
 $v$. Se invece siamo interessati a conoscere tutti i cammini minimi
@@ -536,7 +537,13 @@ allora dobbiamo calcolarci i cammini minimi per \emph{tutti} i vicini
 Il numero di cammini minimi tra due vertici può essere esponenziale
 come si vede in questo semplice esempio:
 
-TODO: disegno
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{diamante}
+  \caption{In questo esempio di grafo diretto non pesato vediamo che
+    esistono esponenziali cammini minimi da $0$ a $9$}
+  \label{fig:diamante}
+\end{figure}
 
 Vedremo nel capitolo \ref{chap:oracolotutticammini} come salvare
 queste informazioni in modo efficiente.
@@ -549,7 +556,7 @@ cammini in $P(u,v)$ per lunghezza crescente, vogliamo estrarre i primi
 $k$ cammini nell'ordine.
 
 In questo caso potremmo dover considerare nuovamente cammini
-contententi cicli, infatti questi (pur non essendo minimi) potrebbero
+contenenti cicli, infatti questi (pur non essendo minimi) potrebbero
 comparire fra i $k$ cammini più brevi.
 
 Questo problema è molto studiato in letteratura e noi non lo
