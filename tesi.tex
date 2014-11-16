@@ -704,7 +704,36 @@ Sempre in \cite{graphspanners} vengono dati i seguenti risultati:
 \end{mycor}
 
 
-\subsection{Risultati noti}
+\subsection{Altri risultati}
+
+Anche supponendo di avere un grafo con pochi archi (magari perch\'e è
+un $t$-spanner), potremmo non poterci permettere di elaborarlo ad ogni
+richiesta di distanza, per questo sono stati sviluppati algoritmi che,
+dopo una preelaborazione, salvano le informazioni sulle distanze in
+poco ($o(N^2)$) spazio e permettono di ricavare la distanza
+approssimata tra due punti in tempo costante.
+
+In \cite{appdistoracl} gli autori presentano questo risultato:
+\begin{myteo}
+  Sia $G = (V,E)$ un grafo indiretto pesato con archi di peso non
+  negativo e sia $k\ge 1$ intero, allora $G$ pu\`o essere
+  preprocessato in $O\pa{kMN^{1/k}}$ tempo producendo una struttura
+  dati occupante $O\pa{kN^{1+1/k}}$ spazio tale che in $O\pa{k}$ tempo
+  \`e possibile tornare la distanza fra due punti approssimata di un
+  fattore $2k-1$
+\end{myteo}
+\begin{mycor}
+  Nelle ipotesi del teorema precedente fissando $k=2$ ottieniamo che
+  che preprocessando il grafo in $O\pa{MN^{1/2}}$ si ottiene una
+  struttura occupante $O\pa{N^{3/2}}$ che resituisce in $O\pa{1}$ la
+  distanza tra sue punti approssimata di un fattore $3$
+\end{mycor}
+\begin{mycor}
+  Nelle ipotesi del teorema precedente fissando $k=\floor{\log N}$ ottieniamo
+  che che preprocessando il grafo in $O\pa{M\log N}$ si ottiene una
+  struttura occupante $O\pa{N\log{N}}$ che resituisce in $O\pa{\log N}$ la
+  distanza tra sue punti approssimata di un fattore $\log N$
+\end{mycor}
 
 \section{Oracoli esatti}
 \label{sec:oracoliesatti}
@@ -754,7 +783,7 @@ $O(n^{2.5})$ con il separation theorem
 
 
 \bibliographystyle{alpha}
-\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners}
+\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl}
 
 
 
