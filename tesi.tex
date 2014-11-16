@@ -735,6 +735,25 @@ In \cite{appdistoracl} gli autori presentano questo risultato:
   distanza tra sue punti approssimata di un fattore $\log N$
 \end{mycor}
 
+In \cite{appdistoraclplus} viene migliorato questo risultato per
+quanto riguarda il tempo di preelaborazione al costo di aggiungere un
+fattore additivo all'errore di approssimazione della distanza.
+
+Viene dato un primo risultato per grafi non pesati:
+\begin{myteo}
+  Sia $G = (V,E)$ un grafo indiretto non pesato e $k\ge 3$ un intero,
+  allora \`e possibile costruire in $O\pa{ M + kN^{3/2 + 1/(2k) +
+      1/\pa{2k-2}}}$ tempo una struttura dati occupate
+  $O\pa{kN^{1+1/k}}$ spazio tale che dati $u,v\in V$ in $O\pa{k}$
+  tempo sia possibile ritornare una distanza $\tilde \delta\pa{u,v}$
+  tale che
+  \[ \tilde \delta \pa{ u,v} \le \pa{2k -1}\delta\pa{ u,v} + 2 \]
+\end{myteo}
+
+Per grafi pesati con pesi interi non negativi vale un teorema simile
+in cui l'errore additivo sulla distanza invece di essere $2$ diventa
+$2 \max _{e\in E} w(e)$
+
 \section{Oracoli esatti}
 \label{sec:oracoliesatti}
 
@@ -783,7 +802,7 @@ $O(n^{2.5})$ con il separation theorem
 
 
 \bibliographystyle{alpha}
-\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl}
+\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl,appdistoraclplus}
 
 
 
