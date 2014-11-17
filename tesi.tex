@@ -803,7 +803,8 @@ Si ha il seguente lemma:
 \end{proof}
 
 Quindi ci basta salvare, al variare di $s\in V$, la quantit\`a
-$\delta\pa{ r,s}$ e il vettore $l_s$.
+$\delta\pa{ r,s}$ e il vettore $l_s$. Poniamo, per semplicit\`a,
+$l_s(r) = 0$ in modo da poter includere $l_s(r)$ nella sommatoria.
 
 Abbiamo osservato che la distanza tra due nodi rispetta la propriet\`a
 triangolare, da questa ricaviamo che 
@@ -815,10 +816,49 @@ specializzandola nel caso $w = f(u)$ e $v = s$
 Quindi le nostre etichette sono ternarie, cio\`e possono assumere solo
 tre valori.
 
+Visto che cerchiamo un modo per ottenere risposte in tempo costante,
+non possiamo permetterci di calcolare tutta la sommatoria ad ogni
+richiesta, per questo vogliamo precalcolare in qualche modo queste
+sommatorie sui percorsi.
 
-\subsection{Compressione delle etichette: Wavelet Tree}
+Ci proponiamo ora di ricondurci ad un problema pi\`u studiato: le
+sommatorie sui prefissi, cio\`e ci riconduciamo a calcolare la somma
+dei primi elementi di una sequenza.
 
-\subsection{Ottimalità}
+Data un'etichettatura $l$ su un albero $T$ costruiamo ricorsivamente
+la seguente sequenza $L_T$
+\begin{itemize}
+\item \textbf{caso base:} se $T$ \`e vuoto allora $L_T = \bra{}$
+\item \textbf{passo induttivo:} sia $T$ ha almeno un nodo e $u$ \`e la
+  radice, siano $v_1,... ,v_k$ i figli di $u$ con $T_1,...,T_k$ i
+  rispettivi sottoalberi, allora
+  \[ L_T = \bra{ l(u) } + L_{T_1} + ... + L_{T_k} + \bra{ -l(u) } \]
+\end{itemize}
+Dove con $+$ intendiamo la concatenazione di sequenze. La stringa
+$L_T$ cos\`i definita avr\`a $2N$ elementi dove $N$ \`e la dimensione
+di $T$
+
+Dato un nodo $u\in T$ chiamiamo $r_T(u)$ la posizione di $l(u)$ nella
+stringa $L_T$, in questo modo \`e facile convincersi che 
+\[ \sum _{v \in \pi(u)} l(v) = \sum _{i=0} ^
+{r_T(u)} L_T(i) \]
+infatti il valore di $l(v)$ per $v \not\in \pi(u)$ viene annullato da
+$-l(v)$ scritto nella stringa nel momento in cui viene chiusa la
+visita al sottoalbero di $v$, questo non accade per $v\in \pi(u)$
+perch\'e la visita al suo sottoalbero (a cui appartiene $u$) non \`e
+stata conclusa.
+
+Osserviamo che $r_T$ non dipende da $l$ ma solo dalla struttura
+dell'albero.
+
+Ora abbiamo $\forall s\in V$ le etichette $l_s$ da cui possiamo
+calcolare la corrispondente stringa (che chiameremo $L_s$), $r_T$
+invece non dipende dall'etichettatura scelta ma solo dall'albero,
+quindi ci basta salvarlo solo una volta.
+
+\subsection{Somme prefisse precalcolate: Wavelet Tree}
+
+\subsection{Complessit\`a e ottimalità}
 \label{sec:oracoloesattoottimale}
 
 \subsection{Possibile generalizzazione: archi pesati}
