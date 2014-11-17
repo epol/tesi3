@@ -761,13 +761,24 @@ Tutte le distanze in $O(n^2)$ spazio con query costanti
 
 http://www.sciencedirect.com/science/article/pii/S0304397510003130
 
-\subsection{Risoluzione tramite alberi di ricoprimento etichettati}
+Concentriamoci, per semplicit\`a, al caso di grafi indiretti con archi
+non pesati. In questa sezione presenteremo il risultato proposto in
+\cite{compactdistance}.
 
-\subsection{Compressione degli alberi}
+Ci chiediamo ora di poter rispondere in tempo costante a richieste di
+distanza tra due punti qualsiasi del grafo ritornando la distanza
+esatta. Vedremo nella sottosezione \ref{sec:oracoloesattoottimale} che
+una struttura dati che soddisifi questa richiestas non si pu\`o
+rompere la barriera dei $\Omega\pa{ N^2}$ bits, attualmente noi lo
+sappiamo fare in $O\pa{N^2 \log n}$, quindi possiamo migliorare.
+
+
+\subsection{Risoluzione tramite etichettatura di un albero di ricoprimento}
 
 \subsection{Compressione delle etichette: Wavelet Tree}
 
 \subsection{Ottimalità}
+\label{sec:oracoloesattoottimale}
 
 \subsection{Possibile generalizzazione: archi pesati}
 
@@ -802,7 +813,7 @@ $O(n^{2.5})$ con il separation theorem
 
 
 \bibliographystyle{alpha}
-\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl,appdistoraclplus}
+\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl,appdistoraclplus,compactdistance}
 
 
 
