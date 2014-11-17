@@ -757,20 +757,16 @@ $2 \max _{e\in E} w(e)$
 \section{Oracoli esatti}
 \label{sec:oracoliesatti}
 
-Tutte le distanze in $O(n^2)$ spazio con query costanti
-
-http://www.sciencedirect.com/science/article/pii/S0304397510003130
-
 Concentriamoci, per semplicit\`a, al caso di grafi indiretti con archi
 non pesati. In questa sezione presenteremo il risultato proposto in
 \cite{compactdistance}.
 
-Ci chiediamo ora di poter rispondere in tempo costante a richieste di
+Ci chiediamo di poter rispondere in tempo costante a richieste di
 distanza tra due punti qualsiasi del grafo ritornando la distanza
 esatta. Vedremo nella sottosezione \ref{sec:oracoloesattoottimale} che
-una struttura dati che soddisifi questa richiestas non si pu\`o
-rompere la barriera dei $\Omega\pa{ N^2}$ bits, attualmente noi lo
-sappiamo fare in $O\pa{N^2 \log n}$, quindi possiamo migliorare.
+una struttura dati che soddisifi questa richiesta non pu\`o rompere la
+barriera dei $\Omega\pa{ N^2}$ bit, attualmente noi lo sappiamo fare
+in $O\pa{N^2 \log\pa{ N}}$, quindi possiamo migliorare.
 
 
 \subsection{Risoluzione tramite etichettatura di un albero di ricoprimento}
@@ -780,9 +776,8 @@ $r$ la sua radice. Per ogni nodo $u\in V$ chiamiamo $f(u)$ il padre
 nell'albero scelto e definiamo induttivamente $f^i(u) =
 f\pa{f^{i-1}(u)}$ (poniamo $f^0(u)=u$).
 
-Scegliamo ora una sorgente $s\in V$ e consideriamo le distanze dei
-vertici del grafo da $s$, per ogni nodo $u\in V$ ci salviamo la
-quantit\`a
+Scegliamo una sorgente $s\in V$ e consideriamo le distanze dei vertici
+del grafo da $s$, per ogni nodo $u\in V$ definiamo la quantit\`a
 \[ l_s (u) = \delta\pa{ u,s } - \delta\pa{ f(u),s} \]
 
 Si ha il seguente lemma:
@@ -803,7 +798,7 @@ Si ha il seguente lemma:
 \end{proof}
 
 Quindi ci basta salvare, al variare di $s\in V$, la quantit\`a
-$\delta\pa{ r,s}$ e il vettore $l_s$. Poniamo, per semplicit\`a,
+$\delta\pa{ r,s}$ e il vettore~ $l_s$. Poniamo, per semplicit\`a,
 $l_s(r) = 0$ in modo da poter includere $l_s(r)$ nella sommatoria.
 
 Abbiamo osservato che la distanza tra due nodi rispetta la propriet\`a
@@ -817,9 +812,9 @@ Quindi le nostre etichette sono ternarie, cio\`e possono assumere solo
 tre valori.
 
 Visto che cerchiamo un modo per ottenere risposte in tempo costante,
-non possiamo permetterci di calcolare tutta la sommatoria ad ogni
-richiesta, per questo vogliamo precalcolare in qualche modo queste
-sommatorie sui percorsi.
+non possiamo permetterci di calcolare la sommatoria ad ogni richiesta,
+per questo vogliamo precalcolare in qualche modo queste sommatorie sui
+percorsi.
 
 Ci proponiamo ora di ricondurci ad un problema pi\`u studiato: le
 sommatorie sui prefissi, cio\`e ci riconduciamo a calcolare la somma
@@ -834,7 +829,7 @@ la seguente sequenza $L_T$
   rispettivi sottoalberi, allora
   \[ L_T = \bra{ l(u) } + L_{T_1} + ... + L_{T_k} + \bra{ -l(u) } \]
 \end{itemize}
-Dove con $+$ intendiamo la concatenazione di sequenze. La stringa
+Dove con $+$ intendiamo la concatenazione di sequenze. La sequenza
 $L_T$ cos\`i definita avr\`a $2N$ elementi dove $N$ \`e la dimensione
 di $T$
 
@@ -908,35 +903,44 @@ Wavelet Tree che occupa $2\log\pa{ 3} N + o(N)$ spazio.
 \subsection{Complessit\`a e ottimalità}
 \label{sec:oracoloesattoottimale}
 
-Abbiamo gi\`a visto che siamo ora in grado di fare richieste di
-distanza in tempo costante. Vediamo quanto stiamo spendendo in spazio.
+Abbiamo gi\`a visto che siamo in grado di fare richieste di distanza
+in tempo costante. Vediamo quanto stiamo spendendo in spazio.
 
 Dobbiamo salvare:
 \begin{itemize}
 \item l'albero $T$ scelto occupando $O\pa{N\log\pa{N}}$ bit
+\item le distanze $\delta\pa{s,r}$ al variare di $s\in V$ occupando
+  $O\pa{ N \log N}$ bit in totale
 \item il vettore $r_T$ occupando $O\pa{N \log\pa{N}}$ bit 
-\item al variare di $s\in V$ il Wavelet Tree associato a $L_s$, in
-  tutto utilizziamo $2\log\pa{3} N^2 + o(N^2)$ bit
+\item al variare di $s\in V$ il Wavelet Tree associato a $L_s$,
+  utilizzando in tutto $2\log\pa{3} N^2 + o(N^2)$ bit
 \end{itemize}
 quindi stiamo utilizzando in tutto $2\log\pa{3} N^2 + o(N^2)$ bit.
 
 Osservando che esiste una corrispondenza biunivoca fra grafi indiretti
 non pesati e matrici distanza, si ha che il numero di matrici distanza
-possibili avendo fissato a $N$ il numero di vertici di un grafo \`e
-$\binom{N}{2} = \pa{N(N-1)}{2} = N^2/2 + o(N^2)$. Questo vuol dire che
+possibili, avendo fissato a $N$ il numero di vertici del grafo, \`e
+$\binom{N}{2} = \pa{N(N-1)}/{2} = N^2/2 + o(N^2)$. Questo vuol dire che
 il nostro oracolo dovr\`a utilizzare almeno $N^2/2 +o(N)$ bit.
 
-Allora la nostra soluzione occupa $4 \log \pa{3}$ volte lo spazio dato
-dal limite inferiore, possiamo guadagnare un fattore $2$ se salviamo
-solo le distanze $\delta\pa{u,v}$ con $u<v$ (sfruttando la simmetria
-delle distanze) abbassandoci a $2\log \pa{3}$.
+La nostra soluzione occupa $4 \log \pa{3}$ volte lo spazio dato dal
+limite inferiore, possiamo guadagnare un fattore $2$ se salviamo solo
+le distanze $\delta\pa{u,v}$ con $u<v$ (sfruttando la simmetria delle
+distanze) abbassandoci a $2\log \pa{3}$.
 
 \`E possibile, partizionando $T$ in macro-micro-alberi, abbassare lo
-spazio utilizzato a $\log\pa{3} /2 N^2 + o(N^2)$ continuando ad
-ammettere query in tempo costante, ma noi non lo faremo.
+spazio utilizzato a $\pa{\log\pa{3} /2} N^2 + o(N^2)$ continuando ad
+ammettere query in tempo costante, ma noi non lo vedremo.
 
 \subsection{Possibile generalizzazione: archi pesati}
 
+Per grafi indiretti pesati, il limite inferiore in spazio teorico
+diventa $\Omega\pa{ n^2 \log k}$ bit (dove $k$ è il massimo modulo
+della lunghezza di un arco). Partendo dalla struttura presentata per
+archi non pesati \`e possibile ottenerne una che, pur supportando
+query in tempo costante non dipendente da $k$, occupa il seguente
+numero di bit:
+\[ \frac{ \ceil { \log{2k+1} } }{2} N^2 + o(N^2) \]
 
 \chapter{Oracolo per scrivere tutti i cammini minimi}
 \label{chap:oracolotutticammini}
