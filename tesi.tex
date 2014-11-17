@@ -775,6 +775,47 @@ sappiamo fare in $O\pa{N^2 \log n}$, quindi possiamo migliorare.
 
 \subsection{Risoluzione tramite etichettatura di un albero di ricoprimento}
 
+Consideriamo un qualsiasi albero di ricoprimento di $G$ dove chiamiamo
+$r$ la sua radice. Per ogni nodo $u\in V$ chiamiamo $f(u)$ il padre
+nell'albero scelto e definiamo induttivamente $f^i(u) =
+f\pa{f^{i-1}(u)}$ (poniamo $f^0(u)=u$).
+
+Scegliamo ora una sorgente $s\in V$ e consideriamo le distanze dei
+vertici del grafo da $s$, per ogni nodo $u\in V$ ci salviamo la
+quantit\`a
+\[ l_s (u) = \delta\pa{ u,s } - \delta\pa{ f(u),s} \]
+
+Si ha il seguente lemma:
+\begin{mylem}
+  \[ \delta\pa{ u,s} = \delta\pa{ r,s} + \sum _{v\in \pi (u)\setminus
+    \set{r}} l_s(v) \] dove $\pi (u)$ \`e il cammino nell'albero da
+  $r$ a $u$.
+\end{mylem}
+\begin{proof}
+  \begin{align*}
+    &\delta\pa{ r,s} + \sum _{v\in \pi (u)\setminus \set{r}} l_s(v) =\\
+    =& \delta\pa{ r,s} + \sum _{v\in \pi (u)\setminus \set{r}} \bra{
+      \delta\pa{ v,s } - \delta\pa{ f(v),s} } =\\
+    = & \delta\pa{ r,s} + \delta\pa{ u,s} - \delta\pa{ r,s}=\\
+    = & \delta\pa{ u,s}
+  \end{align*}
+  Infatti la sommatoria \`e telescopica e si semplifica.
+\end{proof}
+
+Quindi ci basta salvare, al variare di $s\in V$, la quantit\`a
+$\delta\pa{ r,s}$ e il vettore $l_s$.
+
+Abbiamo osservato che la distanza tra due nodi rispetta la propriet\`a
+triangolare, da questa ricaviamo che 
+\[ \abs { \delta\pa{ u,v} - \delta\pa{ w,v}} \le \delta\pa{ u,w} \]
+specializzandola nel caso $w = f(u)$ e $v = s$
+\[ l_s (u) = \delta\pa{ u,s} - \delta\pa{ f(u),s} \in \set{ -1, 0 ,
+  1} \]
+
+Quindi le nostre etichette sono ternarie, cio\`e possono assumere solo
+tre valori.
+
+
 \subsection{Compressione delle etichette: Wavelet Tree}
 
 \subsection{Ottimalità}
