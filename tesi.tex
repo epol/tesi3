@@ -908,6 +908,33 @@ Wavelet Tree che occupa $2\log\pa{ 3} N + o(N)$ spazio.
 \subsection{Complessit\`a e ottimalità}
 \label{sec:oracoloesattoottimale}
 
+Abbiamo gi\`a visto che siamo ora in grado di fare richieste di
+distanza in tempo costante. Vediamo quanto stiamo spendendo in spazio.
+
+Dobbiamo salvare:
+\begin{itemize}
+\item l'albero $T$ scelto occupando $O\pa{N\log\pa{N}}$ bit
+\item il vettore $r_T$ occupando $O\pa{N \log\pa{N}}$ bit 
+\item al variare di $s\in V$ il Wavelet Tree associato a $L_s$, in
+  tutto utilizziamo $2\log\pa{3} N^2 + o(N^2)$ bit
+\end{itemize}
+quindi stiamo utilizzando in tutto $2\log\pa{3} N^2 + o(N^2)$ bit.
+
+Osservando che esiste una corrispondenza biunivoca fra grafi indiretti
+non pesati e matrici distanza, si ha che il numero di matrici distanza
+possibili avendo fissato a $N$ il numero di vertici di un grafo \`e
+$\binom{N}{2} = \pa{N(N-1)}{2} = N^2/2 + o(N^2)$. Questo vuol dire che
+il nostro oracolo dovr\`a utilizzare almeno $N^2/2 +o(N)$ bit.
+
+Allora la nostra soluzione occupa $4 \log \pa{3}$ volte lo spazio dato
+dal limite inferiore, possiamo guadagnare un fattore $2$ se salviamo
+solo le distanze $\delta\pa{u,v}$ con $u<v$ (sfruttando la simmetria
+delle distanze) abbassandoci a $2\log \pa{3}$.
+
+\`E possibile, partizionando $T$ in macro-micro-alberi, abbassare lo
+spazio utilizzato a $\log\pa{3} /2 N^2 + o(N^2)$ continuando ad
+ammettere query in tempo costante, ma noi non lo faremo.
+
 \subsection{Possibile generalizzazione: archi pesati}
 
 
