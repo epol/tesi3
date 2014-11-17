@@ -841,7 +841,7 @@ di $T$
 Dato un nodo $u\in T$ chiamiamo $r_T(u)$ la posizione di $l(u)$ nella
 stringa $L_T$, in questo modo \`e facile convincersi che 
 \[ \sum _{v \in \pi(u)} l(v) = \sum _{i=0} ^
-{r_T(u)} L_T(i) \]
+{r_T(u)} L_T[i] \]
 infatti il valore di $l(v)$ per $v \not\in \pi(u)$ viene annullato da
 $-l(v)$ scritto nella stringa nel momento in cui viene chiusa la
 visita al sottoalbero di $v$, questo non accade per $v\in \pi(u)$
@@ -857,6 +857,53 @@ invece non dipende dall'etichettatura scelta ma solo dall'albero,
 quindi ci basta salvarlo solo una volta.
 
 \subsection{Somme prefisse precalcolate: Wavelet Tree}
+
+Ci poniamo ora il problema di precalcolare e di salvare le somme
+prefisse di una stringa $L$ fissata. Ricordiamoci che, essendo
+l'etichettatura ternaria, gli elementi di $L$ sono solo~ $\set{-1, 0,
+  1}$.
+
+Ci vengono in aiuti i Wavelet Tree (struttura che non discuteremo nel
+dettaglio) per i quali vale il seguente teorema:
+\begin{myteo}
+  Data una sequenza $S$ di $n$ caratteri presi dall'alfabeto $\Sigma$
+  il Wavelet Tree costruito su $S$ occupa $nH_0(S) + o(n)$ bit e
+  risponde alle seguenti richieste in $\log \abs{\Sigma}$ tempo:
+  \begin{itemize}
+  \item Ottieni il carattere $S[i]$
+  \item $Rank_c (S,i)$: calcola il numero di occorenze del carattere~
+    $c\in \Sigma$ nella stringa $S[0:i]$ (cio\`e nei primi~ $i+1$
+    elementi di $S$)
+  \item $Select _c (S,i)$: calcola la posizione dell'$i$-esima
+    occorrenza di~ $c\in \Sigma$ in~ $S$
+  \end{itemize}
+\end{myteo}
+
+Dove $H_0(S)$ \`e l'ordine $0$ dell'entropia empirica di $S$ che
+possiamo definire (chiamando $n_\sigma$ il numero di occorenze del
+carattere $\sigma\in \Sigma$ in $S$ e $n$ il numero totale di
+caratteri in $S$) come:
+\[ H_0(S) = - \sum _{\sigma \in \Sigma} \frac{n_\sigma}{n} \log \pa{
+  \frac{n_\sigma}{n}} \] 
+
+Dato che $H_0(S) \le \log \abs{\Sigma}$ possiamo scrivere che un
+Wavelet Tree occupa al pi\`u $\log \abs{\Sigma} n + o(n)$ bit.
+
+Tornando al nostro problema delle somme prefisse, possiamo ora
+presentare il seguente risultato:
+\begin{mypro}
+  Salvando la stringa $L$ con un Wavelet Tree possiamo calcolare una
+  somma prefissa
+  \[ \sum _{i=0} ^ {k} L[i] = \sum _{\sigma \in \Sigma} \sigma Rank
+  _\sigma (S,k) \] 
+  in $O\pa{ \abs{\Sigma} \log \abs{\Sigma} }$ mantendendo una struttra
+  dati occupante $n\log \abs{\Sigma} + o(n)$ bit.
+\end{mypro}
+
+Nel nostro caso $\Sigma = \set{ -1,0,1}$ e $n = 2N$, quindi in tempo
+costante riusciamo a calcolare una somma prefissa utilizzando un
+Wavelet Tree che occupa $2\log\pa{ 3} N + o(N)$ spazio.
+
 
 \subsection{Complessit\`a e ottimalità}
 \label{sec:oracoloesattoottimale}
