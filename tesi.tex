@@ -121,7 +121,7 @@ Per noi il peso di un arco rappresenta la sua lunghezza, per questo
 chiameremo \textit{lunghezza di un arco} il suo peso.
 
 Nel caso non pesato ci riconduciamo al caso pesato prendendo $w$
-costante a $1$.
+uguale a $1$.
 
 Siamo interessati a considerare grafi diretti, cioè gli archi sono
 orientati, nel caso indiretto possiamo ridurci a questo caso
@@ -151,7 +151,7 @@ v_j )$ con $0 \le i \le j \le k$.
 
 \begin{mydef}[Lunghezza di un cammino]
   Chiamiamo lunghezza di un cammino $p$ la quantità
-  \[ w(p) = \sum _{i=1} ^k w \pa{ (v_{i-1}, v_i) } \]
+  \[ w(p) = \sum _{i=1} ^k w \pa{ v_{i-1}, v_i } \]
 \end{mydef}
 
 Osserivamo che la lunghezza della somma di due cammini è uguale alla
@@ -172,7 +172,8 @@ non negativa, per cui da ora usiamo l'ipotesi $\forall e \in E \; w(e)
 \end{mydef}
 
 Per $P(u,v) \neq \emptyset$ chiamiamo \textit{cammino minimo} fra $u$
-e $v$ un cammino la cui lunghezza realizza il minimo.
+e $v$ un cammino in $P(u,v)$ la cui lunghezza realizza il minimo, non
+\`e detto che questo sia unico.
 
 Osserviamo che questa distanza verifica le proprietà
 \begin{itemize}
@@ -204,14 +205,16 @@ a calcolare:
 \end{itemize}
 
 Possiamo costruire il grafo dei cammini minimi con sorgente in $s$ che
-chiamiamo $G_s = (V,E_s)$ dove
-\[ E_s = \set{ e\in E | e\text{ compare in un cammino minimo con
-    sorgente }s} \]
-
+chiamiamo $G_s = (V_s,E_s)$ dove
+\begin{align*}
+  &V_s = \set{ u\in V \mid P(s,u) \neq \emptyset } \\
+ &E_s = \set{ e\in E \mid e\text{ compare in un cammino minimo con
+    sorgente }s}
+\end{align*}
 Questo grafo rappresenta tutti i cammini minimi con sorgente $s$.
 
 \begin{mypro}
-  Se gli archi hanno lunghezza strettamente positiva $G_s$ definito
+  Se gli archi hanno lunghezza strettamente positiva, $G_s$ definito
   come sopra è un DAG (grafo aciclico diretto)
 \end{mypro}
 \begin{proof}
@@ -220,21 +223,20 @@ Questo grafo rappresenta tutti i cammini minimi con sorgente $s$.
   dalla sorgente $s$.
 
   Per ogni arco $(v_{i-1},v_i)$ abbiamo supposto che esista un cammino
-  minimo che lo attraversi, troncando questo cammino otteniamo un
+  minimo che lo attraversi. Troncando questo cammino, otteniamo un
   cammino minimo da $s$ a $v_i$ e, troncandolo ulteriormente, un
   cammino minimo da $s$ a $v_{i-1}$. Quindi
-  \[ d_k = d_{k-1} + w\pa{ (v_{i-1} , v_i ) } \Rightarrow d_i >
+  \[ d_k = d_{k-1} + w\pa{ v_{i-1} , v_i  } \Rightarrow d_i >
   d_{i-1} \]
   
   Applicando lo stesso argomento all'arco $(v_k,v_0)$ otteniamo $d_0 >
-  d_k$. Unendo queste disuguaglianze otteniamo
+  d_k$. Unendo queste disuguaglianze otteniamo come assurdo che
   \[ d_0 < d_1 < \dots < d_k < d_0 \Rightarrow d_0 < d_0 \]
-  Assurdo.
 \end{proof}
 
-Se invece scegliamo (in modo opportuno) un cammino minimo per ogni
-nodo otteniamo un albero di cammini minimi. Per ottenere questa
-struttura procediamo in modo induttivo
+Se invece scegliamo (in modo opportuno) un solo cammino minimo da $s$
+per ogni nodo otteniamo un albero di cammini minimi con radice
+$s$. Per ottenere questa struttura procediamo in modo induttivo
 
 \textbf{Caso base:} inseriamo la sorgente $s$ nell'albero
 
@@ -258,13 +260,13 @@ Dato un albero di cammini minimi, per ogni nodo $v\in V$ definiamo:
 
 \subsection{Archi non pesati: BFS}
 
-Nel caso in cui tutti gli archi hanno lunghezza $1$ l'albero dei
+Nel caso in cui tutti gli archi hanno la stessa lunghezza l'albero dei
 cammini minimi può essere costruito con una visita in ampiezza (BFS:
-breadth-first search).
+breadth-first search), ma tale metodo non funziona nel caso generale.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.9\textwidth]{preBFS}
+  \includegraphics[width=0.6\textwidth]{preBFS}
   \caption{Esempio di un grafo indiretto non pesato}
   \label{fig:preBFS}
 \end{figure}
@@ -272,12 +274,15 @@ breadth-first search).
 
 \begin{figure}[H]
   \begin{algorithmic}
-    \For {v $\in$ V} \State{v.d = $\infty$} \State{v.p = v}
+    \For {v $\in$ V} 
+    \Comment {Inizializzazione: non conosciamo nessun
+      cammino da $s$ a $v$} \State{v.d = $\infty$} \State{v.p = v}
     \EndFor
-    \State{s.d = 0} \State{q = Queue()} \State{q.push(s)} \While{ !
+    \State{s.d = 0} \Comment {Inizializzazione: $s$ dista $0$ da s\`e
+      stesso} \State{q = Queue()} \State{q.push(s)} \While{ !
       q.empty()} \State{v = q.pop()} \For{u $\in$ v.neigh} \If{u.d =
-      $\infty$} \State{u.d = v.d + 1} \State{u.p = v}
-    \State{q.push(u)}
+      $\infty$} \Comment{Cioè \`e la prima volta che raggiungiamo $u$}
+    \State{u.d = v.d + 1} \State{u.p = v} \State{q.push(u)}
     \EndIf
     \EndFor
     \EndWhile
@@ -285,14 +290,17 @@ breadth-first search).
 %  \caption{Pseudocodice per la BFS}
 \label{fig:BFScode}
 \end{figure}
-Non dimostreremo che questo algoritmo è corretto; osserviamo solamente
-che l'algoritmo termina in $O (M)$, infatti ogni nodo viene
-inserito ed estratto dalla coda esattamente una volta e ogni arco
-viene visitato una volta durante la visita del nodo di partenza.
+Non dimostreremo che questo algoritmo \`e corretto. L'idea che sta
+alla base della dimostrazione \`e che i nodi vengono esaminati in
+ordine di distanza non decrecente.
+
+Osserivamo che l'algoritmo termina in $O\pa{M}$, infatti ogni nodo
+viene inserito ed estratto dalla coda esattamente una volta e ogni
+arco viene visitato una volta durante la visita del nodo di partenza.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.9\textwidth]{BFS}
+  \includegraphics[width=0.6\textwidth]{BFS}
   \caption{Il grafo precedente dopo aver applicato una BFS con
     sorgente $0$, in blu gli archi scelti per l'albero, in rosso gli
     archi non scelti ma comunque appartenenti al DAG dei cammini
@@ -314,32 +322,48 @@ comunque non negativa, dobbiamo usare l'algoritmo di Dijkstra
 
 \begin{figure}[H]
   \begin{algorithmic}
-    \For {v $\in$ V} \State{v.d = $\infty$} \State{v.p = v}
+    \For {v $\in$ V} 
+    \Comment{Inizializzazione: non conosciamo nessun cammino da $s$ a
+      $v$}
+    \State{v.d = $\infty$} \State{v.p = v}
     \EndFor
     \State{S = $\emptyset$} \State{s.d = 0} \State{q =
       PriorityQueue()} \State{q.push(s,s.d)} \While{ ! q.empty()}
-    \State{v = q.extract\_min()} \State{S = S $\cup$ \{v\}} \For{u
-      $\in$ v.neigh} \If{u.d > v.d + w((v,u))} \State{u.d = v.d + 1}
-    \State{u.p = v} \State{q.push(u,u.d)}
+    \State{v = q.extract\_min()} \State{S = S $\cup$ \{v\}}
+    \Comment{Sappiamo che abbiamo trovato la distanza esatta di $v$}
+    \For{u $\in$ v.neigh} \If{u.d > v.d + w((v,u))} \Comment{Possiamo
+      migliorare la distanza di $u$}\State{u.d = v.d + 1}
+    \State{u.p = v} \State{q.push(u,u.d)} \Comment{Aggiorniamo $u$
+      nella coda}
     \EndIf
     \EndFor
     \EndWhile
   \end{algorithmic}
 %\caption{Pseudocodice per Dijkstra}
 \end{figure}
+L'idea che sta alla base di questo algoritmo \`e di trovare dei
+cammini (non necessariamente minimi) da $s$ ad ogni vertice e
+aggiornarli nel tempo. Manteniamo in una PriorityQueue tutti i
+nodi di cui non consciamo ancora la loro distanza esatta ordinati per
+la distanza ``temporanea'', ad ogni iterazione possiamo dire di
+conoscere la distanza esatta del nodo nella coda con distanza pi\`u
+bassa, infatti ogni cammino passante per un altro nodo nella coda non
+potr\`a fare di meglio.
+
+
 Anche questa volta possiamo disegnare l'albero dei cammini minimi con
 la stessa procedura usata per il caso della BFS.
 
 Per la complessit\`a vediamo che ogni arco viene visitato esattamente
 una volta e, per ogni visita, viene effettuato un inserimento nella
-PriorityQueue. Il numero di estrazioni dalla PriorityQueue \`e
-maggiorato dal numero di inserimenti, quindi la complessit\`a di
-Dijkstra \`e $O(M\log N)$ utilizzando una coda di priorit\`a
-implementata con un min-heap.
+PriorityQueue. Il numero di estrazioni dalla struttura di dati
+PriorityQueue \`e maggiorato dal numero di inserimenti, quindi la
+complessit\`a dell'algoritmo di Dijkstra \`e $O(M\log N)$ utilizzando
+una coda di priorit\`a implementata con un min-heap.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.9\textwidth]{dijkstra}
+  \includegraphics[width=0.6\textwidth]{dijkstra}
   \caption{Un grafo diretto pesato a cui è stato applicato Dijkstra
     con sorgente $0$, in blu gli archi scelti per l'albero, in rosso gli
     archi non scelti ma comunque appartenenti al DAG dei cammini
@@ -357,21 +381,21 @@ questo procedimento al variare di $s\in V$ otteniamo questa
 informazione per ogni coppia di nodi $(u,v)$ del grafo.
 
 Nel nostro caso (archi di peso non negativo) possiamo applicare
-Dijkstra su ogni nodo ottenendo un tempo di $O(NM\log N)$
+l'algoritmo di Dijkstra su ogni nodo ottenendo un tempo di $O(NM\log
+N)$ operazioni aritmetiche.
 
 Ci chiediamo se esiste un metodo più veloce per estrarre alcune di
 queste informazioni, possiamo sperare di riuscire a fare di meglio
 evitando di fissare la sorgente.
 
 Gli algoritmi che vedremo utilizzano la matrice di adiacenza del
-grafo. Supponiamo i aver numerato i nodi da $0$ a $N-1$, allora
-definiamo la matrice di adiacenza di $G$ come la matrice $W$ con
-elementi
+grafo. Supponendo di aver numerato i nodi da $0$ a $N-1$, definiamo la
+matrice di adiacenza di $G$ come la matrice $W$ con elementi
 \[
   w_{i,j} = \left\{
     \begin{matrix}
       0 & \text{se } i = j \\
-      w\pa{(i,j)} & \text{se } i\neq j,\; (i,j) \in E \\
+      w\pa{i,j} & \text{se } i\neq j,\; (i,j) \in E \\
       \infty & \text{se } i\neq j,\; (i,j) \not\in E
     \end{matrix}
   \right.
@@ -409,23 +433,25 @@ cammino con al più $m$ archi da $i$ a $j$ può avere:
   _{i,j}$ da cui $l^{(m)}_{i,j} \le l^{(m-1)} _{i,j}$
 \item $m$ archi, allora lo possiamo spezzare come un cammino di
   $m-1$ archi (che arriverà ad un nodo che chiamiamo $k$) più un
-  cammino di $1$ arco di lunghezza $w\pa{(k,j)}$. Per questo possiamo
+  cammino di $1$ arco di lunghezza $w\pa{k,j}$. Per questo possiamo
   scrivere 
   \[ \forall k \in V\;\;\; l^{(m)}_{i,j} \le l^{(m-1)} _{i,k} + w\pa{
-    (k,j) } \]
+    k,j } \]
 \end{itemize}
 Quindi possiamo scrivere
 \[ l^{(m)}_{i,j} = \min\set{ l^{(m-1)} _{i,j} , \min _{0\le k\le N-1}
-  \set{ l^{(m-1)} _{i,k} + w_{k,j}} }  =  \min _{0\le k\le N-1}
-  \set{ l^{(m-1)} _{i,k} + w_{k,j}} \]
-Dove l'ultima uguaglianza possiamo scriverela perché abbiamo imposto
+  \set{ l^{(m-1)} _{i,k} + w\pa{k,j}} } = \min _{0\le k\le N-1} \set{
+  l^{(m-1)} _{i,k} + w_{k,j}} \]
+dove l'ultima uguaglianza possiamo scriverela perché abbiamo definito
+gli elementi di $W$ come $w_{i,j} = w\pa{i,j}$ e abbiamo imposto
 $w_{i,i} = 0$.
 
 Implementando questa procedura impieghiamo $O(N)$ per calcolare un
 $l^{(m)}_{i,j}$, $O(N^2)$ per calcolare tutta la matrice $L^{(m)}$ da
-cui $O(N^4)$ per risolvere il problema, questo tempo è peggiore di
-applicare Dijkstra per ogni sorgente, infatti abbiamo osservato che
-con quel metodo si impiega $O(NM\log N) = O( N^3 \log (N) )$ tempo.
+cui $O(N^4)$ per risolvere il problema. Questo tempo è superiore a
+quello ottenuto applicando l'algoritmo di Dijkstra per ogni sorgente,
+infatti abbiamo osservato che con quel metodo si impiegano $O(NM\log
+N) = O( N^3 \log (N) )$ operazioni aritmetiche.
 
 Vediamo come, leggendo l'aggiornamento della matrice $L$ come un
 prodotto fra matrici, possiamo migliorare le prestazioni
@@ -455,7 +481,7 @@ quindi il nostro spazio non \`e un anello.
 Possiamo scrivere
 \begin{align*}
   L^{(1)} & = & L^{(0)} * W & = & W \\
-  L^{(1)} & = & L^{(1)} * W & = & W^2 \\
+  L^{(2)} & = & L^{(1)} * W & = & W^2 \\
   & & \vdots & & \\
   L^{(N-1)} & = & L^{(N-2)} * W & = & W^{N-1} 
 \end{align*}
@@ -472,23 +498,25 @@ Siamo riusciti, in questo modo, a ridurre il tempo a $O\pa{ N^3 \log
 simile a quello di Dijkstra nel caso di grafo denso.
 
 Potremmo pensare di migliorare questo metodo utilizzando la
-moltiplicazione veloce fra matrici (che impiega $O\pa{pN^\omega}$
-tempo dove $p$ è il tempo di un prodotto fra due entrate, $N$ la
-dimensione della matrice e $2 \le \omega <3$ un esponente legato al
-metodo). In questo caso, però, non lo possiamo applicare direttamente
-perché abbiamo osservato che la struttura di $\pa{ \mathbb{R} \cup
-  \set{\infty}, \min , +}$ non è un anello e algoritmi come quello di
-Strassen utilizzando l'inverso della prima operazione.
+moltiplicazione veloce fra matrici che impiega $O\pa{pN^\omega}$ tempo
+dove $p$ è il tempo di un prodotto fra due entrate, $N$ la dimensione
+della matrice e $2 \le \omega <3$ un esponente legato al metodo ottimo
+(il cui valore \`e tuttora un problema aperto). In questo caso, però,
+non lo possiamo applicare direttamente perché abbiamo osservato che la
+struttura di $\pa{ \mathbb{R} \cup \set{\infty}, \min , +}$ non è un
+anello e algoritmi come quello di Strassen utilizzando l'inverso della
+prima operazione.
 
-Consideriamo il prodotto $\min +$, supponiamo che le matrici $A,B$ di
-cui vogliamo calcolare il prodotto siano a coefficienti interi (cio\`e
-supponiamo che $w:\; E \to \set{0, 1,...,k}$), allora scriviamo le
+Tuttavia nel caso in cui le matrici siano ad entrate intere \`e
+possibile procedere nel seguente modo: supponiamo che le matrici $A,B$
+abbiano coefficienti in $\set{0, 1,...,k}$, allora scriviamo le
 matrici $A'$ e $B'$ con coefficienti
 \[ a'_{i,j} = x ^{a_{i,j}} \;\;\; b'_{i,j} = x ^{b_{i,j}} \]
 dove $x$ è un'indeterminata. Sia quindi
 \[ C' = A' \cdot B' \]
 Dove stiamo usando il prodotto fra matrici, ma con coefficienti
-nell'anello dei polinomi. Possiamo scrivere ora 
+nell'anello dei polinomi. Possiamo ottenere una martice $C$ i cui
+coefficienti sono
 \[ c _{i,j} = \mathrm{first}\pa{c'_{i,j}} \]
 dove $\mathrm{first}$ ritorna il grado del monomio di grado più
 piccolo in $c'_{i,j}$.
@@ -498,25 +526,25 @@ piccolo in $c'_{i,j}$.
 \mathrm{first} \pa{c'_{i,j}} = \min _k \set{ a_{i,k} + b_{k,j} } \]
 
 Quindi, nel caso di archi di lunghezza intera, siamo in grado di fare
-il prodotto fra le matrici $L^{(i)}$ in $O\pa{pN^\omega }$ dove $p$ è
+il prodotto fra le matrici $L^{(i)}$ in $O\pa{pN^\omega }$ tempo dove $p$ è
 il costo di un prodotto fra polinomi. Si pu\`o scrivere $p = O\pa{d
   \log d}$ dove $d$ \`e il diametro del grafo da cui otteniamo che
-questo algoritmo utilizza $O\pa{ d N ^\omega \log d \log n}$
+questo algoritmo utilizza $O\pa{ d N ^\omega \log d \log N}$
 operazioni aritmetiche. Quindi, nel caso di grafi con diametri
-piccoli ($d = O(1)$), come possono essere le reti sociali, abbiamo
+piccoli ($d = \log\pa{N}$), come possono essere le reti sociali, abbiamo
 migliorato le prestazioni del prodotto.
 
 In \cite{funnymult} viene analizzato questo particolare prodotto tra
 matrici proveniente da problemi di ricerca dei cammini minimi.
 
 
-Esistono altri algoritmi per calcolare la tabella delle distanze, per
-esempio l'algoritmo di Floyd–Warshall calcola la tabella delle
-distanze (per un grafo senza cicli negativi) in $\Theta\pa{ N^3}$,
-citiamo anche il risultato di \cite{apspfmp}: possiamo calcolare la
+Esistono altri algoritmi per calcolare la tabella delle distanze. Per
+esempio, l'algoritmo di Floyd–Warshall calcola la tabella delle
+distanze (per un grafo senza cicli negativi) in $\Theta\pa{ N^3}$.
+Citiamo anche il risultato di \cite{apspfmp}: possiamo calcolare la
 tabella delle distanze di un grafo con archi di peso intero positivo
-in $\tilde O\pa{ kN^\omega}$ dove $k$ è la massima lunghezza di un
-arco utilizzando, ancora una volta, il prodotto veloce tra matrici.
+in $\tilde O\pa{ kN^\omega}$ tempo dove $k$ è la massima lunghezza di
+un arco utilizzando, ancora una volta, il prodotto veloce tra matrici.
 
 \subsection{I cammini minimi}
 
@@ -531,20 +559,21 @@ lemma:
 \end{mylem}
 
 Grazie a questo lemma possiamo costruire ricorsivamente i cammini
-minimi, supponiamo di essere interessati ai cammini minimi da $u$ a
-$v$, se ne vogliamo trovare solo uno ci basta sceglire un vicino $u'$
-``buono'' (cioè che rispetta l'uguaglianza del lemma) di $u$ e poi,
-ricorsivamente, proseguire costruendo un cammino minimo da $u'$ a
-$v$. Se invece siamo interessati a conoscere tutti i cammini minimi
-allora dobbiamo calcolarci i cammini minimi per \emph{tutti} i vicini
-``buoni'' di $u$.
+minimi. Supponendo di essere interessati ai cammini minimi da $u$ a
+$v$, se ne vogliamo trovare solo uno ci basta scegliere un vicino $u'$
+``buono'' (cioè che rispetta l'uguaglianza del lemma
+\ref{lem:vicinibuoni}) di $u$ e poi, ricorsivamente, proseguire
+costruendo un cammino minimo da $u'$ a $v$. Se invece siamo
+interessati a conoscere tutti i cammini minimi allora dobbiamo
+calcolarci i cammini minimi per \emph{tutti} i vicini ``buoni'' di
+$u$.
 
 Il numero di cammini minimi tra due vertici può essere esponenziale
 come si vede in questo semplice esempio:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{diamante}
+  \includegraphics[width=0.7\textwidth]{diamante}
   \caption{In questo esempio di grafo diretto non pesato vediamo che
     esistono esponenziali cammini minimi da $0$ a $9$}
   \label{fig:diamante}
@@ -565,27 +594,27 @@ contenenti cicli, infatti questi (pur non essendo minimi) potrebbero
 comparire fra i $k$ cammini più brevi.
 
 Questo problema è molto studiato in letteratura e noi non lo
-tratteremo, citeremo solo alcuni risultati.
+tratteremo, citeremo solo alcuni risultati noti.
 
 In \cite{kshortest} vengono forniti algoritmi su grafi diretti per
 trovare:
 \begin{itemize}
 \item dati $u,v \in V$ trovare i primi $k$ cammini più brevi in
-  $P\pa{u,v}$ in tempo $O\pa{m + n\log n + k}$
+  $P\pa{u,v}$ in tempo $O\pa{m + n\log n + k}$;
 \item una struttura (costruita in $O\pa{m+n\log n}$ tempo) che dati
   $u,v\in V$ ritorna in ordine di lunghezza i cammini in $P(u,v)$
-  estraendo l'$i$-esimo in $\log i$ tempo
+  estraendo l'$i$-esimo in $O\pa{\log i}$ tempo;
 \item dato $s\in V$ trovare i $k$ cammini più brevi per tutte le
-  destinazioni $v\in V$ in $O\pa{m + n\log n + kn}$
+  destinazioni $v\in V$ in $O\pa{m + n\log n + kn}$ tempo.
 \end{itemize}
 
-Uno dei problemi di questi algoritmi è che devono processare tutto il
-grafo (che potrebbe essere molto grande) per poter ritornare i primi
-$k$ cammini minimi, invece in \cite{kspheur} viene presentato
+Uno dei problemi di questi algoritmi è che devono elaborare tutto il
+grafo (che potrebbe essere molto grande) per poter restituire i primi
+$k$ cammini minimi. Invece in \cite{kspheur} viene presentato
 algoritmo che trova i $k$ cammini più brevi esplorando il grafo
 \textit{on-the-fly}, utilizzando delle euristiche per migliorarne le
 prestazioni ma ottenendo comunque, al caso pessimo, lo stesso tempo
-dell'algoritmo di Eppstein cioè $O\pa{m + n\log n + k}$.
+dell'algoritmo di Eppstein cioè $O\pa{m + n\log n + k}$ tempo.
 
 \chapter{Oracoli per distanze}
 
