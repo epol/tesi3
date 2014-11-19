@@ -15,7 +15,7 @@
 \usepackage[noend]{algpseudocode}
 %\usepackage{fullpage}
 \usepackage{hyperref}
-
+\usepackage{chngcntr}
 
 
 %\setlength{\parindent}{0in}
@@ -85,12 +85,17 @@
 \@beginparpenalty=10
 \makeatother
 
+\counterwithin{figure}{chapter}
+\counterwithin{section}{chapter}
+\counterwithin{counter1}{chapter}
+
 \title{Tesi}
 \author{Enrico Polesel}
 \date{\today}
 
 \begin{document}
 \maketitle
+
 
 \setcounter{tocdepth}{5}
 
@@ -584,10 +589,17 @@ dell'algoritmo di Eppstein cioè $O\pa{m + n\log n + k}$.
 
 \chapter{Oracoli per distanze}
 
-Ora che sappiamo calcolare la tabella delle distanze ci poniamo il
-problema di salvarle. Il metodo banale di farlo (salvare la matrice
+Abbiamo visto come calcolare la tabella delle distanze, ora ci poniamo
+il problema di salvarle. Il metodo banale di farlo (salvare la matrice
 delle distanze $D$) richiede $O\pa{ N^2 \log d}$ bit dove $d$ è il
 diametro del grafo ($d = O\pa{N}$ nel caso non pesato).
+
+Diciamo che un certo algoritmo \`e un oracolo se \`e in grado di
+rispondere alle nostre richieste (nel nostro caso la distanza tra due
+punti qualsiasi) in tempo proporzionale all'output (nel nostro caso
+$O\pa{1}$). In realt\`a saremo anche interessati ad algoritmi che
+hanno tempi di risposta pi\`u lunghi ma comunque migliori rispetto al
+metodo banale (per esempio logaritmici).
 
 \`E naturale porsi due probelmi:
 \begin{itemize}
@@ -596,20 +608,24 @@ diametro del grafo ($d = O\pa{N}$ nel caso non pesato).
   della distanza tra due vertici? Vedremo questo problema nella
   sezione \ref{sec:oracoliapprossimati}
 \item qual'\`e la struttura dati pi\`u piccola che contiene le
-  informazioni esatte sulle distanza di un grafo? Vedremo questo nella
+  informazioni esatte sulle distanza di un grafo e ammette
+  interrogazioni in tempo costante? Vedremo questo nella
   sezione \ref{sec:oracoliesatti}
 \end{itemize}
+
+In questo capitolo useremo grafi non pesati, \`e comunque studiato
+anche il caso pesato ma noi lo tralasceremo per semplicit\`a.
 
 \section{Oracoli approssimati}
 \label{sec:oracoliapprossimati}
 
-Come gi\`a anticipato, in questa sezione ci poniamo il problema di
-usare poco spazio in memoria pur continuando a saper stimare (ma senza
-pretendere di restituire il valore esatto) la distanza fra due punti
-in un grafo.
+In questa sezione ci poniamo il problema di usare poco spazio in
+memoria pur continuando a saper stimare (ma senza pretendere di
+restituire il valore esatto) la distanza fra due punti in un grafo.
 
-Ricordiamo che salvare il grafo completo richiede $O\pa{ N + M } =
-O\pa{ N^2}$, per cui dobbiamo cercare degli approci alternativi.
+Ricordiamo che salvare il grafo completo richiede $O\pa{ N + M }$
+spazio che diventa $O\pa{ N^2}$ per grafi densi. Per questo dobbiamo
+cercare degli approci alternativi.
 
 \begin{mydef}[$r$-approssimazione]
   Diciamo che un certo algoritmo ritorna una $r$-approsimazione della
@@ -617,9 +633,6 @@ O\pa{ N^2}$, per cui dobbiamo cercare degli approci alternativi.
   distanza ritornata dall'algoritmo, si ha che
   \[ d\pa{u,v} \le r \delta\pa{u,v} \]
 \end{mydef}
-
-Per questo capitolo useremo grafi non pesati, \`e comunque studiato
-anche il caso pesato ma noi lo tralasceremo per semplicit\`a.
 
 \subsection{Graph spanners}
 
@@ -637,9 +650,9 @@ grafo.
 \end{mydef}
 
 Se quindi troviamo un grafo $G'$ con $o\pa{ N^2}$ archi (per esempio
-$O(N)$) con questa propriet\`a allora occupiamo $\tilde O(N \log N)$
+$O(N)$) con questa propriet\`a allora occupiamo $o(N^2)$
 spazio per salvarlo e sappiamo rispondere ad una query di distanza in
-$O(N)$ (il tempo di eseguire una BFS).
+$O(M)$ (il tempo di eseguire una BFS).
 
 Possiamo caratterizzare un $t$-spanner anche con
 \begin{mylem}
@@ -723,10 +736,10 @@ In \cite{appdistoracl} gli autori presentano questo risultato:
   fattore $2k-1$
 \end{myteo}
 \begin{mycor}
-  Nelle ipotesi del teorema precedente fissando $k=2$ ottieniamo che
-  che preprocessando il grafo in $O\pa{MN^{1/2}}$ si ottiene una
-  struttura occupante $O\pa{N^{3/2}}$ che resituisce in $O\pa{1}$ la
-  distanza tra sue punti approssimata di un fattore $3$
+  Nelle ipotesi del teorema precedente fissando $k=2$ otteniamo che
+  preprocessando il grafo in $O\pa{MN^{1/2}}$ si ottiene una struttura
+  occupante $O\pa{N^{3/2}}$ che resituisce in $O\pa{1}$ la distanza
+  tra sue punti approssimata di un fattore $3$
 \end{mycor}
 \begin{mycor}
   Nelle ipotesi del teorema precedente fissando $k=\floor{\log N}$ ottieniamo
@@ -776,6 +789,8 @@ $r$ la sua radice. Per ogni nodo $u\in V$ chiamiamo $f(u)$ il padre
 nell'albero scelto e definiamo induttivamente $f^i(u) =
 f\pa{f^{i-1}(u)}$ (poniamo $f^0(u)=u$).
 
+\subsubsection{L'albero etichettato}
+
 Scegliamo una sorgente $s\in V$ e consideriamo le distanze dei vertici
 del grafo da $s$, per ogni nodo $u\in V$ definiamo la quantit\`a
 \[ l_s (u) = \delta\pa{ u,s } - \delta\pa{ f(u),s} \]
@@ -811,6 +826,8 @@ specializzandola nel caso $w = f(u)$ e $v = s$
 Quindi le nostre etichette sono ternarie, cio\`e possono assumere solo
 tre valori.
 
+\subsubsection{Dalle somme sui percorsi alle somme sui prefissi}
+
 Visto che cerchiamo un modo per ottenere risposte in tempo costante,
 non possiamo permetterci di calcolare la sommatoria ad ogni richiesta,
 per questo vogliamo precalcolare in qualche modo queste sommatorie sui
@@ -831,7 +848,10 @@ la seguente sequenza $L_T$
 \end{itemize}
 Dove con $+$ intendiamo la concatenazione di sequenze. La sequenza
 $L_T$ cos\`i definita avr\`a $2N$ elementi dove $N$ \`e la dimensione
-di $T$
+di $T$.
+
+Per capire meglio come \`e costruita la stringa $L_T$ pu\`o essere
+utile vedere la figura~ \ref{fig:labeltree}.
 
 \begin{figure}[h]
   \centering
@@ -929,11 +949,12 @@ Dobbiamo salvare:
 \end{itemize}
 quindi stiamo utilizzando in tutto $2\log\pa{3} N^2 + o(N^2)$ bit.
 
-Osservando che esiste una corrispondenza biunivoca fra grafi indiretti
-non pesati e matrici distanza, si ha che il numero di matrici distanza
-possibili, avendo fissato a $N$ il numero di vertici del grafo, \`e
-$\binom{N}{2} = \pa{N(N-1)}/{2} = N^2/2 + o(N^2)$. Questo vuol dire che
-il nostro oracolo dovr\`a utilizzare almeno $N^2/2 +o(N)$ bit.
+Osserviamo che esiste una corrispondenza biunivoca fra grafi indiretti
+non pesati e matrici distanza, in un grafo di $N$ nodi esitono
+$\binom{N}{2} = \pa{N(N-1)}/{2} = N^2/2 + o(N^2)$ archi possibili,
+quindi il numero di grafi possibili \`e $2^{N^2/2 + o(N^2)}$,
+da cui il numero minimo di bit che deve usare il nostro oracolo sar\`a
+\[ \log \pa{ 2^{N^2/2 + o(N^2)} } = \frac{N^2}{2} + o(N^2) \]
 
 La nostra soluzione occupa $4 \log \pa{3}$ volte lo spazio dato dal
 limite inferiore, possiamo guadagnare un fattore $2$ se salviamo solo
