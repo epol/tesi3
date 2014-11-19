@@ -89,7 +89,7 @@
 \counterwithin{section}{chapter}
 \counterwithin{counter1}{chapter}
 
-\title{Tesi}
+\title{Cammini minimi su grafi: oracoli per distanze e cammini}
 \author{Enrico Polesel}
 \date{\today}
 
@@ -103,7 +103,30 @@
 
 \tableofcontents
 
+\chapter*{Abstract}
+
+In questo lavoro ci proponiamo di discutere vari aspetti della ricerca
+dei cammini minimi in un grafo.
+
+Nel capitolo \ref{chap:camminiminimi} contestualizzeremo il problema e
+discuteremo gli algoritmi comunemente usati per risolvere i vari
+problemi di cammini minimi e mostreremo un interessante collegamento
+con il prodotto veloce tra matrici.
+
+Nei restanti capitoli parleremo di oracoli, cioè algoritmi che,
+dopo un'eventuale preelaborazione dell'input, riescono a rispondere a
+particolari richieste in tempo costante all'output.
+
+Nel capitolo \ref{chap:distanze} vedremo oracoli in grado di
+restituire la distanza tra due punti qualsiasi del grafo. Nel capitolo
+\ref{chap:oracolotutticammini} oracoli che restituiscono
+\textbf{tutti} i cammini fra ogni coppia di vertici in un grafo. In
+entrambi i casi saremo interessati ad ottimizzare lo spazio occupato
+da questi oracoli.
+
+
 \chapter{Cammini minimi su grafi}
+\label{chap:camminiminimi}
 
 \begin{mydef}[Grafo]
   Chiamiamo grafo la coppia $G = (V,E)$ dove $V$ è un insieme finito
@@ -617,6 +640,7 @@ prestazioni ma ottenendo comunque, al caso pessimo, lo stesso tempo
 dell'algoritmo di Eppstein cioè $O\pa{m + n\log n + k}$ tempo.
 
 \chapter{Oracoli per distanze}
+\label{chap:distanze}
 
 Abbiamo visto come calcolare la tabella delle distanze, ora ci poniamo
 il problema di salvarle. Il metodo banale di farlo (salvare la matrice
