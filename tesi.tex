@@ -606,6 +606,7 @@ Vedremo nel capitolo \ref{chap:oracolotutticammini} come salvare
 queste informazioni in modo efficiente.
 
 \section{Problema dei $k$ cammini più brevi}
+\label{sec:kcammini}
 
 Una generalizzazione del problema dei cammini minimi è il problema dei
 $k$ cammini più brevi, cioè dati due vertici $u,v \in V$, ordinati i
@@ -1031,9 +1032,105 @@ numero di bit:
 \chapter{Oracolo per scrivere tutti i cammini minimi}
 \label{chap:oracolotutticammini}
 
+Discutiamo il problema di costruire un oracolo in grado di restituire,
+data una coppia di vertici, \textbf{tutti} i cammini minimi aciclici
+tra la coppia.
+
+Ricordiamo che un'oracolo deve impiegare, nell'elaborare una
+richiesta, tempo proporzionale all'output. Quindi, in questo caso,
+tempo proporzionale al numero di archi restituiti, vale a dire
+\[ O\pa{ c(u,v) \delta (u,v) } \]
+dove $c(u,v)$ \`e il numero di cammini minimi in $P(u,v)$
+
+Ricordiamo che, come abbiamo visto nell'esempio della figura
+\ref{fig:diamante}, il numero di cammini tra una coppia di vertici
+pu\`o essere esponenziale, quindi potremmo essere interessati anche a
+poter chiedere solo un certo numero $k$ di cammini, cos\`i facendo ci
+si avvicinerebbe al problema dei $k$ cammini pi\`u brevi trattato
+nella sezione \ref{sec:kcammini}.
+
+Nel caso particolare di $k=1$ (cio\`e ci basta conoscere un solo
+cammino) allora abbiamo gi\`a osservato, come conseguenza del lemma
+\ref{lem:vicinibuoni}, che ci basta salvare per ogni coppia di vertici
+$u,v$ un vicino ``buono'' $u'$ di $u$ cio\`e tale che esiste un cammino
+minimo da $u$ a $v$ che ha come secondo vertice $u'$. In questo modo
+stiamo occupando $O\pa{N^2 \log N}$ bit di memoria e rispondiamo alle
+richieste in $O\pa{ \delta\pa{u,v}}$, cio\`e il tempo cercato.
+
 \section{Un primo algoritmo}
 
-$O(n^3)$
+Siano $u,v$ due vertici tra i quali stiamo cercando tutti i cammini
+minimi, siano essi $p_1,p_2,...,p_c$ con $c = c(u,v)$.
+
+Siano $u_1,..., u_c$ i nodi che compaiono in seconda posizione nei
+cammini (in prima compare $u$). Visto che, in generale, ci saranno
+delle ripetizioni possiamo supporre (a meno di riordinare i $p_i$) che
+esiste $n$ tale che $u_1,...,u_n$ sono tutti distinti e che ogni nodo
+in $\set{ u_{n+1},..., u_c}$ sia la ripetizione di un qualche nodo
+$\set{ u_1,..., u_n}$.
+
+Possiamo allora partizionare l'insieme $\set{p_1,... ,p_c}$ in $n$
+insiemi $P_1, ..., P_n$ tali che $p_i \in P_k$ se e solo se il secondo
+vertice di $p_i$ \`e $u_k$.
+
+Definiamo anche gli insiemi $\pa{ \tilde P_i} _{i=1,..,n}$ dove
+$\tilde P_i$ contiene tutti i cammini di $P_i$ a cui \`e stato rimosso
+il primo vertice $u$, ci\`o significa che $\tilde P _i \subseteq P\pa{
+  u_i, v}$.
+
+\begin{mypro}
+  Per ogni $i \in \set{ 1,...,k}$ si ha che $\tilde P _i$ contiene
+  tutti e soli i cammini minimi tra $u_i$ e $v$.
+\end{mypro}
+\begin{proof}
+  Tutti questi sono cammini minimi, infatti sappiamo che un
+  sottocammino di un cammino minimo \`e ancora minimo.
+
+  D'altra parte se $q \in P(u_i,v)$ \`e un cammino minimo allora $(u)
+  + q$ diventa un cammino minimo in $P(u,v)$ e quindi esiste $j \in
+  \set{ 1,...,c}$ tale che $(u) +q = p_j$. Siccome il secondo vertice
+  di $p_j$ \`e $u_i$ si ha che $p_j \in P_i$ e quindi $q \in \tilde P
+  _i$.
+\end{proof}
+
+Questa proposizione ci dice che per conoscere i cammini minimi in
+$P(u,v)$ ci basta conoscere i cammini minimi in $P(u_i,v)$ al variare
+di $u_i \in \set{ u_1,..., u_n}$ dove $\set{ u_1,..., u_n}$ sono i
+vicini ``buoni'' definiti dal lemma \ref{lem:vicinibuoni}.
+
+Presentiamo quindi un primo algoritmo, molto semplice, per costruire
+un oracolo in grado di ritornare tutti i cammini minimi.
+
+\textbf{Preelaborazione:}
+\begin{enumerate}
+\item Calcola la matrice $D$ delle distanze fra ogni coppia di vertici;
+\item Per ogni coppia $u,v\in V$ cerca i vicini ``buoni'' di $u$
+  verificando l'uguaglianza del lemma \ref{lem:vicinibuoni} e salvali.
+\end{enumerate}
+
+\textbf{Risposta ad una richiesta}
+\begin{enumerate}
+\item Siano $u,v$ i nodi di cui dobbiamo ritornare i cammini minimi;
+\item Carichiamo dalla memoria l'insieme $u_1,..., u_n$ dei vicini
+  buoni di $u$;
+\item Per ogni $u_i$ calcoliamo l'insieme $\tilde P _i$ dei cammini
+  minimi in $P(u_i,v)$;
+\item Sia $P_i = \set{ (u) + \tilde p _i \mid \tilde p_i \in \tilde
+    P_i }$;
+\item Restituiamo $\bigcup _i P_i$
+\end{enumerate}
+
+Per la preelaborazione utilizziamo $O\pa{ NM}$ tempo, infatti per ogni
+vertice di arrivo $v$ stiamo esaminando tutti gli archi uscenti da
+ogni altro vertice, il risultato della preelaborazione occupa $O\pa{
+  NM \log N}$ bit.
+
+Si pu\`o dimostrare per induzione sulla distanza tra i nodi che una
+richiesta viene elaborata in tempo proporzionale all'output, quindi
+abbiamo scritto un oracolo.
+
+Osserviamo che per grafi densi arriviamo ad occupare $O\pa{ N^3 \log
+  N}$ spazio.
 
 \section{Un algoritmo con tempo di query non ottimale}
 
