@@ -1123,20 +1123,40 @@ un oracolo in grado di ritornare tutti i cammini minimi.
 Per la preelaborazione utilizziamo $O\pa{ NM}$ tempo, infatti per ogni
 vertice di arrivo $v$ stiamo esaminando tutti gli archi uscenti da
 ogni altro vertice, il risultato della preelaborazione occupa $O\pa{
-  NM \log N}$ bit.
+  NM \log {N}}$ bit.
 
 Si pu\`o dimostrare per induzione sulla distanza tra i nodi che una
 richiesta viene elaborata in tempo proporzionale all'output, quindi
 abbiamo scritto un oracolo.
 
 Osserviamo che per grafi densi arriviamo ad occupare $O\pa{ N^3 \log
-  N}$ spazio.
+  \pa{N}}$ spazio.
 
 \section{Un algoritmo con tempo di query non ottimale}
 
-\subsection{L'algoritmo}
+Abbiamo visto che con l'algoritmo precedente occupiamo, al caso
+pessimo, $O\pa{ N^3 \log\pa{N}}$ bit, potremmo pensare di diminuire lo
+spazio occupato calcolando i vicini buoni al momento della richiesta.
 
-\subsection{Complessità}
+Nella preelaborazione, quindi, rimane solo il calcolo della matrice
+delle distanze e il suo salvataggio (che sappiamo fare in $O\pa{ N^2}$
+bit), ma nella richiesta dobbiamo aggiungere la ricerca dei vicini
+``buoni''.
+
+La ricerca dei vicini buoni per un vertice utilizza tempo
+proporzionale al suo grado, visto il carattere ricorsivo
+dell'algoritmo proposto dovremo effettuare questa ricerca per ogni
+vertice presente in un qualche percorso minimo. Possiamo dire che
+esamineremo ogni arco al pi\`u due volte, per questo il tempo di
+elaborazione di una richiesta diventa $O\pa{ c\pa{u,v} \delta\pa{u,v}
+  + M}$. \`E possibile costruire esempi in cui questo peggiora il caso
+precedente, per esempio potremmo avere un solo cammino minimo ma ci
+troviamo a dover esaminare tutti gli archi del grafo. TODO: esempio
+disegnino
+
+Siamo riusciti a migliorare lo spazio occupato al costo di peggiorare
+il tempo impiegato per elaborare una richiesta ottenendo, quindi, un
+algoritmo che non \`e pi\`u un oracolo.
 
 \section{Una classe particolare: grafi planari}
 
