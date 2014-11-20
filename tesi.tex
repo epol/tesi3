@@ -1022,7 +1022,7 @@ ammettere query in tempo costante, ma noi non lo vedremo.
 \subsection{Possibile generalizzazione: archi pesati}
 
 Per grafi indiretti pesati, il limite inferiore in spazio teorico
-diventa $\Omega\pa{ n^2 \log k}$ bit (dove $k$ è il massimo modulo
+diventa $\Omega\pa{ N^2 \log k}$ bit (dove $k$ è il massimo modulo
 della lunghezza di un arco). Partendo dalla struttura presentata per
 archi non pesati \`e possibile ottenerne una che, pur supportando
 query in tempo costante non dipendente da $k$, occupa il seguente
@@ -1065,6 +1065,7 @@ rispondiamo alle richieste in $O\pa{ \delta\pa{u,v}}$, cio\`e il tempo
 cercato.
 
 \section{Un primo algoritmo}
+\label{sec:camminibanale}
 
 Siano $u,v$ due vertici tra i quali stiamo cercando tutti i cammini
 minimi, siano essi $p_1,p_2,...,p_c$ con $c = c(u,v)$.
@@ -1167,6 +1168,18 @@ il tempo impiegato per elaborare una richiesta ottenendo, quindi, un
 algoritmo che non \`e pi\`u un oracolo.
 
 \section{Una classe particolare: grafi planari}
+
+Vediamo come per i grafi planari si possa costruire un oracolo che, al
+caso pessimo, occupa meno spazio rispetto all'oracolo presentato nella
+sezione \ref{sec:camminibanale}.
+
+\begin{mydef}[Grafo planare]
+  TODO: inserire qui una traduzione
+\end{mydef}
+
+Sfruttando la struttura dei grafi planari data dal \textit{separation
+  theorem} riusciamo a migliorare lo spazio occupato dal nostro
+oracolo pur mantenendo tempo di elaborazione proporzionale all'output.
 
 \subsection{Separation theorem}
 
