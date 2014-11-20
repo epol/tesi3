@@ -1036,7 +1036,13 @@ Discutiamo il problema di costruire un oracolo in grado di restituire,
 data una coppia di vertici, \textbf{tutti} i cammini minimi aciclici
 tra la coppia.
 
-Ricordiamo che un'oracolo deve impiegare, nell'elaborare una
+Per semplicit\`a supponiamo che gli archi abbiano lunghezza positiva
+non nulla (in modo da non dover gestire i cicli di lunghezza
+nulla). Il caso generale pu\`o essere ricondotto a questo collassando
+i vertici collegati da archi di lunghezza nulla (nel caso non diretto)
+o aggiungendo degli opportuni archi (nel caso diretto).
+
+Ricordiamo che un oracolo deve impiegare, nell'elaborare una
 richiesta, tempo proporzionale all'output. Quindi, in questo caso,
 tempo proporzionale al numero di archi restituiti, vale a dire
 \[ O\pa{ c(u,v) \delta (u,v) } \]
@@ -1050,12 +1056,13 @@ si avvicinerebbe al problema dei $k$ cammini pi\`u brevi trattato
 nella sezione \ref{sec:kcammini}.
 
 Nel caso particolare di $k=1$ (cio\`e ci basta conoscere un solo
-cammino) allora abbiamo gi\`a osservato, come conseguenza del lemma
+cammino) abbiamo gi\`a osservato, come conseguenza del lemma
 \ref{lem:vicinibuoni}, che ci basta salvare per ogni coppia di vertici
-$u,v$ un vicino ``buono'' $u'$ di $u$ cio\`e tale che esiste un cammino
-minimo da $u$ a $v$ che ha come secondo vertice $u'$. In questo modo
-stiamo occupando $O\pa{N^2 \log N}$ bit di memoria e rispondiamo alle
-richieste in $O\pa{ \delta\pa{u,v}}$, cio\`e il tempo cercato.
+$u,v$ un vicino ``buono'' $u'$ di $u$, cio\`e tale che esiste un
+cammino minimo da $u$ a $v$ che ha come secondo vertice $u'$. In
+questo modo stiamo occupando $O\pa{N^2 \log N}$ bit di memoria e
+rispondiamo alle richieste in $O\pa{ \delta\pa{u,v}}$, cio\`e il tempo
+cercato.
 
 \section{Un primo algoritmo}
 
@@ -1135,13 +1142,14 @@ Osserviamo che per grafi densi arriviamo ad occupare $O\pa{ N^3 \log
 \section{Un algoritmo con tempo di query non ottimale}
 
 Abbiamo visto che con l'algoritmo precedente occupiamo, al caso
-pessimo, $O\pa{ N^3 \log\pa{N}}$ bit, potremmo pensare di diminuire lo
-spazio occupato calcolando i vicini buoni al momento della richiesta.
+pessimo, $O\pa{ N^3 \log\pa{N}}$ bit, potremmo pensare di
+diminuire lo spazio occupato calcolando i vicini buoni al momento
+della richiesta.
 
 Nella preelaborazione, quindi, rimane solo il calcolo della matrice
-delle distanze e il suo salvataggio (che sappiamo fare in $O\pa{ N^2}$
-bit), ma nella richiesta dobbiamo aggiungere la ricerca dei vicini
-``buoni''.
+delle distanze e il suo salvataggio (che sappiamo fare in $\tilde
+O\pa{ N^2}$ bit), ma nella procedura eseguita al momento richiesta
+dobbiamo aggiungere la ricerca dei vicini ``buoni''.
 
 La ricerca dei vicini buoni per un vertice utilizza tempo
 proporzionale al suo grado, visto il carattere ricorsivo
