@@ -1112,20 +1112,20 @@ un oracolo in grado di ritornare tutti i cammini minimi.
 \textbf{Preelaborazione:}
 \begin{enumerate}
 \item Calcola la matrice $D$ delle distanze fra ogni coppia di vertici;
-\item Per ogni coppia $u,v\in V$ cerca i vicini ``buoni'' di $u$
+\item per ogni coppia $u,v\in V$ cerca i vicini ``buoni'' di $u$
   verificando l'uguaglianza del lemma \ref{lem:vicinibuoni} e salvali.
 \end{enumerate}
 
 \textbf{Risposta ad una richiesta}
 \begin{enumerate}
 \item Siano $u,v$ i nodi di cui dobbiamo ritornare i cammini minimi;
-\item Carichiamo dalla memoria l'insieme $u_1,..., u_n$ dei vicini
+\item carichiamo dalla memoria l'insieme $u_1,..., u_n$ dei vicini
   buoni di $u$;
-\item Per ogni $u_i$ calcoliamo l'insieme $\tilde P _i$ dei cammini
+\item per ogni $u_i$ calcoliamo l'insieme $\tilde P _i$ dei cammini
   minimi in $P(u_i,v)$;
-\item Sia $P_i = \set{ (u) + \tilde p _i \mid \tilde p_i \in \tilde
+\item sia $P_i = \set{ (u) + \tilde p _i \mid \tilde p_i \in \tilde
     P_i }$;
-\item Restituiamo $\bigcup _i P_i$
+\item restituiamo $\bigcup _i P_i$
 \end{enumerate}
 
 Per la preelaborazione utilizziamo $O\pa{ NM}$ tempo, infatti per ogni
@@ -1174,8 +1174,13 @@ caso pessimo, occupa meno spazio rispetto all'oracolo presentato nella
 sezione \ref{sec:camminibanale}.
 
 \begin{mydef}[Grafo planare]
-  TODO: inserire qui una traduzione
+  Un grafo si dice \textit{planare} se pu\`o essere rappresentato in
+  un piano in modo che gli archi non si intersechino se non sui
+  vertici.
 \end{mydef}
+
+Si vede facilmente che un sottografo di un grafo planare \`e ancora
+planare. 
 
 Sfruttando la struttura dei grafi planari data dal \textit{separation
   theorem} riusciamo a migliorare lo spazio occupato dal nostro
@@ -1183,9 +1188,109 @@ oracolo pur mantenendo tempo di elaborazione proporzionale all'output.
 
 \subsection{Separation theorem}
 
-\subsection{Un algoritmo in spazio $O(n^{2.5})$}
+Per i grafi planari in \cite{separator} viene dimostrato il seguente
+teorema
+\begin{myteo}[\textit{Separation theorem}]
+  Dato un grafo planare $G = (V,E)$, detto $N = \abs{V}$ \`e
+  possibile partizionare $V$ in tre insiemi $A,B,S$ tali che
+  \begin{itemize}
+  \item $A$ e $B$ hanno al pi\`u $2n/3$ vertici ciascuno
+  \item $S$ ha $O\pa{ \sqrt{N}}$ vertici
+  \item non esistono archi tra $A$ e $B$
+  \end{itemize}
+\end{myteo}
 
-$O(n^{2.5})$ con il separation theorem
+Quindi questo teorema ci permette di dividere un grafo planare in due
+sottografi (anch'essi planari) $A$ e $B$ separati dai nodi in $S$, per
+questo possiamo applicare metodi di \textit{divide et impera} al
+grafo.
+
+Vediamo, per esempio, come ci viene in aiuto in un contesto di ricerca
+di cammini minimi. Siano quindi $u,v \in V$, se dividiamo $V$ con il
+separation theorem possiamo distinguere tre casi: 
+\begin{enumerate}
+\item $u \in A, v\in B$ (o viceversa): allora un cammino minimo in
+  $P(u,v)$ deve passare attraverso un nodo in $S$, quindi ci siamo
+  ricondotti a studiare i cammini minimi in $P(u,s)$ e $P(s,v)$ al
+  variare di $s \in S$, da questi poi possiamo ricostruire i cammini
+  minimi in $P(u,v)$;
+\item $u,v \in A$ (o $B$): possiamo limitarci a studiare $A$ che \`e
+  più piccolo di $V$;
+\item $u\in s, v\in A$ (o $B$): consideriamo $A\cup \set{s}$ che \`e
+  pi\`u piccolo di $V$.
+\end{enumerate}
+avendo osservato che $A$ e $B$ sono a loro volta planari, possiamo
+riapplicare il \textit{separation theorem} al grafo ridotto e ripetere
+il procedimento.
+
+Osserviamo che, nel caso in cui volessimo precalcolare in modo
+ricorsivo le scomposizioni, detta $A,B,S$ la partizione data dal
+teorema ci conviene riapplicare il teorema agli insiemi $A\cup S$ e
+$B\cup S$, infatti in questo modo assorbiamo anche il terzo caso.
+
+La scomposizione ricorsiva ha, al pi\`u, profondit\`a $\log
+_{\frac{2}{3}} \pa{N}$, cio\`e $O\pa{ \log\pa{N}}$.
+
+\subsection{Un algoritmo in spazio $\tilde O(n^{2.5})$}
+
+Supponiamo di aver partizionato ricorsivamente il nostro grafo
+utilizzando il \textit{separation theorem}, vogliamo costruire un
+oracolo che sfrutti questa struttura.
+
+Vista la caratterizzazione che abbiamo dato di un algoritmo
+\textit{divide et impera}, discutiamo cosa deve fare l'oracolo nei tre
+casi:
+\begin{enumerate}
+\item se $u,v$ stanno in due partizioni diverse del grafo dobbiamo
+  ricondurci a studiare i cammini attraverso $S$, siccome non abbiamo
+  tempo di controllare tutte le distanze siamo costretti a salvarci i
+  nodi in $S$ che appartengono ad un qualche cammino minimo in
+  $P(u,v)$.
+\item se $u,v$ appartengono alla stessa partizione allora ci
+  scendiamo nelle partizioni prescelte fino a trovare una partizione
+  che li divida
+\item il terzo caso, grazie alla scelta del partizionamento, \`e
+  uguale al secondo
+\end{enumerate}
+
+Quindi per ogni coppia di vertici siamo interessati a sapere qual'\`e
+la partizione che li separa e, in questa separazione, quali sono i
+nodi separanti attraverso i quali passa un cammino minimo.
+
+Siamo arrivati quindi a costuire il seguente algoritmo:
+
+\textbf{Preelaborazione:}
+\begin{enumerate}
+\item Calcola la matrice delle distanze;
+\item calcola in modo ricorsivo le partizioni di $V$;
+\item per ogni coppia di vertici $u,v$ considera la partizione meno
+  fine che li divide, sia $S$ l'insieme separatore;
+\item salva l'insieme dei vertici $s\in S$ tali che $\delta\pa{u,s} =
+  \delta\pa{s,v}$.
+\end{enumerate}
+
+\textbf{Risposta ad una richiesta:}
+\begin{enumerate}
+\item Siano $u,v$ i vertici di cui vogliamo calcolare i cammini minimi;
+\item leggi dalla memoria l'insieme $\set{s_1,...,s_k}$ dei vertici che
+  separano $u$ da $v$;
+\item per ogni $s_i \in \set{s_1,...,s_k}$ calcola (per ricorsione) i
+  cammini minimi in $P(u,s)$ e $P(s,v)$, sommando ogni possibile
+  coppia di cammini otteniamo l'insieme $P_i$ di tutti i cammini
+  minimi passanti per $s_i$;
+\item se esiste un arco tra $u$ e $v$ ed \`e tale che $\delta\pa{ u,v}
+  = w(u,v)$ aggiungi l'insieme~ $P_0 = \set{ (u,v) }$;
+\item Ritorna $\bigcup _i P_i$.
+\end{enumerate}
+
+Il tempo di risposta \`e quello cercato, infatti per ogni $s_i$
+elaborato esiste almeno un cammino minimo e, quindi, non stiamo
+sprecando tempo.
+
+Vediamo lo spazio occupato, per ogni coppia di nodi $u,v$ dobbiamo
+salvarci l'insieme dei vertici separatori dai quali passa almeno un
+cammino minimo, ma questi sono al pi\`u $O\pa{ \sqrt{N}}$ e, quindi,
+stiamo occupando $O\pa{ N^{2.5} \log\pa{ N} }$ bit.
 
 \section{Un nuovo algoritmo}
 
@@ -1196,7 +1301,7 @@ $O(n^{2.5})$ con il separation theorem
 
 
 \bibliographystyle{alpha}
-\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl,appdistoraclplus,compactdistance}
+\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl,appdistoraclplus,compactdistance,separator}
 
 
 
