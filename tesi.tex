@@ -285,8 +285,9 @@ Dato un albero di cammini minimi, per ogni nodo $v\in V$ definiamo:
 \subsection{Archi non pesati: BFS}
 
 Nel caso in cui tutti gli archi hanno la stessa lunghezza l'albero dei
-cammini minimi può essere costruito con una visita in ampiezza (BFS:
-breadth-first search), ma tale metodo non funziona nel caso generale.
+cammini minimi può essere costruito con una visita in ampiezza (si
+veda, per esempio, \cite{cormen}), ma tale metodo non funziona nel
+caso generale.
 
 \begin{figure}[h]
   \centering
@@ -343,6 +344,7 @@ I cammini minimi possono essere estratti in modo ricorsivo:
 
 Nel caso in cui gli archi non abbiano tutti lunghezza unitaria, ma
 comunque non negativa, dobbiamo usare l'algoritmo di Dijkstra
+(introdotto in \cite{dijkstra}).
 
 \begin{figure}[H]
   \begin{algorithmic}
@@ -1302,7 +1304,7 @@ stiamo occupando $O\pa{ N^{2.5} \log\pa{ N} }$ bit.
 
 
 \bibliographystyle{alpha}
-\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl,appdistoraclplus,compactdistance,separator}
+\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl,appdistoraclplus,compactdistance,separator,cormen,dijkstra}
 
 
 
