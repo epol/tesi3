@@ -105,24 +105,25 @@
 
 \chapter*{Abstract}
 
-In questo lavoro ci proponiamo di discutere vari aspetti della ricerca
+In questa tesi ci proponiamo di discutere vari aspetti della ricerca
 dei cammini minimi in un grafo.
 
-Nel capitolo \ref{chap:camminiminimi} contestualizzeremo il problema e
-discuteremo gli algoritmi comunemente usati per risolvere i vari
-problemi di cammini minimi e mostreremo un interessante collegamento
-con il prodotto veloce tra matrici.
+Nel capitolo \ref{chap:camminiminimi} contestualizziamo il problema e
+discutiamo gli algoritmi comunemente usati per risolvere i vari
+problemi di cammini minimi, infine mostriamo un interessante
+collegamento con il prodotto veloce tra matrici.
 
-Nei restanti capitoli parleremo di oracoli, cioè algoritmi che,
-dopo un'eventuale preelaborazione dell'input, riescono a rispondere a
-particolari richieste in tempo costante all'output.
+Un certo algoritmo lo chiamiamo \textit{oracolo} se, dopo
+un'eventuale preelaborazione dei dati, \`e in grado di rispondere ad
+una certa classe di richieste in tempo proporzionale all'output.
 
-Nel capitolo \ref{chap:distanze} vedremo oracoli in grado di
-restituire la distanza tra due punti qualsiasi del grafo. Nel capitolo
-\ref{chap:oracolotutticammini} oracoli che restituiscono
-\textbf{tutti} i cammini fra ogni coppia di vertici in un grafo. In
-entrambi i casi saremo interessati ad ottimizzare lo spazio occupato
-da questi oracoli.
+Nel capitolo \ref{chap:distanze} vediamo oracoli in grado di
+restituire la distanza tra due punti qualsiasi del grafo.
+
+Nel capitolo \ref{chap:oracolotutticammini} vediamo oracoli che
+restituiscono tutti i cammini fra ogni coppia di vertici in un grafo.
+
+Siamo interessati ad ottimizzare lo spazio occupato da questi oracoli.
 
 
 \chapter{Cammini minimi su grafi}
@@ -1231,7 +1232,7 @@ $B\cup S$, infatti in questo modo assorbiamo anche il terzo caso.
 La scomposizione ricorsiva ha, al pi\`u, profondit\`a $\log
 _{\frac{2}{3}} \pa{N}$, cio\`e $O\pa{ \log\pa{N}}$.
 
-\subsection{Un algoritmo in spazio $\tilde O(n^{2.5})$}
+\subsection{Un oracolo in spazio $\tilde O(n^{2.5})$}
 
 Supponiamo di aver partizionato ricorsivamente il nostro grafo
 utilizzando il \textit{separation theorem}, vogliamo costruire un
