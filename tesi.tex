@@ -1297,7 +1297,35 @@ stiamo occupando $O\pa{ N^{2.5} \log\pa{ N} }$ bit.
 
 \section{Un nuovo algoritmo}
 
-???
+Cerchiamo di migliorare l'algoritmo proposto alla sezione
+\ref{sec:camminibanale}. Facendo alcune considerazioni sui cammini
+minimi riusciamo a diminuire il numero di vicini da salvare senza
+riuscire, per\`o, a diminuire lo spazio utilizzato al caso pessimo.
+
+Siano $u,v\in V$ i nodi di cui vogliamo trovare i cammini minimi.
+
+Supponiamo di conoscere un vicino buono $u'$ di $u$ e di aver gi\`a
+trovato, ricorsivamente, tutti i cammini minimi da $u'$ a $v$, abbiamo
+quindi un insieme $W \subseteq V$ di vertici attraverso i quali passa
+un qualche cammino minimo che abbiamo gi\`a trovato.
+
+Sia $w \in W$, noi conosciamo tutti i cammini minimi da $u$ a $w$ che
+hanno $u'$ come secondo vertice. In realt\`a a noi interessano tutti i
+cammini minimi in $P(u,w)$, quindi possiamo scoprire nuovi cammini
+minimi semplicemente cercando i cammini minimi in $P(u,w)$ e
+concatenandoli con quelli in $P(w,v)$ (che gi\`a conosciamo).
+
+In questo modo abbiamo ampliato l'insieme $W$ dei vertici usati da un
+qualche cammino minimo in $P(u,v)$ e avremo, quindi, nuovi nodi $w\in
+W$ su cui applicare il ragionamento precedente. Fra questi potrebbero
+esserci anche nuovi vicini ``buoni'' che, quindi, non ci servir\`a
+salvare.
+
+TODO: descrizione pi\`u formale
+
+TODO: analisi della struttura trovata
+
+(TODO: \`e comunque un oracolo)
 
 \section{Un caso difficile}
 
