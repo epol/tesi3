@@ -1399,10 +1399,36 @@ $H'$. Siano quindi $H_1, ..., H_n$ le componenti connesse di $H$.
   ogni componente connessa di $H$.
 \end{mycor}
 
+\section{Caso pessimo del nuovo algoritmo}
+\label{sec:casopessimo}
+
+Il caso in cui la nostra strategia precedente fallisce \`e questo:
+
+TODO: diamante.
+
+Viste le considerazioni che abbiamo fatti sulla struttura dei cammini
+minimi, questo grafo riassume la struttura dei cammini minimi fra una
+coppia di vertici. Possiamo immagginare, infatti, di aver collassato
+ogni componente connessa ad un singolo nodo.
+
+Questo esempio, per\`o, non raggiunge il caso pessimo di spazio
+occupato. Possiamo raggiungere il limite di $O\pa{ N M \log \pa{N} }$
+bit considerando il seguente esempio:
+
+TODO: diamante multiplo.
+
+\subsection{Un caso difficile}
+
+Guidati dagli esempi visti, proponiamo alcune indicazioni su come
+costruire un grafo ``difficile'' che ci possa dare un'indicazione
+sullo spazio minimo che pu\`o utilizzare un oracolo per cammini
+minimi.
+
+TODO.
 
 
-\section{Un caso difficile}
-\label{sec:casodifficile}
+
+
 
 
 \bibliographystyle{alpha}
