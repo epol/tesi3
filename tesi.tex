@@ -238,6 +238,7 @@ chiamiamo $G_s = (V_s,E_s)$ dove
 Questo grafo rappresenta tutti i cammini minimi con sorgente $s$.
 
 \begin{mypro}
+\label{pro:DAG}
   Se gli archi hanno lunghezza strettamente positiva, $G_s$ definito
   come sopra è un DAG (grafo aciclico diretto)
 \end{mypro}
@@ -1295,12 +1296,12 @@ salvarci l'insieme dei vertici separatori dai quali passa almeno un
 cammino minimo, ma questi sono al pi\`u $O\pa{ \sqrt{N}}$ e, quindi,
 stiamo occupando $O\pa{ N^{2.5} \log\pa{ N} }$ bit.
 
-\section{Un nuovo algoritmo}
+\section{Miglioriamo l'algoritmo}
 
 Cerchiamo di migliorare l'algoritmo proposto alla sezione
 \ref{sec:camminibanale}. Facendo alcune considerazioni sui cammini
 minimi riusciamo a diminuire il numero di vicini da salvare senza
-riuscire, per\`o, a diminuire lo spazio utilizzato al caso pessimo.
+riuscire, per\`o, a diminuire lo spazio utilizzato nel caso pessimo.
 
 Siano $u,v\in V$ i nodi di cui vogliamo trovare i cammini minimi.
 
@@ -1321,14 +1322,87 @@ W$ su cui applicare il ragionamento precedente. Fra questi potrebbero
 esserci anche nuovi vicini ``buoni'' che, quindi, non ci servir\`a
 salvare.
 
-TODO: descrizione pi\`u formale
+Vediamo come verrebbe elaborata una richiesta di cammini:
+\begin{enumerate}
+\item Siano $u,v$ i nodi in input;
+\item $P = \emptyset$ insieme dei cammini minimi che vogliamo costruire
+\item $W = \emptyset$ l'insieme dei nodi da cui possiamo passare e non
+  abbiamo ancora visitato;
+\item $Z = \emptyset$ l'insieme dei nodi da cui possiamo passare e
+  abbiamo gi\`a visitato;
+\item sia $N$ l'insieme (ridotto) dei vicini ``buoni'' per raggiungere
+  $v$ da $u$;
+\item $W = W \cup N$;
+\item per ogni $w \in W$
+  \begin{enumerate}
+  \item $Z = Z \cup \set{w}$;
+  \item sia $P'$ l'insieme dei cammini minimi in $P(u,w)$;
+  \item sia $P''$ l'insieme dei cammini minimi in $P(w,v)$;
+  \item sia $W'$ l'insieme dei nodi toccati dai camminini in $P'$;
+  \item sia $W''$ l'insieme dei nodi toccati dai camminini in $P''$;
+  \item $P = P \cup \set{ p' + p'' \mid p' \in P' , \ p'' \in
+      P''}$\footnote{In realtà sarebbe $p' - (w) + p''$ per evitare la
+      ripetizione del nodo $w$ fra i due cammini, lo abbiamo
+      tralasciato per semplicit\`a.};
+  \item $W = W \cup \pa{ \pa{ W' \cup W'' } \setminus Z }$ salviamo i
+    nuovi nodi scoperti;
+  \end{enumerate}
+\item resitituisci $P$.
+\end{enumerate}
 
-TODO: analisi della struttura trovata
+Vedremo nella prossima sezione che non siamo riusciti a migliorare lo
+spazio occupato al caso pessimo.
 
-(TODO: \`e comunque un oracolo)
+\subsection{Struttura dei cammini minimi}
+
+Questo algoritmo evidenzia una particolare struttura del grafo
+(aciclico diretto) dei cammini minimi che ora analizziamo nel caso di
+grafi indiretti.
+
+Sia quindi $H = H(u,v) = (W,F)$ il sottografo di $G$ dei cammini
+minimi fra $u$ e $v$. Questo \`e un sottografo del grafo dei cammini
+minimi con sorgente in $u$, siccome quest'ultimo \`e un grafo aciclico
+diretto (lo abbiamo dimostrato nella proposizione~ \ref{pro:DAG})
+allora anche $H$ \`e un grafo aciclico diretto.
+
+Sia $H' = (W',F')$ il sottografo di $H$ ottenuto con $W' = W \setminus
+\set{u,v}$ e $F' = F \cap W' \times W'$, cio\`a abbiamo tolto gli
+estremi $u,v$ da $H$ e stiamo considerando solo i nodi intermedi.
+
+Il grafo $H$ \`e connesso\footnote{Qui usiamo una nozione debole di
+  connessione, diciamo che un grafo diretto $G$ \`e connesso se lo \`e
+  visto come un grafo indiretto} mentre, in generale, non lo sar\`a
+$H'$. Siano quindi $H_1, ..., H_n$ le componenti connesse di $H$.
+
+\begin{mypro}
+  Dato $H_1$ connesso basta conoscere un solo vertice $h \in H_1$
+  qualsiasi per poter conoscere tutto $H_1$ utilizzando il metodo
+  descritto precedentemente.
+\end{mypro}
+\begin{proof}
+  Sia $\tilde H \subseteq H_1$ l'insieme dei nodi che non vengono
+  visitati, supponiamo per assurdo $\tilde H \neq \emptyset$. Siccome
+  $H_1$ \`e connesso deve esistere un arco $f$ che collega $\tilde H$
+  a $H_1 \setminus \tilde H$. Quest'arco ha un vertice in $H_1$ che
+  chiamiamo $w$.
+
+  Nella visita di $w$ abbiamo trovato, ricorsivamente, tutti i cammini
+  minimi in $P(u,w)$ e in $P(w,v)$, in almeno uno di questi due
+  insiemi (a seconda della direzione dell'arco) deve esserci un
+  cammino che passa per $f$ (altrimenti $f\not\in F$), questo vuol
+  dire che anche l'altro estremo di $f$ sta in $H_1 \setminus \tilde
+  H$, ma $f$ l'abbiamo preso come un arco da $\tilde H$ a $H_1
+  \setminus \tilde H$ da cui l'assurdo.
+\end{proof}
+\begin{mycor}
+  Usando il nuovo algoritmo ci basta salvare un vicino ``buono'' per
+  ogni componente connessa di $H$.
+\end{mycor}
+
+
 
 \section{Un caso difficile}
-
+\label{sec:casodifficile}
 
 
 \bibliographystyle{alpha}
