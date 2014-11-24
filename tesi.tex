@@ -81,6 +81,8 @@
 
 \DeclareMathOperator{\im}{Im}
 
+\DeclareMathOperator{\neigh}{neigh}
+
 \makeatletter
 \@beginparpenalty=10
 \makeatother
@@ -1439,7 +1441,30 @@ costruire un grafo ``difficile'' che ci possa dare un'indicazione
 sullo spazio minimo che pu\`o utilizzare un oracolo per cammini
 minimi.
 
-TODO.
+Consideriamo un grafo indiretto non pesato bipartito $G = (V,E)$ i cui
+vertici sono divisi in due insiemi di $N_1$ e $N_2$ nodi ciascuno,
+cio\`e
+\[ A = \set{a_1,....,a_{N_1} } ,\; B = \set{b_1,...,b_{N_2}} \;\;\; V =
+A\cup B \]
+tutti gli archi avranno estremi in due insiemi diversi, cio\`e
+\[ E \subseteq A \times B \cup B \times A \]
+sia $N = N_1 + N_2$ e $M = \abs{E}$.
+
+
+Vogliamo costruire un grafo con queste caratteristiche che ogni
+oracolo per cammini minimi richieda $\Omega \pa{ NM }$ spazio per
+essere memorizzato, in mod da raggiungere (a meno di fattori
+logaritmici) lo spazio richiesto dal nostro algoritmo.
+
+Nell'analisi ci limiteremo ad analizzare i cammini minimi tra due nodi
+in $A$ a distanza $2$. In particolare, viste le limitazioni su $E$, si
+ha che i cammini minimi in $P(a,a')$ sono in corrispondenza biunivoca
+con l'insieme
+\[ \neigh(a) \cap \neigh(a') \subseteq B \]
+dove $\neigh(u)$ indica i vicini del vertice $u$.
+
+Rileggendo questa scrittura vediamo che quello che stiamo
+effettivamente cercando \`e un oracolo per interesezioni di insiemi.
 
 
 
