@@ -1308,7 +1308,7 @@ riuscire, per\`o, a diminuire lo spazio utilizzato nel caso pessimo.
 Siano $u,v\in V$ i nodi di cui vogliamo trovare i cammini minimi.
 
 Supponiamo di conoscere un vicino buono $u'$ di $u$ e di aver gi\`a
-trovato, ricorsivamente, tutti i cammini minimi da $u'$ a $v$, abbiamo
+trovato, ricorsivamente, tutti i cammini minimi da $u'$ a $v$. Abbiamo
 quindi un insieme $W \subseteq V$ di vertici attraverso i quali passa
 un qualche cammino minimo che abbiamo gi\`a trovato.
 
@@ -1318,13 +1318,13 @@ cammini minimi in $P(u,w)$, quindi possiamo scoprire nuovi cammini
 minimi semplicemente cercando i cammini minimi in $P(u,w)$ e
 concatenandoli con quelli in $P(w,v)$ (che gi\`a conosciamo).
 
-In questo modo abbiamo ampliato l'insieme $W$ dei vertici usati da un
-qualche cammino minimo in $P(u,v)$ e avremo, quindi, nuovi nodi $w\in
-W$ su cui applicare il ragionamento precedente. Fra questi potrebbero
-esserci anche nuovi vicini ``buoni'' che, quindi, non ci servir\`a
-salvare.
+In questo modo possiamo aver ampliato l'insieme $W$ dei vertici usati
+da un qualche cammino minimo in $P(u,v)$ e avremo, in questo caso,
+nuovi nodi $w\in W$ su cui applicare il ragionamento precedente. Fra
+questi potrebbero esserci anche nuovi vicini ``buoni'' che, quindi,
+non ci servir\`a salvare nella preelaborazione.
 
-Vediamo come verrebbe elaborata una richiesta di cammini:
+Vediamo come viene elaborata una richiesta di cammini:
 \begin{enumerate}
 \item Siano $u,v$ i nodi in input;
 \item $P = \emptyset$ insieme dei cammini minimi che vogliamo costruire
@@ -1352,14 +1352,14 @@ Vediamo come verrebbe elaborata una richiesta di cammini:
 \item resitituisci $P$.
 \end{enumerate}
 
-Vedremo nella prossima sezione che non siamo riusciti a migliorare lo
-spazio occupato al caso pessimo.
+Vedremo nella sezione \ref{sec:casopessimo} che non siamo riusciti a
+migliorare lo spazio occupato al caso pessimo.
 
 \subsection{Struttura dei cammini minimi}
 
 Questo algoritmo evidenzia una particolare struttura del grafo
-(aciclico diretto) dei cammini minimi che ora analizziamo nel caso di
-grafi indiretti.
+(aciclico diretto) dei cammini minimi in $P(u,v)$ che ora analizziamo
+nel caso di grafi indiretti.
 
 Sia quindi $H = H(u,v) = (W,F)$ il sottografo di $G$ dei cammini
 minimi fra $u$ e $v$. Questo \`e un sottografo del grafo dei cammini
@@ -1368,13 +1368,13 @@ diretto (lo abbiamo dimostrato nella proposizione~ \ref{pro:DAG})
 allora anche $H$ \`e un grafo aciclico diretto.
 
 Sia $H' = (W',F')$ il sottografo di $H$ ottenuto con $W' = W \setminus
-\set{u,v}$ e $F' = F \cap W' \times W'$, cio\`a abbiamo tolto gli
+\set{u,v}$ e $F' = F \cap W' \times W'$, cio\`e abbiamo tolto gli
 estremi $u,v$ da $H$ e stiamo considerando solo i nodi intermedi.
 
-Il grafo $H$ \`e connesso\footnote{Qui usiamo una nozione debole di
-  connessione, diciamo che un grafo diretto $G$ \`e connesso se lo \`e
-  visto come un grafo indiretto} mentre, in generale, non lo sar\`a
-$H'$. Siano quindi $H_1, ..., H_n$ le componenti connesse di $H$.
+Il grafo $H$ \`e connesso\footnote{Usiamo questa nozione di
+  connessione: un grafo diretto \`e connesso se lo \`e come grafo
+  indiretto} mentre, in generale, non lo sar\`a $H'$. Siano quindi
+$H_1, ..., H_n$ le componenti connesse di $H$.
 
 \begin{mypro}
   Dato $H_1$ connesso basta conoscere un solo vertice $h \in H_1$
@@ -1383,10 +1383,10 @@ $H'$. Siano quindi $H_1, ..., H_n$ le componenti connesse di $H$.
 \end{mypro}
 \begin{proof}
   Sia $\tilde H \subseteq H_1$ l'insieme dei nodi che non vengono
-  visitati, supponiamo per assurdo $\tilde H \neq \emptyset$. Siccome
-  $H_1$ \`e connesso deve esistere un arco $f$ che collega $\tilde H$
-  a $H_1 \setminus \tilde H$. Quest'arco ha un vertice in $H_1$ che
-  chiamiamo $w$.
+  visitati con il metodo precedente, supponiamo per assurdo $\tilde H
+  \neq \emptyset$. Siccome $H_1$ \`e connesso deve esistere un arco
+  $f$ che collega $\tilde H$ a $H_1 \setminus \tilde H$, quest'arco ha
+  un vertice in $H_1$ che chiamiamo $w$.
 
   Nella visita di $w$ abbiamo trovato, ricorsivamente, tutti i cammini
   minimi in $P(u,w)$ e in $P(w,v)$, in almeno uno di questi due
@@ -1421,9 +1421,9 @@ coppia di vertici. Possiamo immagginare, infatti, di aver collassato
 ogni componente connessa ad un singolo nodo.
 
 Questo esempio, pur raggiungendo il caso pessimo di spazio occupato,
-sta ancora sotto la soglia di $O\pa{N^2}$ perch\'e il grafo \`e
-sparso. Si pu\`o raggiungere il limite di $O\pa{ N M \log \pa{N} } =
-O\pa{N^3 \log\pa{N}}$ bit considerando il seguente esempio:
+sta ancora sotto la soglia di $O\pa{N^2\log\pa{N}}$ perch\'e il grafo
+\`e sparso. Si pu\`o raggiungere il limite di $O\pa{ N M \log \pa{N} }
+= O\pa{N^3 \log\pa{N}}$ bit considerando il seguente esempio:
 
 \begin{figure}[H]
   \centering
@@ -1479,10 +1479,9 @@ di $B = \set{ b_1,...,b_{N_2} }$, allora costruiamo il grafo bipartito
 come sopra dove $(a_i,b_k) \in E \Leftrightarrow b_k \in a_i$. Si vede
 facilmente che
 \[ a_i \cap a_j \neq \emptyset \Leftrightarrow \delta\pa{ a_i , a_j }
-= 2 \]
-inoltre se $a_i \cap a_j \neq \emptyset$ i cammini minimi in $P\pa{
-  a_i, a_j}$ sono tutti e soli quelli nella forma $a_i, b_k, a_j$ al
-variare di $b_k \in a_i \cap a_j$.
+= 2 \] inoltre se $a_i \cap a_j \neq \emptyset$ i cammini minimi in
+$P\pa{ a_i, a_j}$ sono tutti e soli quelli nella forma $\pa{a_i, b_k,
+  a_j}$ al variare di $b_k \in a_i \cap a_j$.
 
 Questa riduzione (almeno per quanto riguarda la relazione sulla
 distanza) \`e nota, si veda per esempio \cite{distanceintersection}
@@ -1492,8 +1491,8 @@ a_j \stackrel{?}{=} \emptyset$. Noi per\`o siamo interessati ad una
 richiesta pi\`u forte: vogliamo un oracolo in grado di elencare tutti
 gli elementi di $a_i \cap a_j$.
 
-Abbiamo quindi visto un possibile modo per costruire un lower bound
-per lo spazio utilizzato da un oracolo per cammini minimi, resta
+Abbiamo quindi visto un possibile modo per cercare un limite inferiore
+allo spazio utilizzato da un oracolo per cammini minimi, resta
 comunque il problema di costruire il controesempio.
 
 
