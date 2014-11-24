@@ -1450,10 +1450,18 @@ tutti gli archi avranno estremi in due insiemi diversi, cio\`e
 \[ E \subseteq A \times B \cup B \times A \]
 sia $N = N_1 + N_2$ e $M = \abs{E}$.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{bipartito}
+  \caption{Il grafo bipartito descritto. In altro i vertici
+    dell'insieme $A$ e in basso i vertici dell'insieme $B$}
+  \label{fig:bipartito}
+\end{figure}
+
 
 Vogliamo costruire un grafo con queste caratteristiche che ogni
 oracolo per cammini minimi richieda $\Omega \pa{ NM }$ spazio per
-essere memorizzato, in mod da raggiungere (a meno di fattori
+essere memorizzato, in modo da raggiungere (a meno di fattori
 logaritmici) lo spazio richiesto dal nostro algoritmo.
 
 Nell'analisi ci limiteremo ad analizzare i cammini minimi tra due nodi
@@ -1466,13 +1474,32 @@ dove $\neigh(u)$ indica i vicini del vertice $u$.
 Rileggendo questa scrittura vediamo che quello che stiamo
 effettivamente cercando \`e un oracolo per interesezioni di insiemi.
 
+Sia infatti $A = \set{ a_1,...,a_{N_1}}$ una collezione sottoinsiemi
+di $B = \set{ b_1,...,b_{N_2} }$, allora costruiamo il grafo bipartito
+come sopra dove $(a_i,b_k) \in E \Leftrightarrow b_k \in a_i$. Si vede
+facilmente che
+\[ a_i \cap a_j \neq \emptyset \Leftrightarrow \delta\pa{ a_i , a_j }
+= 2 \]
+inoltre se $a_i \cap a_j \neq \emptyset$ i cammini minimi in $P\pa{
+  a_i, a_j}$ sono tutti e soli quelli nella forma $a_i, b_k, a_j$ al
+variare di $b_k \in a_i \cap a_j$.
 
+Questa riduzione (almeno per quanto riguarda la relazione sulla
+distanza) \`e nota, si veda per esempio \cite{distanceintersection}
+dove viene anche citata una congettura sullo spazio minimo che deve
+utilizzare un oracolo in grado di rispondere alla richiesta $a_i \cap
+a_j \stackrel{?}{=} \emptyset$. Noi per\`o siamo interessati ad una
+richiesta pi\`u forte: vogliamo un oracolo in grado di elencare tutti
+gli elementi di $a_i \cap a_j$.
 
+Abbiamo quindi visto un possibile modo per costruire un lower bound
+per lo spazio utilizzato da un oracolo per cammini minimi, resta
+comunque il problema di costruire il controesempio.
 
 
 
 \bibliographystyle{alpha}
-\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl,appdistoraclplus,compactdistance,separator,cormen,dijkstra}
+\bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl,appdistoraclplus,compactdistance,separator,cormen,dijkstra,distanceintersection}
 
 
 
