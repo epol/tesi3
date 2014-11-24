@@ -1402,20 +1402,35 @@ $H'$. Siano quindi $H_1, ..., H_n$ le componenti connesse di $H$.
 \section{Caso pessimo del nuovo algoritmo}
 \label{sec:casopessimo}
 
-Il caso in cui la nostra strategia precedente fallisce \`e questo:
+Il caso in cui la nostra strategia precedente fallisce nel
+diminuire lo spazio utilizzato \`e il seguente
 
-TODO: diamante.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{diamante}
+  \caption{Due nodi fra cui abbiamo una componente per ogni cammino}
+  \label{fig:diamante}
+\end{figure}
+
 
 Viste le considerazioni che abbiamo fatti sulla struttura dei cammini
 minimi, questo grafo riassume la struttura dei cammini minimi fra una
 coppia di vertici. Possiamo immagginare, infatti, di aver collassato
 ogni componente connessa ad un singolo nodo.
 
-Questo esempio, per\`o, non raggiunge il caso pessimo di spazio
-occupato. Possiamo raggiungere il limite di $O\pa{ N M \log \pa{N} }$
-bit considerando il seguente esempio:
+Questo esempio, pur raggiungendo il caso pessimo di spazio occupato,
+sta ancora sotto la soglia di $O\pa{N^2}$ perch\'e il grafo \`e
+sparso. Si pu\`o raggiungere il limite di $O\pa{ N M \log \pa{N} } =
+O\pa{N^3 \log\pa{N}}$ bit considerando il seguente esempio:
 
-TODO: diamante multiplo.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diamantemultiplo}
+  \caption{La struttura della figura \ref{fig:diamante} ripetuta in
+    modo da ottenere il caso pessimo in un grafo denso}
+  \label{fig:diamantemultiplo}
+\end{figure}
+
 
 \subsection{Un caso difficile}
 
