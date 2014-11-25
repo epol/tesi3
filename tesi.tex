@@ -1054,12 +1054,12 @@ tempo proporzionale al numero di archi restituiti, vale a dire
 \[ O\pa{ c(u,v) \delta (u,v) } \]
 dove $c(u,v)$ \`e il numero di cammini minimi in $P(u,v)$
 
-Ricordiamo che, come abbiamo visto nell'esempio della figura
-\ref{fig:diamantecatena}, il numero di cammini tra una coppia di vertici
-pu\`o essere esponenziale, quindi potremmo essere interessati anche a
-poter chiedere solo un certo numero $k$ di cammini, cos\`i facendo ci
-si avvicinerebbe al problema dei $k$ cammini pi\`u brevi trattato
-nella sezione \ref{sec:kcammini}.
+Abbiamo visto nell'esempio della figura \ref{fig:diamantecatena} che
+il numero di cammini tra una coppia di vertici pu\`o essere
+esponenziale, quindi potremmo essere interessati anche a poter
+chiedere solo un certo numero $k$ di cammini, cos\`i facendo ci si
+avvicinerebbe al problema dei $k$ cammini pi\`u brevi trattato nella
+sezione \ref{sec:kcammini}.
 
 Nel caso particolare di $k=1$ (cio\`e ci basta conoscere un solo
 cammino) abbiamo gi\`a osservato, come conseguenza del lemma
@@ -1074,7 +1074,7 @@ cercato.
 \label{sec:camminibanale}
 
 Siano $u,v$ due vertici tra i quali stiamo cercando tutti i cammini
-minimi, siano essi $p_1,p_2,...,p_c$ con $c = c(u,v)$.
+minimi e siano essi $p_1,p_2,...,p_c$ con $c = c(u,v)$.
 
 Siano $u_1,..., u_c$ i nodi che compaiono in seconda posizione nei
 cammini (in prima compare $u$). Visto che, in generale, ci saranno
@@ -1094,7 +1094,7 @@ il primo vertice $u$, ci\`o significa che $\tilde P _i \subseteq P\pa{
 
 \begin{mypro}
   Per ogni $i \in \set{ 1,...,k}$ si ha che $\tilde P _i$ contiene
-  tutti e soli i cammini minimi tra $u_i$ e $v$.
+  tutti e soli i cammini minimi in $P(u_i,v)$.
 \end{mypro}
 \begin{proof}
   Tutti questi sono cammini minimi, infatti sappiamo che un
@@ -1166,8 +1166,16 @@ esamineremo ogni arco al pi\`u due volte, per questo il tempo di
 elaborazione di una richiesta diventa $O\pa{ c\pa{u,v} \delta\pa{u,v}
   + M}$. \`E possibile costruire esempi in cui questo peggiora il caso
 precedente, per esempio potremmo avere un solo cammino minimo ma ci
-troviamo a dover esaminare tutti gli archi del grafo. TODO: esempio
-disegnino
+troviamo a dover esaminare tutti gli archi del grafo come si può
+vedere nell'esempio di figura \ref{fig:millepiedi}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{millepiedi}
+  \caption{Ci interessano i cammini minimi da $u$ a $v$, ma per
+    trovare l'unico cammino dobbiamo esplorare tutti gli archi}
+  \label{fig:millepiedi}
+\end{figure}
 
 Siamo riusciti a migliorare lo spazio occupato al costo di peggiorare
 il tempo impiegato per elaborare una richiesta ottenendo, quindi, un
