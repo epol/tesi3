@@ -1208,7 +1208,7 @@ teorema
   Dato un grafo planare $G = (V,E)$, detto $N = \abs{V}$ \`e
   possibile partizionare $V$ in tre insiemi $A,B,S$ tali che
   \begin{itemize}
-  \item $A$ e $B$ hanno al pi\`u $2n/3$ vertici ciascuno
+  \item $A$ e $B$ hanno al pi\`u $2N/3$ vertici ciascuno
   \item $S$ ha $O\pa{ \sqrt{N}}$ vertici
   \item non esistono archi tra $A$ e $B$
   \end{itemize}
@@ -1330,7 +1330,7 @@ In questo modo possiamo aver ampliato l'insieme $W$ dei vertici usati
 da un qualche cammino minimo in $P(u,v)$ e avremo, in questo caso,
 nuovi nodi $w\in W$ su cui applicare il ragionamento precedente. Fra
 questi potrebbero esserci anche nuovi vicini ``buoni'' che, quindi,
-non ci servir\`a salvare nella preelaborazione.
+non dobbiamo salvare nella preelaborazione.
 
 Vediamo come viene elaborata una richiesta di cammini:
 \begin{enumerate}
@@ -1360,7 +1360,7 @@ Vediamo come viene elaborata una richiesta di cammini:
 \item resitituisci $P$.
 \end{enumerate}
 
-Vedremo nella sezione \ref{sec:casopessimo} che non siamo riusciti a
+Nella sezione \ref{sec:casopessimo} vediamo che non siamo riusciti a
 migliorare lo spazio occupato al caso pessimo.
 
 \subsection{Struttura dei cammini minimi}
@@ -1381,8 +1381,8 @@ estremi $u,v$ da $H$ e stiamo considerando solo i nodi intermedi.
 
 Il grafo $H$ \`e connesso\footnote{Usiamo questa nozione di
   connessione: un grafo diretto \`e connesso se lo \`e come grafo
-  indiretto} mentre, in generale, non lo sar\`a $H'$. Siano quindi
-$H_1, ..., H_n$ le componenti connesse di $H$.
+  indiretto} mentre, in generale, non lo \`e $H'$. Siano quindi $H_1,
+..., H_n$ le componenti connesse di $H$.
 
 \begin{mypro}
   Dato $H_1$ connesso basta conoscere un solo vertice $h \in H_1$
