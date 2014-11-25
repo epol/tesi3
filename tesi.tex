@@ -96,16 +96,31 @@
 \date{\today}
 
 \begin{document}
-\maketitle
 
+\input{frontespizio.tex}
+%\maketitle
+\null\thispagestyle{empty}\newpage
 
-\setcounter{tocdepth}{5}
+\setcounter{tocdepth}{2}
 
+\thispagestyle{plain}
+\begin{center}
+%    \Large
+%    \textbf{Thesis Title}
+%    
+%    \vspace{0.4cm}
+%    \large
+%    Thesis Subtitle
+%    
+%    \vspace{0.4cm}
+%    \textbf{Author Name}
+%    
+%    \vspace{0.9cm}
+    \Large
+    \textbf{Sommario}
+\end{center}
 
-
-\tableofcontents
-
-\chapter*{Abstract}
+%\chapter*{Sommario}
 
 In questa tesi ci proponiamo di discutere vari aspetti della ricerca
 dei cammini minimi in un grafo.
@@ -126,6 +141,8 @@ Nel capitolo \ref{chap:oracolotutticammini} vediamo oracoli che
 restituiscono tutti i cammini fra ogni coppia di vertici in un grafo.
 
 Siamo interessati ad ottimizzare lo spazio occupato da questi oracoli.
+
+\tableofcontents
 
 
 \chapter{Cammini minimi su grafi}
@@ -1507,8 +1524,6 @@ comunque il problema di costruire il controesempio.
 
 \bibliographystyle{alpha}
 \bibliography{funnymult,apspfmp,kshortest,kspheur,graphspanners,appdistoracl,appdistoraclplus,compactdistance,separator,cormen,dijkstra,distanceintersection}
-
-
 
 
 
