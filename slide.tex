@@ -144,36 +144,81 @@ Relatore: & Prof. Roberto Grossi
 
 \begin{frame}{Definizioni}
   \begin{columns}
-    \begin{column}{0.48\textwidth}
-      uno
+    \begin{column}{0.40\textwidth}
+      \includegraphics[width=\textwidth]{directgraph}
     \end{column}
-    \begin{column}{0.48\textwidth}
-      due
+    \begin{column}{0.58\textwidth}
+      \begin{itemize}
+      \item $G = (V,E)$ grafo
+      \item $V$ nodi
+      \item $E \subseteq V\times V$ archi
+      \item gli archi possono essere orientati
+      \item gli archi possono avere un peso $w: E \to \mathbb{R}$ (nel
+        nostro caso la lunghezza)
+      \end{itemize}
     \end{column}
   \end{columns}
 \end{frame}
 
 \begin{frame}{Cammini}
-  \begin{itemize}
-  \item cammini
-  \item lunghezza di un cammino
-  \item $P$
-  \item minimi
-  \end{itemize}
+  \begin{columns}
+    \begin{column}{0.40\textwidth}
+      \includegraphics[width=\textwidth]{directpath}
+    \end{column}
+    \begin{column}{0.58\textwidth}
+      \begin{itemize}
+      \item Cammino: $p = \pa{ 0,7,2, 4,6}$
+      \item Lunghezza: $w(p) = 7+4+10+0 = 21$
+      \item $P(u,v) = \set{\text{cammini tra }u\text{ e }v}$
+      \item Distanza: $\delta (u,v) = \min \limits _{p\in P(u,v)}
+        w(p)$
+      \item $\pa{V,\delta}$ \`e una pseudometrica
+      \item Sottocammini di cammini minimi sono minimi
+      \end{itemize}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \subsection{Cammini da una sorgente unica}
 
 \begin{frame}{DAG e albero}
-  
+  Scegliamo $s\in V$, vogliamo conoscere:
+  \begin{itemize}
+  \item $\forall v\in V\;\; \delta \pa{s,v}$
+  \item $\forall v\in V$ i cammini minimi da $s$ a $v$
+  \end{itemize}
+
+  \begin{mypro}
+    Se gli archi hanno lunghezza strettamente positiva, il grafo $G_s$
+    dei cammini minimi \`e un DAG (grafo aciclico diretto)
+  \end{mypro}
+  Sceglieno opportunamente un cammino per ogni vertice otteniamo un
+  albero.
 \end{frame}
 
 \begin{frame}{BFS}
-  
+    \begin{columns}
+    \begin{column}{0.40\textwidth}
+      \includegraphics[width=\textwidth]{BFS}
+    \end{column}
+    \begin{column}{0.58\textwidth}
+      Per grafi non pesati (archi di lunghezza unitaria) applicando
+      una visita in ampiezza otteniamo distanze e cammini in
+      $O\pa{M}$.
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Dijkstra}
-  
+    \begin{columns}
+    \begin{column}{0.40\textwidth}
+      \includegraphics[width=\textwidth]{dijkstra} %TODO: rifare figura
+    \end{column}
+    \begin{column}{0.58\textwidth}
+      Per grafi pesati l'algoritmo di Dijkstra costruisce il DAG dei
+      cammini minimi in $O\pa{M\log \pa{N}}$.
+    \end{column}
+  \end{columns}  
 \end{frame}
 
 \subsection{Cammini tra tutte le coppie}
