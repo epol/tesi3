@@ -23,6 +23,7 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[italian]{babel}
 \usepackage{mathtools}
+\usepackage{colortbl}
 
 %\usepackage{pdftricks}
 %\begin{psinputs}
@@ -69,6 +70,8 @@
 \newcommand{\bra}[1]{\left[#1\right]}
 \newcommand{\abs}[1]{\left|#1\right|}
 \newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\floor}[1]{\left\lfloor#1\right\rfloor}
 
 \newcommand{\pfrac}[2]{\pa{\frac{#1}{#2}}}
 \newcommand{\bfrac}[2]{\bra{\frac{#1}{#2}}}
@@ -238,20 +241,120 @@ Relatore: & Prof. Roberto Grossi
  
 \end{frame}
 
-\begin{frame}
-  Algoritmo
+\begin{frame}{Calcolo della matrice delle distanze}
+  Matrice delle distanze: $d_{i,j} = \delta(i,j)$
+  \vfill
+  
+  $l^{(m)}_{i,j} = \min\set{ l^{(m-1)} _{i,j} , \min _{0\le k\le N-1}
+    \set{ l^{(m-1)} _{i,k} + w_{k,j}} }$
+  
+  Ogni cammino ha al pi\`u $N-1$ archi $\Rightarrow$ $d_{i,j} = l^{(N-1)}
+  _{i,j}$.
+  \vfill
+  
+  Possiamo riscrivere $l^{(m)}_{i,j} = \min \limits _{0\le k\le N-1}
+  \set{ l^{(m-1)} _{i,k} + w_{k,j}}$
 \end{frame}
 
-\begin{frame}
-  Ma è un prodotto fra matrici
+\begin{frame}{Lettura del prodotto fra matrici}
+  \begin{block}{}
+    \begin{align*}
+      l^{(m)}_{i,j} &=& & \min \limits _k & \Big\{ & l^{(m-1)}
+      _{i,k} & & +  & & w_{k,j} \Big\} \\
+      C_{i,j} &=& &\sum _k  & &  A_{i,k}  & & \cdot  & &B_{k,j} 
+    \end{align*}
+  \end{block}
+  \pause
+  
+  \[ L^{(m)} = L^{(m-1)} * W \]
+
+  \begin{block}{}
+    \[ D = W^{N-1} \]
+  \end{block}
 \end{frame}
 
-\begin{frame}
-  Altri risultati
+\begin{frame}{Complessit\`a}
+  \begin{overprint}
+    \onslide<1>
+    \begin{center}
+      \begin{tabular}{| c | c |}
+        \hline
+        Calcolo di un prodotto & Elevamento a potenza \\
+        \hline
+        $ A *B $ & $W ^N$ \\
+        $O\pa{N^3}$ & $O\pa{ N}$ \\
+        \hline
+        \multicolumn{2}{| c| }{$O\pa{N^4}$}\\
+        \hline
+      \end{tabular}
+    \end{center}
+    \onslide<2>
+    \begin{center}
+      \begin{tabular}{| c | c |}
+        \hline
+        Calcolo di un prodotto & Elevamento a potenza \\
+        \hline
+        $ A *B $ & \cellcolor{yellow} $W ^{2^{\ceil{\log\pa{N}}}}$ \\
+        $O\pa{N^3}$ & \cellcolor{yellow} $O\pa{ \log\pa{N}}$ \\
+        \hline
+        \multicolumn{2}{| c| }{$O\pa{N^3 \log\pa{N}}$}\\
+        \hline
+      \end{tabular}
+    \end{center}
+    \onslide<3->
+    \begin{center}
+      \begin{tabular}{| c | c |}
+        \hline
+        Calcolo di un prodotto & Elevamento a potenza \\
+        \hline
+        $ A *B $ & $W ^{2^{\ceil{\log\pa{N}}}}$ \\
+        \color{red} \bf ??? $O\pa{N^\omega}$ ??? & $O\pa{ \log\pa{N}}$ \\
+        \hline
+        \multicolumn{2}{| c| }{\color{red} ?? $O\pa{N^\omega \log\pa{N}}$ ??}\\
+        \hline
+      \end{tabular}
+    \end{center}
+  \end{overprint}
+  \vfill
+  \begin{overprint}
+    \onslide<3-> $O\pa{N^\omega}$ \`e la complessit\`a in tempo del
+    prodotto veloce fra matrici.
+
+    Il valore di $2\le\omega <3$ \`e un problema aperto.
+  \end{overprint}
+  \vfill
+  \begin{overprint}
+    \onslide<4-> Il prodotto veloce funziona solo su anelli.
+    
+    $\pa{\mathbb{R},\min, +}$ non \`e un anello!!
+  \end{overprint}
+  \vfill
+  \begin{overprint}
+    \onslide<5-> Per archi di peso intero positivo: $O\pa{ d N ^\omega
+      \log d \log N}$
+  \end{overprint}
+\end{frame}
+
+
+\begin{frame}{Altri risultati}
+  \begin{itemize}
+  \item Grafi senza cicli negativi: Floyd-Warshall $\rightarrow$ $O \pa{N^3}$
+  \item Grafi con archi di peso intero positivo: SZ99 $\rightarrow$
+    $\tilde O \pa{k N^\omega}$ (dove $k$ \`e la lunghezza massima di
+    un arco).
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Trovare i cammini minimi}
-  Vicini ``buoni''
+  \begin{mylem}
+    Dati $u,v \in V$ e $u'$ vicino di $u$ si ha che esiste un cammino
+    minimo in $P(u,v)$ che utilizza l'arco $(u,u')$ se e solo se
+    \[ \delta \pa{ u,v} = w\pa{ u,u' } + \delta \pa{ u',v} \]
+  \end{mylem}
+  \vfill
+  
+  Questa relazione ci definisce i vicini di $u$ ``buoni'' per
+  raggiungere $v$.
 \end{frame}
 
 
