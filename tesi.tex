@@ -647,12 +647,12 @@ In \cite{kshortest} vengono forniti algoritmi su grafi diretti per
 trovare:
 \begin{itemize}
 \item dati $u,v \in V$ trovare i primi $k$ cammini più brevi in
-  $P\pa{u,v}$ in tempo $O\pa{m + n\log n + k}$;
-\item una struttura (costruita in $O\pa{m+n\log n}$ tempo) che dati
-  $u,v\in V$ ritorna in ordine di lunghezza i cammini in $P(u,v)$
+  $P\pa{u,v}$ in tempo $O\pa{M + N\log \pa{N} + k}$;
+\item una struttura (costruita in $O\pa{M+N\log \pa{n}}$ tempo) che
+  dati $u,v\in V$ ritorna in ordine di lunghezza i cammini in $P(u,v)$
   estraendo l'$i$-esimo in $O\pa{\log i}$ tempo;
 \item dato $s\in V$ trovare i $k$ cammini più brevi per tutte le
-  destinazioni $v\in V$ in $O\pa{m + n\log n + kn}$ tempo.
+  destinazioni $v\in V$ in $O\pa{M + N\log \pa{N} + kN}$ tempo.
 \end{itemize}
 
 Uno dei problemi di questi algoritmi è che devono elaborare tutto il
@@ -661,7 +661,7 @@ $k$ cammini minimi. Invece in \cite{kspheur} viene presentato
 algoritmo che trova i $k$ cammini più brevi esplorando il grafo
 \textit{on-the-fly}, utilizzando delle euristiche per migliorarne le
 prestazioni ma ottenendo comunque, al caso pessimo, lo stesso tempo
-dell'algoritmo di Eppstein cioè $O\pa{m + n\log n + k}$ tempo.
+dell'algoritmo di Eppstein cioè $O\pa{M + N\log \pa{N} + k}$ tempo.
 
 \chapter{Oracoli per distanze}
 \label{chap:distanze}
