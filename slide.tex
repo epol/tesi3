@@ -150,6 +150,7 @@ Relatore: & Prof. Roberto Grossi
     \begin{column}{0.58\textwidth}
       \begin{itemize}
       \item $G = (V,E)$ grafo
+      \item $\abs{V} = N$, $\abs{E} = M$
       \item $V$ nodi
       \item $E \subseteq V\times V$ archi
       \item gli archi possono essere orientati
@@ -173,6 +174,7 @@ Relatore: & Prof. Roberto Grossi
       \item Distanza: $\delta (u,v) = \min \limits _{p\in P(u,v)}
         w(p)$
       \item $\pa{V,\delta}$ \`e una pseudometrica
+      \item I cammini minimi sono ``quasi'' aciclici
       \item Sottocammini di cammini minimi sono minimi
       \end{itemize}
     \end{column}
@@ -181,7 +183,7 @@ Relatore: & Prof. Roberto Grossi
 
 \subsection{Cammini da una sorgente unica}
 
-\begin{frame}{DAG e albero}
+\begin{frame}{Grafo (aciclico diretto) dei cammini minimi}
   Scegliamo $s\in V$, vogliamo conoscere:
   \begin{itemize}
   \item $\forall v\in V\;\; \delta \pa{s,v}$
@@ -192,11 +194,11 @@ Relatore: & Prof. Roberto Grossi
     Se gli archi hanno lunghezza strettamente positiva, il grafo $G_s$
     dei cammini minimi \`e un DAG (grafo aciclico diretto)
   \end{mypro}
-  Sceglieno opportunamente un cammino per ogni vertice otteniamo un
+  Scegliendo opportunamente un cammino per ogni vertice otteniamo un
   albero.
 \end{frame}
 
-\begin{frame}{BFS}
+\begin{frame}{Archi non pesati: BFS}
     \begin{columns}
     \begin{column}{0.40\textwidth}
       \includegraphics[width=\textwidth]{BFS}
@@ -204,27 +206,48 @@ Relatore: & Prof. Roberto Grossi
     \begin{column}{0.58\textwidth}
       Per grafi non pesati (archi di lunghezza unitaria) applicando
       una visita in ampiezza otteniamo distanze e cammini in
-      $O\pa{M}$.
+      $O\pa{M}$ operazioni.
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Dijkstra}
+\begin{frame}{Archi pesati: algoritmo di Dijkstra}
     \begin{columns}
     \begin{column}{0.40\textwidth}
-      \includegraphics[width=\textwidth]{dijkstra} %TODO: rifare figura
+      \includegraphics[width=\textwidth]{dijkstraslide} 
     \end{column}
     \begin{column}{0.58\textwidth}
       Per grafi pesati l'algoritmo di Dijkstra costruisce il DAG dei
-      cammini minimi in $O\pa{M\log \pa{N}}$.
+      cammini minimi in $O\pa{M\log \pa{N}}$ operazioni.
     \end{column}
   \end{columns}  
 \end{frame}
 
 \subsection{Cammini tra tutte le coppie}
 
-\begin{frame}{Tabella delle distanze}
-  Da moltiplicare in 3-4 slide
+\begin{frame}{Matrice di adiacenza}
+  Numeriamo i vertici: $V = \set{ 0,1,2,..., N-1}$.
+  
+  \vfill
+  Definiamo la matrice $W$ dove
+  \begin{itemize}
+  \item $W_{i,i} = 0$
+  \item $W_{i,j} = w(i,j)$ se $(i,j) \in E$
+  \item $W_{i,j} = \infty$ se $(i,j) \not\in E$
+  \end{itemize}
+ 
+\end{frame}
+
+\begin{frame}
+  Algoritmo
+\end{frame}
+
+\begin{frame}
+  Ma è un prodotto fra matrici
+\end{frame}
+
+\begin{frame}
+  Altri risultati
 \end{frame}
 
 \begin{frame}{Trovare i cammini minimi}
