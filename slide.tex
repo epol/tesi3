@@ -357,7 +357,14 @@ Relatore: & Prof. Roberto Grossi
   raggiungere $v$.
 \end{frame}
 
-%TODO: esponenziali
+\begin{frame}{Numero di cammini minimi}
+  Dati due vertici il numero di cammini minimi tra i due potrebbe
+  essere anche esponenziale
+  \vfill
+  
+  \includegraphics[width=\textwidth]{diamantecatena}
+\end{frame}
+
 
 \subsection{$k$ cammini pi\`u brevi}
 
@@ -381,21 +388,55 @@ Relatore: & Prof. Roberto Grossi
 \subsection{Oracoli approssimati}
 
 \begin{frame}{Graph spanner}
-  
+  \begin{mydef}[$r$-approssimazione]
+    Un algoritmo che ritorna $d(u,v)$ tale che
+    \[ d\pa{u,v} \le r \delta\pa{u,v} \]
+  \end{mydef}
+
+  \begin{mydef}[$t$-spanner]
+    $G' = (V,E')$ con $E' \subseteq E$ tale che la distanza in $G'$
+    \`e una $t$-approssimazione.
+  \end{mydef}
+
+  \begin{myteo}
+    Dato un grafo $G = (V,E)$ e due numeri $t,m\ge 1$ il problema di
+    determinare se esiste un $t$-spanner di $G$ con al pi\`u $m$ archi
+    \`e NP-completo.
+  \end{myteo}
 \end{frame}
 
 \begin{frame}{Risultati}
-  
+  \begin{itemize}
+  \item PS89: esiste un $(4r+1)$-spanner con $O(N^{1+1/r})$ vertici
+  \item TODO
+  \end{itemize}
 \end{frame}
 
 \subsection{Oracoli esatti}
 
 \begin{frame}{Limiti teorici}
-  
+  \begin{itemize}
+  \item Esistono $\binom{ N}{2}$ grafi con $N$ archi
+  \item c'\`e una corrispondenza biunivoca tra grafi e tabelle delle
+    distanze 
+  \end{itemize}
+  \pause
+  \vfill
+  Un oracolo deve saper distinugere tra $\binom{ N}{2}$ casi
+  \pause
+  \begin{block}{Lower bound}
+    Un oracolo per distanze deve utilizzare almeno $N^2 / 2 + o(N^2)$
+    bit
+  \end{block}
 \end{frame}
 
 \begin{frame}{Albero etichettato}
-  
+  Sia $T$ un albero di ricoprimento qualsiasi di $T$.
+
+  Per la triangolare si ha $\pa{\delta\pa{ u,s} - \delta\pa{ f(u),s} }
+  \le \delta\pa{u,f(u)} \le 1$
+  \vfill
+  TODO
 \end{frame}
 
 \begin{frame}{Somme prefisse}
