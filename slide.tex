@@ -552,21 +552,55 @@ Relatore: & Prof. Roberto Grossi
 \subsection{Miglioramenti dell'oracolo facile}
 
 \begin{frame}{Miglioramento}
-  
+  \begin{block}{}
+    Se $w$ appartiene ad un cammino minimo in $P(u,v)$ allora
+    cerchiamo tutti i cammini minimi in $P(u,w)$ e
+    $P(w,v)$. Concatenandoli otteniamo cammini minimi in $P\pa{u,v}$.
+  \end{block}
+  \vfill
+
+  Ricorsivamente, per ogni cammino minimo in $P\pa{u,v}$ che
+  scopriamo, applichiamo questo ragionamento ai suoi nodi.  
 \end{frame}
 
 \begin{frame}{Struttura dei cammini}
-  
+  Consideriamo il DAG $H$ dei cammini da $u$ a $v$, se togliamo i due
+  estremi otteniamo delle componenti connesse $H_1,...,H_k$.
+
+  \begin{mypro}
+    Per ogni componente $H_i$ ci basta conoscere un vertice $h_i \in H_i$
+    per conoscere tutta la componente
+  \end{mypro}
+  \vfill \pause
+
+  Invece di salvare tutti i vicini buoni salviamo un vicino buono per
+  ogni componete connessa (che potrebbe contenere più di un vicino
+  buono)
 \end{frame}
 
 \begin{frame}{Caso pessimo}
-  
+%    \begin{columns}
+%    \begin{column}{0.6\textwidth}
+      \begin{overprint}
+        \onslide<1> \includegraphics[width=\textwidth]{diamante}
+        \onslide<2-> \includegraphics[width=\textwidth]{diamantemultiplo}
+        \begin{center}
+          $O\pa{N^3}$ bit!
+        \end{center}
+      \end{overprint}
+%    \end{column}
+%    \begin{column}{0.39\textwidth}
+ %    \end{column}
+%  \end{columns}
+
 \end{frame}
 
 \subsection{Costruzione di un caso difficile}
 
 \begin{frame}{Grafo bipartito}
+  \includegraphics[width=\textwidth]{bipartito}
   
+  Cerchiamo cammini di lunghezza $2$ tra i nodi gialli
 \end{frame}
 
 \begin{frame}{Intersezione di insiemi}
