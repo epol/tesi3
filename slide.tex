@@ -431,16 +431,36 @@ Relatore: & Prof. Roberto Grossi
 \end{frame}
 
 \begin{frame}{Albero etichettato}
-  Sia $T$ un albero di ricoprimento qualsiasi di $T$.
-
-  Per la triangolare si ha $\pa{\delta\pa{ u,s} - \delta\pa{ f(u),s} }
-  \le \delta\pa{u,f(u)} \le 1$
+  Sia $T$ un albero di ricoprimento qualsiasi di $T$ con radice in
+  $r$. Denotiamo con $f(u)$ il padre di $u$.
   \vfill
-  TODO
+  \[ \delta\pa{ s,u} = \delta\pa{ s,r} + \sum _{v\in \pi (u)} \bra{
+    \delta\pa{ s,v} - \delta\pa{ s,f(v) } } \]
+  
+  Per la triangolare si ha $\abs{\delta\pa{ s,v} - \delta\pa{ s,f(v)}
+  } \le \abs{\delta\pa{v,f(v)}} \le 1$ \vfill
+  
+  \pause
+  \[ l_s(v) = \delta\pa{s,v} - \delta\pa{ s, f(v) } \in \set{
+    -1,0,1} \]
 \end{frame}
 
 \begin{frame}{Somme prefisse}
-  
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+      \includegraphics[width=\textwidth]{labeltree}
+    \end{column}
+    \begin{column}{0.39\textwidth}
+      Associamo ad ogni etichettatura $l_s$ una sequenza $L_s$.
+      \vfill
+      Per ogni nodo $u\in V$ nella stringa compare $l(u)$ (triangolino
+      verde) e $-l(u)$ (quadratino rosso).
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Complessità}
+  TODO
 \end{frame}
 
 
