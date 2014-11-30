@@ -1,4 +1,4 @@
-\documentclass{beamer}
+t \documentclass{beamer}
 %\usetheme{PaloAlto}
 %\usetheme{Berlin}
 \usetheme{Ilmenau}
@@ -452,15 +452,35 @@ Relatore: & Prof. Roberto Grossi
     \end{column}
     \begin{column}{0.39\textwidth}
       Associamo ad ogni etichettatura $l_s$ una sequenza $L_s$.
-      \vfill
+
       Per ogni nodo $u\in V$ nella stringa compare $l(u)$ (triangolino
-      verde) e $-l(u)$ (quadratino rosso).
+      verde) e $-l(u)$ (quadratino rosso).  \vfill \pause
+      
+      $\sum _{v\in \pi(u)} \bra{ \delta\pa{ s,v} - \delta\pa{ s,f(v) } }$
+      \`e la somma prefissa fino a $r(u)$.
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Complessità}
-  TODO
+\begin{frame}{Complessità in spazio}
+  Dobbiamo salvare:
+  \begin{itemize}
+  \item albero: $O\pa{N\log\pa{N}}$ bit
+  \item distanze $\delta\pa{s,r}$ per ogni $s\in V$: $O\pa{ N \log N}$
+    bit totali
+  \item vettore $r$: $O\pa{N \log\pa{N}}$ bit 
+  \item al variare di $s\in V$ il Wavelet Tree associato a $L_s$:
+    $2\log\pa{3} N^2 + o(N^2)$ bit totali
+  \end{itemize}
+  \textbf{Totale:} ${2}\log\pa{3} N^2 + o(N^2)$ bit
+  \vfill
+  \pause
+
+  Si pu\`o migliorare a 
+  \begin{block}{Bit utilizzati}
+    \[ \frac{1}{2}\log\pa{3} N^2 + o\pa{N^2} = 1.585 \frac{N^2}{2} +
+    o\pa{N^2} \]
+  \end{block}
 \end{frame}
 
 
