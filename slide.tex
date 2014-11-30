@@ -1,4 +1,4 @@
-t \documentclass{beamer}
+\documentclass{beamer}
 %\usetheme{PaloAlto}
 %\usetheme{Berlin}
 \usetheme{Ilmenau}
@@ -489,21 +489,64 @@ Relatore: & Prof. Roberto Grossi
 \subsection{Algoritmi facili}
 
 \begin{frame}{Un oracolo}
-  
+  Supponiamo di conoscere la tabella delle distanze.
+  \begin{mylem}
+    Dati $u,v \in V$ e $u'$ vicino di $u$ esiste un cammino minimo in
+    $P(u,v)$ che utilizza l'arco $(u,u')$ se e solo se $ \delta \pa{
+      u,v} = w\pa{ u,u' } + \delta \pa{ u',v} $
+  \end{mylem}
+  \pause
+  Per ogni $u,v\in V$ ci salviamo i vicini buoni di $u$ e procediamo
+  in modo ricorsivo.
+  \vfill \pause
+
+  Spazio utilizzato: $O\pa{NM}$ bit.
 \end{frame}
 
 \begin{frame}{Un non oracolo}
+  Invece di precalcolarci i vicini buoni, li troviamo durante
+  l'elaborazione.
   
+  Spazio utilizzato: un oracolo per distanze.
+  \vfill
+  \pause
+  \includegraphics[width=\textwidth]{millepiedi}
+  
+  \begin{center}
+    \textbf{Non \`e un oracolo!}
+  \end{center}
 \end{frame}
 
 \subsection{Grafi planari}
 
 \begin{frame}{Separation theorem}
-  
+  \begin{myteo}[\textit{Separation theorem}]
+    Dato un grafo planare $G = (V,E)$ \`e possibile partizionare $V$
+    in tre insiemi $A,B,S$ tali che
+    \begin{itemize}
+    \item $A$ e $B$ hanno al pi\`u $2N/3$ vertici ciascuno
+    \item $S$ ha $O\pa{ \sqrt{N}}$ vertici
+    \item non esistono archi tra $A$ e $B$
+    \end{itemize}
+  \end{myteo}
+  \vfill
+  \pause
+  Sottografi di grafi planari sono planari, quindi possiamo applicare
+  ricorsivamente il teorema a $A\cup S$ e $B\cup S$.
 \end{frame}
 
 \begin{frame}{Un oracolo}
-  
+  La struttura data dal \textit{separation theorem} ci permette di
+  procedere con una strategia di \textit{divide et impera}.
+  \vfill \pause
+
+  Per ogni coppia $u,v\in V$ ci salviamo i nodi separanti ``buoni''
+  che sono, al pi\`u, $O\pa{\sqrt{N}}$.
+  \vfill \pause
+
+  \begin{block}{Bit utilizzati}
+    \[ O\pa{N^{2.5}} \]
+  \end{block}
 \end{frame}
 
 \subsection{Miglioramenti dell'oracolo facile}
