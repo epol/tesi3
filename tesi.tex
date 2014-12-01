@@ -150,8 +150,8 @@ siamo interessati ad ottimizzare lo spazio occupato da questi oracoli.
 
 \begin{mydef}[Grafo]
   Chiamiamo grafo la coppia $G = (V,E)$ dove $V$ è un insieme finito
-  di elementi detti \textit{nodi} e $E\subseteq V \times V$ di
-  relazioni chiamate archi.
+  di elementi detti \textit{nodi} e $E\subseteq V \times V$ un insieme
+  di relazioni dette archi.
 \end{mydef}
 
 Se non specificato diversamente definiamo $N = \abs{V}$ e $M =
@@ -179,7 +179,7 @@ considerando l'insieme di archi
   \[ \forall i \in \set{ 1, ... , k} \;\;\; (v_{i-1}, v_{i} ) \in E\]
 \end{mydef}
 
-Diciamo che $p$ congiunge $v_0$ a $v_k$. Dati due nodi $v,w$ chiamiamo
+Diciamo che $p$ congiunge $v_0$ a $v_k$. Dati due nodi $u,v$ chiamiamo
 $P(u,v)$ l'insieme (eventualmente vuoto) dei cammini che congiungono
 $u$ a $v$
 
@@ -197,7 +197,7 @@ v_j )$ con $0 \le i \le j \le k$.
   \[ w(p) = \sum _{i=1} ^k w \pa{ v_{i-1}, v_i } \]
 \end{mydef}
 
-Osserivamo che la lunghezza della somma di due cammini è uguale alla
+Osserviamo che la lunghezza della somma di due cammini è uguale alla
 somma delle lunghezze.
 
 Siamo interessati a trattare grafi in cui gli archi hanno lunghezza
@@ -225,7 +225,7 @@ Osserviamo che questa distanza verifica le proprietà
   cammino minimo tra $u$ e $v$ e quello tra $v$ e $z$ si ottiene un
   cammino in $P(u,z)$
 \end{itemize}
-Questa distanza, però, in generale non è simmetica, quindi definisce
+Questa distanza, però, in generale non è simmetrica, quindi definisce
 una pseudometrica. Nel caso di grafi non orientati allora $\delta$
 diventa una distanza.
 
@@ -678,7 +678,7 @@ $O\pa{1}$). In realt\`a saremo anche interessati ad algoritmi che
 hanno tempi di risposta pi\`u lunghi ma comunque migliori rispetto al
 metodo banale (per esempio logaritmici).
 
-\`E naturale porsi due probelmi:
+\`E naturale porsi due problemi:
 \begin{itemize}
 \item è possibile salvarsi una struttura dati pi\`u piccola ($o
   \pa{ N^2}$) in modo da poter dare ancora una buona approssimazione
@@ -727,11 +727,11 @@ grafo.
 \end{mydef}
 
 Se quindi troviamo un grafo $G'$ con $o\pa{ N^2}$ archi (per esempio
-$O(N)$) con questa propriet\`a allora occupiamo $o(N^2)$
-spazio per salvarlo e sappiamo rispondere ad una query di distanza in
-$O(M)$ (il tempo di eseguire una BFS).
+$O(N)$) con questa propriet\`a allora occupiamo $o(N^2)$ spazio per
+salvarlo e sappiamo calcolare la distanza tra due vertici qualsiasi in
+$O(M)$ tempo (eseguendo BFS).
 
-Possiamo caratterizzare un $t$-spanner anche con
+Possiamo caratterizzare un $t$-spanner anche con il lemma che segue.
 \begin{mylem}
   $G' = (V,E')$ con $E' \subseteq E$ \`e un $t$-spanner per $G$ se
   \[ \forall (u,v) \in E\;\; \delta_{G'} (u,v) \le t \]
@@ -745,26 +745,26 @@ Possiamo caratterizzare un $t$-spanner anche con
 \end{proof}
 
 Questo semplice risultato ci mostra che ci sono delle limitazioni
-negli spanner che possiamo costruire
+per gli spanner che possiamo costruire:
 \begin{mypro}
   In un grafo indiretto $G = (V,E)$ sia $k$ la lunghezza minima di un
   ciclo non banale in $G$, allora se $G' = (V,E')$ \`e un $t$-spanner
   di $G$ con $t < k-1$ si ha $G = G'$
 \end{mypro}
 \begin{proof}
-  Supponiamo per assurdo che esista $(u,v) \in E' \setminus E$,
+  Supponiamo per assurdo che esista $(u,v) \in E \setminus E'$,
   siccome
   \[ \delta_{G'} (u,v) \le t < n -1 \] 
 
   Si ha che esiste un cammino aciclico composto da $h$ archi di $E'$
   da $u$ a $v$ con $h<k-1$, allora ricordando che $(u,v) \not\in E'$
   si ha che se aggiungiamo $(v,u)$ al cammino otteniamo un ciclo di
-  lunghezza $h+1 < k$ da cui l'assuro.
+  lunghezza $h+1 < k$ da cui l'assurdo.
 \end{proof}
 
 Ci poniamo allora il problema di dire quando esistono dei $t$-spanner
-di un grafo con un certo numero di archi, purtroppo si ha che (teorema
-che non dimostriamo)
+di un grafo con un certo numero di archi, purtroppo si pu\`o
+dimostrare il seguente teorema (cosa che noi non faremo):
 \begin{myteo}
   Dato un grafo $G = (V,E)$ e due numeri $t,m\ge 1$ il problema di
   determinare se esiste un $t$-spanner di $G$ con al pi\`u $m$ archi
@@ -797,11 +797,11 @@ Sempre in \cite{graphspanners} vengono dati i seguenti risultati:
 \subsection{Altri risultati}
 
 Anche supponendo di avere un grafo con pochi archi (magari perch\'e è
-un $t$-spanner), potremmo non poterci permettere di elaborarlo ad ogni
-richiesta di distanza, per questo sono stati sviluppati algoritmi che,
-dopo una preelaborazione, salvano le informazioni sulle distanze in
-poco ($o(N^2)$) spazio e permettono di ricavare la distanza
-approssimata tra due punti in tempo costante.
+un $t$-spanner), potremmo comunque non poterci permettere di
+elaborarlo ad ogni richiesta di distanza, per questo sono stati
+sviluppati algoritmi che, dopo una preelaborazione, salvano le
+informazioni sulle distanze in poco ($o(N^2)$) spazio e permettono di
+ricavare la distanza approssimata tra due punti in tempo costante.
 
 In \cite{appdistoracl} gli autori presentano questo risultato:
 \begin{myteo}
@@ -960,7 +960,7 @@ calcolare la corrispondente stringa (che chiameremo $L_s$), $r_T$
 invece non dipende dall'etichettatura scelta ma solo dall'albero,
 quindi ci basta salvarlo solo una volta.
 
-\subsection{Somme prefisse precalcolate: Wavelet Tree}
+\subsection{Somme prefisse precalcolate: WaveletTree}
 
 Ci poniamo ora il problema di precalcolare e di salvare le somme
 prefisse di una stringa $L$ fissata. Ricordiamoci che, essendo
@@ -1006,14 +1006,15 @@ presentare il seguente risultato:
 
 Nel nostro caso $\Sigma = \set{ -1,0,1}$ e $n = 2N$, quindi in tempo
 costante riusciamo a calcolare una somma prefissa utilizzando un
-Wavelet Tree che occupa $2\log\pa{ 3} N + o(N)$ spazio.
+Wavelet Tree che occupa $2\log\pa{ 3} N + o(N)$ bit di memoria.
 
 
 \subsection{Complessit\`a e ottimalità}
 \label{sec:oracoloesattoottimale}
 
-Abbiamo gi\`a visto che siamo in grado di fare richieste di distanza
-in tempo costante. Vediamo quanto stiamo spendendo in spazio.
+Abbiamo gi\`a visto che siamo in grado di restituire la distanza tra
+due vertici arbitrari in tempo costante. Vediamo quanto spazio stiamo
+occupando.
 
 Dobbiamo salvare:
 \begin{itemize}
@@ -1039,8 +1040,8 @@ le distanze $\delta\pa{u,v}$ con $u<v$ (sfruttando la simmetria delle
 distanze) abbassandoci a $2\log \pa{3}$.
 
 \`E possibile, partizionando $T$ in macro-micro-alberi, abbassare lo
-spazio utilizzato a $\pa{\log\pa{3} /2} N^2 + o(N^2)$ continuando ad
-ammettere query in tempo costante, ma noi non lo vedremo.
+spazio utilizzato a $\pa{\log\pa{3} /2} N^2 + o(N^2)$ continuando a
+restituire le distanze in tempo costante, ma noi non lo vedremo.
 
 \subsection{Possibile generalizzazione: archi pesati}
 
@@ -1074,8 +1075,8 @@ dove $c(u,v)$ \`e il numero di cammini minimi in $P(u,v)$
 Abbiamo visto nell'esempio della figura \ref{fig:diamantecatena} che
 il numero di cammini tra una coppia di vertici pu\`o essere
 esponenziale, quindi potremmo essere interessati anche a poter
-chiedere solo un certo numero $k$ di cammini, cos\`i facendo ci si
-avvicinerebbe al problema dei $k$ cammini pi\`u brevi trattato nella
+chiedere solo un certo numero $k$ di cammini, cos\`i facendo ci
+avviciniamo al problema dei $k$ cammini pi\`u brevi trattato nella
 sezione \ref{sec:kcammini}.
 
 Nel caso particolare di $k=1$ (cio\`e ci basta conoscere un solo
@@ -1096,8 +1097,8 @@ minimi e siano essi $p_1,p_2,...,p_c$ con $c = c(u,v)$.
 Siano $u_1,..., u_c$ i nodi che compaiono in seconda posizione nei
 cammini (in prima compare $u$). Visto che, in generale, ci saranno
 delle ripetizioni possiamo supporre (a meno di riordinare i $p_i$) che
-esiste $n$ tale che $u_1,...,u_n$ sono tutti distinti e che ogni nodo
-in $\set{ u_{n+1},..., u_c}$ sia la ripetizione di un qualche nodo
+esista $n$ tale che $u_1,...,u_n$ sono tutti distinti e che ogni nodo
+in $\set{ u_{n+1},..., u_c}$ sia la ripetizione di un qualche nodo in
 $\set{ u_1,..., u_n}$.
 
 Possiamo allora partizionare l'insieme $\set{p_1,... ,p_c}$ in $n$
@@ -1153,7 +1154,7 @@ un oracolo in grado di ritornare tutti i cammini minimi.
 
 Per la preelaborazione utilizziamo $O\pa{ NM}$ tempo, infatti per ogni
 vertice di arrivo $v$ stiamo esaminando tutti gli archi uscenti da
-ogni altro vertice, il risultato della preelaborazione occupa $O\pa{
+ogni altro vertice; il risultato della preelaborazione occupa $O\pa{
   NM \log {N}}$ bit.
 
 Si pu\`o dimostrare per induzione sulla distanza tra i nodi che una
@@ -1284,9 +1285,9 @@ casi:
   uguale al secondo
 \end{enumerate}
 
-Quindi per ogni coppia di vertici siamo interessati a sapere qual'\`e
-la partizione che li separa e, in questa separazione, quali sono i
-nodi separanti attraverso i quali passa un cammino minimo.
+Quindi, per ogni coppia di vertici, siamo interessati a sapere
+qual'\`e la partizione che li separa e, in questa separazione, quali
+sono i nodi separanti attraverso i quali passa un cammino minimo.
 
 Siamo arrivati quindi a costuire il seguente algoritmo:
 
@@ -1296,8 +1297,8 @@ Siamo arrivati quindi a costuire il seguente algoritmo:
 \item calcola in modo ricorsivo le partizioni di $V$;
 \item per ogni coppia di vertici $u,v$ considera la partizione meno
   fine che li divide, sia $S$ l'insieme separatore;
-\item salva l'insieme dei vertici $s\in S$ tali che $\delta\pa{u,s} =
-  \delta\pa{s,v}$.
+\item salva l'insieme dei vertici $s\in S$ tali che $\delta\pa{u,s} +
+  \delta\pa{s,v} = \delta\pa{u,v}$.
 \end{enumerate}
 
 \textbf{Risposta ad una richiesta:}
@@ -1429,8 +1430,9 @@ Il grafo $H$ \`e connesso\footnote{Usiamo questa nozione di
 \section{Caso pessimo del nuovo algoritmo}
 \label{sec:casopessimo}
 
-Il caso in cui la nostra strategia precedente fallisce nel
-diminuire lo spazio utilizzato \`e il seguente
+Il caso in cui la nostra strategia precedente fallisce nel diminuire
+lo spazio utilizzato \`e rappresentato nella figura
+\ref{fig:diamante}.
 
 \begin{figure}[H]
   \centering
@@ -1440,15 +1442,16 @@ diminuire lo spazio utilizzato \`e il seguente
 \end{figure}
 
 
-Viste le considerazioni che abbiamo fatti sulla struttura dei cammini
+Viste le considerazioni che abbiamo fatto sulla struttura dei cammini
 minimi, questo grafo riassume la struttura dei cammini minimi fra una
-coppia di vertici. Possiamo immagginare, infatti, di aver collassato
+coppia di vertici. Possiamo immaginare, infatti, di aver collassato
 ogni componente connessa ad un singolo nodo.
 
 Questo esempio, pur raggiungendo il caso pessimo di spazio occupato,
 sta ancora sotto la soglia di $O\pa{N^2\log\pa{N}}$ perch\'e il grafo
 \`e sparso. Si pu\`o raggiungere il limite di $O\pa{ N M \log \pa{N} }
-= O\pa{N^3 \log\pa{N}}$ bit considerando il seguente esempio:
+= O\pa{N^3 \log\pa{N}}$ bit considerando l'esempio di figura~
+\ref{fig:diamantemultiplo}.
 
 \begin{figure}[H]
   \centering
@@ -1463,8 +1466,8 @@ sta ancora sotto la soglia di $O\pa{N^2\log\pa{N}}$ perch\'e il grafo
 
 Guidati dagli esempi visti, proponiamo alcune indicazioni su come
 costruire un grafo ``difficile'' che ci possa dare un'indicazione
-sullo spazio minimo che pu\`o utilizzare un oracolo per cammini
-minimi.
+sullo spazio minimo che deve utilizzare al caso pessimo un oracolo per
+cammini minimi.
 
 Consideriamo un grafo indiretto non pesato bipartito $G = (V,E)$ i cui
 vertici sono divisi in due insiemi di $N_1$ e $N_2$ nodi ciascuno,
