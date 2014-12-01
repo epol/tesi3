@@ -105,7 +105,7 @@
 %\subtitle{}
 %\author{Enrico Polesel}
 %\institute[Scuola Normale Superiore]{Scuola Normale Superiore}
-\date{05 dicembre 2014}
+\date{5 dicembre 2014}
 
 \author[Enrico Polesel]{\begin{tabular}{r@{ }l}
 Candidato: &  Enrico Polesel \\ 
@@ -152,12 +152,12 @@ Relatore: & Prof. Roberto Grossi
     \end{column}
     \begin{column}{0.58\textwidth}
       \begin{itemize}
-      \item $G = (V,E)$ grafo
-      \item $\abs{V} = N$, $\abs{E} = M$
-      \item $V$ nodi
-      \item $E \subseteq V\times V$ archi
-      \item gli archi possono essere orientati
-      \item gli archi possono avere un peso $w: E \to \mathbb{R}$ (nel
+      \item<1-> $G = (V,E)$ grafo
+      \item<1-> $\abs{V} = N$, $\abs{E} = M$
+      \item<1-> $V$ nodi
+      \item<1-> $E \subseteq V\times V$ archi
+      \item<2-> gli archi possono essere orientati
+      \item<2-> gli archi possono avere un peso $w: E \to \mathbb{R}$ (nel
         nostro caso la lunghezza)
       \end{itemize}
     \end{column}
@@ -171,14 +171,14 @@ Relatore: & Prof. Roberto Grossi
     \end{column}
     \begin{column}{0.58\textwidth}
       \begin{itemize}
-      \item Cammino: $p = \pa{ 0,7,2, 4,6}$
-      \item Lunghezza: $w(p) = 7+4+10+0 = 21$
-      \item $P(u,v) = \set{\text{cammini tra }u\text{ e }v}$
-      \item Distanza: $\delta (u,v) = \min \limits _{p\in P(u,v)}
+      \item<1-> Cammino: $p = \pa{ 0,7,2, 4,6}$
+      \item<1-> Lunghezza: $w(p) = 7+4+10+0 = 21$
+      \item<2-> $P(u,v) = \set{\text{cammini tra }u\text{ e }v}$
+      \item<2-> Distanza: $\delta (u,v) = \min \limits _{p\in P(u,v)}
         w(p)$
-      \item $\pa{V,\delta}$ \`e una pseudometrica
-      \item I cammini minimi sono ``quasi'' aciclici
-      \item Sottocammini di cammini minimi sono minimi
+      \item<3-> $\pa{V,\delta}$ \`e una pseudometrica
+      \item<3-> I cammini minimi sono ``quasi'' aciclici
+      \item<3-> Sottocammini di cammini minimi sono minimi
       \end{itemize}
     \end{column}
   \end{columns}
@@ -192,7 +192,8 @@ Relatore: & Prof. Roberto Grossi
   \item $\forall v\in V\;\; \delta \pa{s,v}$
   \item $\forall v\in V$ i cammini minimi da $s$ a $v$
   \end{itemize}
-
+  \pause 
+  
   \begin{mypro}
     Se gli archi hanno lunghezza strettamente positiva, il grafo $G_s$
     dei cammini minimi \`e un DAG (grafo aciclico diretto)
@@ -243,13 +244,16 @@ Relatore: & Prof. Roberto Grossi
 
 \begin{frame}{Calcolo della matrice delle distanze}
   Matrice delle distanze: $d_{i,j} = \delta(i,j)$
+  \pause
   \vfill
   
   $l^{(m)}_{i,j} = \min\set{ l^{(m-1)} _{i,j} , \min _{0\le k\le N-1}
     \set{ l^{(m-1)} _{i,k} + w_{k,j}} }$
+  \pause
   
   Ogni cammino ha al pi\`u $N-1$ archi $\Rightarrow$ $d_{i,j} = l^{(N-1)}
   _{i,j}$.
+  \pause
   \vfill
   
   Possiamo riscrivere $l^{(m)}_{i,j} = \min \limits _{0\le k\le N-1}
@@ -405,10 +409,14 @@ Relatore: & Prof. Roberto Grossi
   \end{myteo}
 \end{frame}
 
-\begin{frame}{Risultati}
+\begin{frame}{}
   \begin{itemize}
-  \item PS89: esiste un $(4r+1)$-spanner con $O(N^{1+1/r})$ vertici
-  \item TODO
+  \item Partendo dagli spanner vengono costruiti oracoli per ottenere
+    distanze approssimate;
+  \item la struttura sparsa degli spanner permette di ridurre lo
+    spazio utilizzato dall'oracolo;
+  \item esitono anche algoritmi che trovano approssimazioni della
+    distanza senza elaborare tutto il grafo.
   \end{itemize}
 \end{frame}
 
@@ -417,13 +425,13 @@ Relatore: & Prof. Roberto Grossi
 \begin{frame}{Limiti teorici}
   \begin{itemize}
   \item Esistono $\binom{ N}{2}$ grafi con $N$ archi
-  \item c'\`e una corrispondenza biunivoca tra grafi e tabelle delle
-    distanze 
+  \item esiste una corrispondenza biunivoca tra grafi e matrici
+    distanza
   \end{itemize}
-  \pause
-  \vfill
-  Un oracolo deve saper distinugere tra $\binom{ N}{2}$ casi
-  \pause
+  \pause \vfill
+
+  Un oracolo deve saper distinugere tra $2 ^\wedge {\binom{ N}{2}}$
+  casi \pause
   \begin{block}{Lower bound}
     Un oracolo per distanze deve utilizzare almeno $N^2 / 2 + o(N^2)$
     bit
@@ -431,7 +439,7 @@ Relatore: & Prof. Roberto Grossi
 \end{frame}
 
 \begin{frame}{Albero etichettato}
-  Sia $T$ un albero di ricoprimento qualsiasi di $T$ con radice in
+  Sia $T$ un albero di ricoprimento qualsiasi di $G$ con radice in
   $r$. Denotiamo con $f(u)$ il padre di $u$.
   \vfill
   \[ \delta\pa{ s,u} = \delta\pa{ s,r} + \sum _{v\in \pi (u)} \bra{
@@ -450,7 +458,7 @@ Relatore: & Prof. Roberto Grossi
     \begin{column}{0.6\textwidth}
       \includegraphics[width=\textwidth]{labeltree}
     \end{column}
-    \begin{column}{0.39\textwidth}
+    \begin{column}{0.4\textwidth}
       Associamo ad ogni etichettatura $l_s$ una sequenza $L_s$.
 
       Per ogni nodo $u\in V$ nella stringa compare $l(u)$ (triangolino
@@ -545,7 +553,7 @@ Relatore: & Prof. Roberto Grossi
   \vfill \pause
 
   \begin{block}{Bit utilizzati}
-    \[ O\pa{N^{2.5}} \]
+    \[ O \pa{N^{2.5}} \]
   \end{block}
 \end{frame}
 
@@ -564,7 +572,8 @@ Relatore: & Prof. Roberto Grossi
 \end{frame}
 
 \begin{frame}{Struttura dei cammini}
-  Consideriamo il DAG $H$ dei cammini da $u$ a $v$, se togliamo i due
+  Supponiamo $G$ indiretto e consideriamo il DAG $H$ dei cammini da
+  $u$ a $v$ (che \`e connesso come grafo indiretto), se togliamo i due
   estremi otteniamo delle componenti connesse $H_1,...,H_k$.
 
   \begin{mypro}
@@ -604,7 +613,37 @@ Relatore: & Prof. Roberto Grossi
 \end{frame}
 
 \begin{frame}{Intersezione di insiemi}
-  
+  $B = \set{ b_1,..., b_{N_2}}$ un insieme.
+
+  $A = \set{ a_1,..., a_{N_1}}$ con $a_i \subseteq B$.
+
+  Cerchiamo un oracolo per elencare gli elementi $a_i \cap a_j$.
+  \vfill \pause
+
+  Costruiamo un grafo indiretto bipartito $(V,E)$ con
+  \begin{itemize}
+  \item $V = A \cup B$
+  \item $E = \set{ \pa{a_i, b_j} \mid b_j \in a_i }$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Conclusioni}
+  \begin{itemize}
+  \item<1-> Abbiamo visto come costruire un oracolo che occupa $O\pa{NM}$
+    memoria;
+  \item<1-> migliorandolo siamo riusciti a trovare una struttura dei
+    cammini minimi tra due vertici;
+  \item<2-> \`e possibile fare di meglio? Studiare il caso difficile
+    potrebbe aiutarci a capirlo.
+  \end{itemize}
+\end{frame}
+
+
+\section*{}
+
+\begin{frame}[plain]
+ \frametitle{Indice}
+ \tableofcontents
 \end{frame}
 
 
