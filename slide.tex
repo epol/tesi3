@@ -179,7 +179,7 @@ Relatore: & Prof. Roberto Grossi
         w(p)$
       \item<3-> $\pa{V,\delta}$ \`e una pseudometrica
       \item<3-> I cammini minimi sono ``quasi'' aciclici
-      \item<3-> Sottocammini di cammini minimi sono minimi
+%      \item<3-> Sottocammini di cammini minimi sono minimi
       \end{itemize}
     \end{column}
   \end{columns}
@@ -284,7 +284,7 @@ Relatore: & Prof. Roberto Grossi
         \hline
         Calcolo di un prodotto & Elevamento a potenza \\
         \hline
-        $ A *B $ & $W ^N$ \\
+        $ A *B $ & $W ^{N-1}$ \\
         $O\pa{N^3}$ & $O\pa{ N}$ \\
         \hline
         \multicolumn{2}{| c| }{$O\pa{N^4}$}\\
@@ -374,31 +374,14 @@ Relatore: & Prof. Roberto Grossi
 \end{frame}
 
 
-\subsection{$k$ cammini pi\`u brevi}
-
-\begin{frame}
-  \begin{block}{Problema}
-    Dati $u,v \in V$ trovare i $k$ cammini pi\`u brevi in $P(u,v)$.
-  \end{block}
-  \vfill
-  
-  \begin{itemize}
-  \item Alcuni algoritmi venono forniti in \textit{Eppstein 1994}
-  \item In \textit{Aljazzar-Leue 2011}, senza peggiorare le
-    prestazioni al caso pessimo, si riesce a risolvere il problema
-    senza esplorare tutto il grafo
-  \end{itemize}
-  
-\end{frame}
-
-
 \section{Oracoli per distanze}
 
 \subsection{Oracoli esatti}
 
 \begin{frame}{Limiti teorici in spazio}
   \begin{itemize}
-  \item Esistono $2 ^\wedge \binom{ N}{2}$ grafi con $N$ archi;
+  \item Esistono $2 ^\wedge \binom{ N}{2}$ grafi indiretti non pesati
+    con $N$ nodi;
   \item esiste una corrispondenza biunivoca tra grafi e matrici
     distanza
   \end{itemize}
@@ -412,107 +395,16 @@ Relatore: & Prof. Roberto Grossi
   \end{block}
 \end{frame}
 
-\begin{frame}{Albero etichettato}
-  Sia $T$ un albero di ricoprimento qualsiasi di $G$ con radice in
-  $r$. Denotiamo con $f(u)$ il padre di $u$.
-  \vfill
-  \[ \delta\pa{ s,u} = \delta\pa{ s,r} + \sum _{v\in \pi (u)} \bra{
-    \delta\pa{ s,v} - \delta\pa{ s,f(v) } } \]
-  
-  Per la triangolare si ha $\abs{\delta\pa{ s,v} - \delta\pa{ s,f(v)}
-  } \le \abs{\delta\pa{v,f(v)}} \le 1$ \vfill
-  
-  \pause
-  \[ l_s(v) = \delta\pa{s,v} - \delta\pa{ s, f(v) } \in \set{
-    -1,0,1} \]
-\end{frame}
-
-\begin{frame}{Somme prefisse}
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-      \includegraphics[width=\textwidth]{labeltree}
-    \end{column}
-    \begin{column}{0.4\textwidth}
-      Associamo ad ogni etichettatura $l_s$ una sequenza $L_s$.
-
-      Per ogni nodo $u\in V$ nella stringa compare $l(u)$ (triangolino
-      verde) e $-l(u)$ (quadratino rosso).  \vfill \pause
-      
-      $\sum _{v\in \pi(u)} \bra{ \delta\pa{ s,v} - \delta\pa{ s,f(v) } }$
-      \`e la somma prefissa fino a $r(u)$.
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{Complessità in spazio}
-  Dobbiamo salvare:
-  \begin{itemize}
-  \item albero: $O\pa{N}$ bit
-  \item distanze $\delta\pa{s,r}$ per ogni $s\in V$: $O\pa{ N \log N}$
-    bit totali
-  \item vettore $r$: $O\pa{N \log\pa{N}}$ bit 
-  \item al variare di $s\in V$ una struttura dati associata a $L_s$:
-    $2\log\pa{3} N^2 + o(N^2)$ bit totali {\color{white}
-      \ref{frame:wavelettree}}
-  \end{itemize}
-  Asintoticamente lo spazio utilizzato è dato dalla struttura per
-  $L_s$.
-
-  \textbf{Totale:} ${2}\log\pa{3} N^2 + o(N^2)$ bit \vfill
-  \pause
-
-  Si pu\`o migliorare a 
-  \begin{block}{Bit utilizzati}
-    \[ \frac{1}{2}\log\pa{3} N^2 + o\pa{N^2} = 1.585 \frac{N^2}{2} +
-    o\pa{N^2} \]
-  \end{block}
-\end{frame}
-
-\subsection{Oracoli approssimati}
-
-\begin{frame}{Approssimazioni}
-  Dover usare $\Omega \pa{N^2}$ bit potrebbe essere comunuque troppo,
-  possiamo rinunciare ad avere le distanze precise in cambio di
-  un'ulteriore diminuzione dello spazio occupato dall'oracolo.
+\begin{frame}{Risultato}
+  In un articolo di \textit{Ferragina, Nitto e Venturini} comparso in
+  \textit{Theoretical Computer Science} nel 2010 viene presentato un
+  oracolo per grafi indiretti non pesati i cui bit utilizzati sono 
+  \[ \frac{1}{2} \log \pa{3} N^2 + o\pa{N^2} \]
   \vfill
   
-  \begin{mydef}[$r$-approssimazione]
-    Un algoritmo che ritorna $d(u,v)$ tale che
-    \[ d\pa{u,v} \le r \delta\pa{u,v} \]
-  \end{mydef}
+  Quindi si discosta dal \textit{lower bound} di un fattore $\log
+  \pa{3} \simeq 1.585$.
 \end{frame}
-
-\begin{frame}{}
-\setlength{\tabcolsep}{2pt}
-  \begin{tabular}{c| c| c|c|c}
-    \textbf{autore} & \textbf{preprocessing} & \textbf{spazio} & \textbf{tempo} & \textbf{approx} \\
-    \hline 
-    \multirow{3}{*}{
-    \begin{tabular}{c}
-      Thorup-Zwick\\
-      STOC 2001
-    \end{tabular}}
-  & $O\pa{kMN^{1/k}}$ & $O\pa{kN^{1+1/k}}$ &
-  $O\pa{k}$ & 2k-1 \\
-  & $O\pa{MN^{1/2}}$ & $O\pa{N^{3/2}}$ & $O(1)$ & $3$\\
-  & $O\pa{M\log N}$ & $O\pa{N\log{N}}$ & $O\pa{\log N}$  & $\log N$ \\
-\hline
-     \begin{tabular}{c}
-       Baswana-Gaur\\
-       Sen-Upadhyay\\
-       LNCS 2008
-     \end{tabular}
-     & 
-     \begin{tabular}{c}
-       $O\big( M + kN^{3/2}$\\
-       $N^{1/(2k)}$\\
-       $N^{1/\pa{2k-2}}\big)$
-     \end{tabular}
-     & $O\pa{kN^{1+1/k}}$ & $O\pa{k}$ & $\pa{2k-1,2}$ 
-  \end{tabular}
-\setlength{\tabcolsep}{6pt}
-\end{frame}
-
 
 \section{Oracoli per cammini}
 
@@ -574,7 +466,7 @@ Relatore: & Prof. Roberto Grossi
   che sono, al pi\`u, $O\pa{\sqrt{N}}$.
   \vfill \pause
 
-  \begin{block}{Bit utilizzati}
+  \begin{block}{Spazio utilizzato}
     \[ O \pa{N^{2.5}} \]
   \end{block}
 \end{frame}
@@ -616,7 +508,7 @@ Relatore: & Prof. Roberto Grossi
         \onslide<1> \includegraphics[width=\textwidth]{diamante}
         \onslide<2-> \includegraphics[width=\textwidth]{diamantemultiplo}
         \begin{center}
-          $O\pa{N^3}$ bit!
+          $\Theta \pa{N^3}$ spazio!
         \end{center}
       \end{overprint}
 %    \end{column}
@@ -630,23 +522,13 @@ Relatore: & Prof. Roberto Grossi
 
 \begin{frame}{Grafo bipartito}
   \includegraphics[width=\textwidth]{bipartito}
+  \pause
+  \begin{center}
+  \pause
   
-  Cerchiamo cammini di lunghezza $2$ tra i nodi gialli
-\end{frame}
-
-\begin{frame}{Intersezione di insiemi}
-  $B = \set{ b_1,..., b_{N_2}}$ un insieme.
-
-  $A = \set{ a_1,..., a_{N_1}}$ con $a_i \subseteq B$.
-
-  Cerchiamo un oracolo per elencare gli elementi $a_i \cap a_j$.
-  \vfill \pause
-
-  Costruiamo un grafo indiretto bipartito $(V,E)$ con
-  \begin{itemize}
-  \item $V = A \cup B$
-  \item $E = \set{ \pa{a_i, b_j} \mid b_j \in a_i }$
-  \end{itemize}
+  Se $a_i \cap a_j \neq \emptyset$ allora $\mathrm{minimi}(a_i,a_j)
+  \cong \mathrm{neigh}(a_i) \cap \mathrm{neigh}(a_j)$
+  \end{center}
 \end{frame}
 
 \begin{frame}{Conclusioni}
@@ -668,7 +550,17 @@ Relatore: & Prof. Roberto Grossi
  \tableofcontents
 \end{frame}
 
-\begin{frame}{Prodotto $\min - + $ fra interi}
+\begin{frame}{Contenuti bonus}
+  \begin{itemize}
+  \item \hyperref[frame:prodottointeri]{Prodotto $\min +$ fra interi}
+  \item \hyperref[frame:wavelettree]{Wavelet tree}
+  \item \hyperref[sec:kcamm]{$k$-cammini minimi}
+  \item \hyperref[sec:oracolidist]{Oracoli per distanze esatti}
+  \item \hyperref[sec:approx]{Oracoli per distanze approsimati}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Prodotto $\min + $ fra interi}
 \label{frame:prodottointeri}
   \begin{overprint}
     \onslide<1>
@@ -719,7 +611,7 @@ Relatore: & Prof. Roberto Grossi
   \end{overprint}
   \[ c_{ij} = \min _k \set{ a_{ik} + b_{kj} } \]
   \begin{overprint}
-    \onslide<3-> \[ c_{ij} = \mathrm{first}\pa{c_{ij}} \]
+    \onslide<3-> \[ c_{ij} = \mathrm{first}\pa{c'_{ij}} \]
   \end{overprint}
 \end{frame}
 
@@ -741,6 +633,129 @@ Relatore: & Prof. Roberto Grossi
   _\sigma (S,k) \]
 \end{frame}
 
+\subsection*{$k$ cammini pi\`u brevi}
+\label{sec:kcamm}
+
+\begin{frame}
+  \begin{block}{Problema}
+    Dati $u,v \in V$ trovare i $k$ cammini pi\`u brevi in $P(u,v)$.
+  \end{block}
+  \vfill
+  
+  \begin{itemize}
+  \item Alcuni algoritmi venono forniti in \textit{Eppstein 1994}
+  \item In \textit{Aljazzar-Leue 2011}, senza peggiorare le
+    prestazioni al caso pessimo, si riesce a risolvere il problema
+    senza esplorare tutto il grafo
+  \end{itemize}
+  
+\end{frame}
+
+\subsection*{Oracoli per distanze esatti}
+\label{sec:oracolidist}
+
+\begin{frame}{Albero etichettato}
+  Sia $T$ un albero di ricoprimento qualsiasi di $G$ con radice in
+  $r$. Denotiamo con $f(u)$ il padre di $u$.
+  \vfill
+  \[ \delta\pa{ s,u} = \delta\pa{ s,r} + \sum _{v\in \pi (u)} \bra{
+    \delta\pa{ s,v} - \delta\pa{ s,f(v) } } \]
+  
+  Per la triangolare si ha $\abs{\delta\pa{ s,v} - \delta\pa{ s,f(v)}
+  } \le \abs{\delta\pa{v,f(v)}} \le 1$ \vfill
+  
+  \pause
+  \[ l_s(v) = \delta\pa{s,v} - \delta\pa{ s, f(v) } \in \set{
+    -1,0,1} \]
+\end{frame}
+
+\begin{frame}{Somme prefisse}
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+      \includegraphics[width=\textwidth]{labeltree}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      Associamo ad ogni etichettatura $l_s$ una sequenza $L_s$.
+
+      Per ogni nodo $u\in V$ nella stringa compare $l(u)$ (triangolino
+      verde) e $-l(u)$ (quadratino rosso).  \vfill \pause
+      
+      $\sum _{v\in \pi(u)} \bra{ \delta\pa{ s,v} - \delta\pa{ s,f(v) } }$
+      \`e la somma prefissa fino a $r(u)$.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Complessità in spazio}
+  Dobbiamo salvare:
+  \begin{itemize}
+  \item albero: $O\pa{N}$ bit
+  \item distanze $\delta\pa{s,r}$ per ogni $s\in V$: $O\pa{ N \log N}$
+    bit totali
+  \item vettore $r$: $O\pa{N \log\pa{N}}$ bit 
+  \item al variare di $s\in V$ una struttura dati associata a $L_s$:
+    $2\log\pa{3} N^2 + o(N^2)$ bit totali {\color{white}
+      \ref{frame:wavelettree}}
+  \end{itemize}
+  Asintoticamente lo spazio utilizzato è dato dalla struttura per
+  $L_s$.
+
+  \textbf{Totale:} ${2}\log\pa{3} N^2 + o(N^2)$ bit \vfill
+  \pause
+
+  Si pu\`o migliorare a 
+  \begin{block}{Bit utilizzati}
+    \[ \frac{1}{2}\log\pa{3} N^2 + o\pa{N^2} = 1.585 \frac{N^2}{2} +
+    o\pa{N^2} \]
+  \end{block}
+\end{frame}
+
+
+\subsection*{Oracoli per distanze approssimati}
+\label{sec:approx}
+
+\begin{frame}{Approssimazioni}
+  Dover usare $\Omega \pa{N^2}$ bit potrebbe essere comunuque troppo,
+  possiamo rinunciare ad avere le distanze precise in cambio di
+  un'ulteriore diminuzione dello spazio occupato dall'oracolo.
+  \vfill
+  
+  \begin{mydef}[$r$-approssimazione]
+    Un algoritmo che ritorna $d(u,v)$ tale che
+    \[ d\pa{u,v} \le r \delta\pa{u,v} \]
+  \end{mydef}
+\end{frame}
+
+\begin{frame}{}
+\setlength{\tabcolsep}{2pt}
+  \begin{tabular}{c| c| c|c|c}
+    \textbf{autore} & \textbf{preprocessing} & \textbf{spazio} & \textbf{tempo} & \textbf{approx} \\
+    \hline 
+    \multirow{3}{*}{
+    \begin{tabular}{c}
+      Thorup-Zwick\\
+      STOC 2001
+    \end{tabular}}
+  & $O\pa{kMN^{1/k}}$ & $O\pa{kN^{1+1/k}}$ &
+  $O\pa{k}$ & 2k-1 \\
+  & $O\pa{MN^{1/2}}$ & $O\pa{N^{3/2}}$ & $O(1)$ & $3$\\
+  & $O\pa{M\log N}$ & $O\pa{N\log{N}}$ & $O\pa{\log N}$  & $\log N$ \\
+\hline
+     \begin{tabular}{c}
+       Baswana-Gaur\\
+       Sen-Upadhyay\\
+       LNCS 2008
+     \end{tabular}
+     & 
+     \begin{tabular}{c}
+       $O\big( M + kN^{3/2}$\\
+       $N^{1/(2k)}$\\
+       $N^{1/\pa{2k-2}}\big)$
+     \end{tabular}
+     & $O\pa{kN^{1+1/k}}$ & $O\pa{k}$ & $\pa{2k-1,2}$ 
+  \end{tabular}
+\setlength{\tabcolsep}{6pt}
+\end{frame}
 
 \begin{frame}{Graph spanner}
     \begin{mydef}[$t$-spanner]
