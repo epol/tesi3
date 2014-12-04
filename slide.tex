@@ -387,37 +387,6 @@ Relatore: & Prof. Roberto Grossi
 
 \section{Oracoli per distanze}
 
-\subsection{Oracoli approssimati}
-
-\begin{frame}{Graph spanner}
-  \begin{mydef}[$r$-approssimazione]
-    Un algoritmo che ritorna $d(u,v)$ tale che
-    \[ d\pa{u,v} \le r \delta\pa{u,v} \]
-  \end{mydef}
-
-  \begin{mydef}[$t$-spanner]
-    $G' = (V,E')$ con $E' \subseteq E$ tale che la distanza in $G'$
-    \`e una $t$-approssimazione.
-  \end{mydef}
-
-  \begin{myteo}
-    Dato un grafo $G = (V,E)$ e due numeri $t,m\ge 1$ il problema di
-    determinare se esiste un $t$-spanner di $G$ con al pi\`u $m$ archi
-    \`e NP-completo.
-  \end{myteo}
-\end{frame}
-
-\begin{frame}{}
-  \begin{itemize}
-  \item Partendo dagli spanner vengono costruiti oracoli per ottenere
-    distanze approssimate;
-  \item la struttura sparsa degli spanner permette di ridurre lo
-    spazio utilizzato dall'oracolo;
-  \item esitono anche algoritmi che trovano approssimazioni della
-    distanza senza elaborare tutto il grafo.
-  \end{itemize}
-\end{frame}
-
 \subsection{Oracoli esatti}
 
 \begin{frame}{Limiti teorici}
@@ -471,15 +440,17 @@ Relatore: & Prof. Roberto Grossi
 \begin{frame}{Complessità in spazio}
   Dobbiamo salvare:
   \begin{itemize}
-  \item albero: $O\pa{N\log\pa{N}}$ bit
+  \item albero: $O\pa{N}$ bit
   \item distanze $\delta\pa{s,r}$ per ogni $s\in V$: $O\pa{ N \log N}$
     bit totali
   \item vettore $r$: $O\pa{N \log\pa{N}}$ bit 
-  \item al variare di $s\in V$ il Wavelet Tree associato a $L_s$:
+  \item al variare di $s\in V$ una struttura dati associata a $L_s$:
     $2\log\pa{3} N^2 + o(N^2)$ bit totali
   \end{itemize}
-  \textbf{Totale:} ${2}\log\pa{3} N^2 + o(N^2)$ bit
-  \vfill
+  Asintoticamente lo spazio utilizzato è dato dalla struttura per
+  $L_s$.
+
+  \textbf{Totale:} ${2}\log\pa{3} N^2 + o(N^2)$ bit \vfill
   \pause
 
   Si pu\`o migliorare a 
@@ -487,6 +458,31 @@ Relatore: & Prof. Roberto Grossi
     \[ \frac{1}{2}\log\pa{3} N^2 + o\pa{N^2} = 1.585 \frac{N^2}{2} +
     o\pa{N^2} \]
   \end{block}
+\end{frame}
+
+\subsection{Oracoli approssimati}
+
+\begin{frame}{Approssimazioni}
+  Dover usare $\Omega \pa{N^2}$ bit potrebbe essere comunuque troppo,
+  possiamo rinunciare ad avere le distanze precise in cambio di
+  un'ulteriore diminuzione dello spazio occupato dall'oracolo.
+  \vfill
+  
+  \begin{mydef}[$r$-approssimazione]
+    Un algoritmo che ritorna $d(u,v)$ tale che
+    \[ d\pa{u,v} \le r \delta\pa{u,v} \]
+  \end{mydef}
+\end{frame}
+
+\begin{frame}{}
+  \begin{itemize}
+  \item Partendo dagli spanner vengono costruiti oracoli per ottenere
+    distanze approssimate;
+  \item la struttura sparsa degli spanner permette di ridurre lo
+    spazio utilizzato dall'oracolo;
+  \item esitono anche algoritmi che trovano approssimazioni della
+    distanza senza elaborare tutto il grafo.
+  \end{itemize}
 \end{frame}
 
 
@@ -642,6 +638,24 @@ Relatore: & Prof. Roberto Grossi
 \begin{frame}[plain]
  \frametitle{Indice}
  \tableofcontents
+\end{frame}
+
+\begin{frame}{Prodotto $\min - + $ fra interi}
+  
+\end{frame}
+
+
+\begin{frame}{Graph spanner}
+    \begin{mydef}[$t$-spanner]
+    $G' = (V,E')$ con $E' \subseteq E$ tale che la distanza in $G'$
+    \`e una $t$-approssimazione.
+  \end{mydef}
+
+  \begin{myteo}
+    Dato un grafo $G = (V,E)$ e due numeri $t,m\ge 1$ il problema di
+    determinare se esiste un $t$-spanner di $G$ con al pi\`u $m$ archi
+    \`e NP-completo.
+  \end{myteo}
 \end{frame}
 
 
