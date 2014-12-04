@@ -24,6 +24,7 @@
 \usepackage[italian]{babel}
 \usepackage{mathtools}
 \usepackage{colortbl}
+\usepackage{multirow}
 
 %\usepackage{pdftricks}
 %\begin{psinputs}
@@ -333,7 +334,7 @@ Relatore: & Prof. Roberto Grossi
   \vfill
   \begin{overprint}
     \onslide<5-> Per archi di peso intero positivo: $O\pa{ d N ^\omega
-      \log d \log N}$
+      \log d \log N}$ {\color{white}\ref{frame:prodottointeri}}
   \end{overprint}
 \end{frame}
 
@@ -341,9 +342,9 @@ Relatore: & Prof. Roberto Grossi
 \begin{frame}{Altri risultati}
   \begin{itemize}
   \item Grafi senza cicli negativi: Floyd-Warshall $\rightarrow$ $O \pa{N^3}$
-  \item Grafi con archi di peso intero positivo: SZ99 $\rightarrow$
-    $\tilde O \pa{k N^\omega}$ (dove $k$ \`e la lunghezza massima di
-    un arco).
+  \item Grafi con archi di peso intero positivo: \textit{Shoshan-Zwick
+      FOCS~ 1999} $\rightarrow$ $\tilde O \pa{k N^\omega}$ (dove $k$ \`e la
+    lunghezza massima di un arco).
   \end{itemize}
 \end{frame}
 
@@ -363,8 +364,13 @@ Relatore: & Prof. Roberto Grossi
   Dati due vertici il numero di cammini minimi tra i due potrebbe
   essere anche esponenziale
   \vfill
-  
-  \includegraphics[width=\textwidth]{diamantecatena}
+
+  \begin{overprint}
+    \onslide<1>  \includegraphics[width=\textwidth]{catena0}
+    \onslide<2>  \includegraphics[width=\textwidth]{catena1}
+    \onslide<3>  \includegraphics[width=\textwidth]{catena2}
+    \onslide<4>  \includegraphics[width=\textwidth]{catena3}
+  \end{overprint}
 \end{frame}
 
 
@@ -377,9 +383,10 @@ Relatore: & Prof. Roberto Grossi
   \vfill
   
   \begin{itemize}
-  \item Alcuni algoritmi venono forniti in Epp94
-  \item In AL11, senza peggiorare le prestazioni al caso pessimo, si
-    riesce a risolvere il problema senza esplorare tutto il grafo
+  \item Alcuni algoritmi venono forniti in \textit{Eppstein 1994}
+  \item In \textit{Aljazzar-Leue 2011}, senza peggiorare le
+    prestazioni al caso pessimo, si riesce a risolvere il problema
+    senza esplorare tutto il grafo
   \end{itemize}
   
 \end{frame}
@@ -389,9 +396,9 @@ Relatore: & Prof. Roberto Grossi
 
 \subsection{Oracoli esatti}
 
-\begin{frame}{Limiti teorici}
+\begin{frame}{Limiti teorici in spazio}
   \begin{itemize}
-  \item Esistono $2 ^\wedge \binom{ N}{2}$ grafi con $N$ archi
+  \item Esistono $2 ^\wedge \binom{ N}{2}$ grafi con $N$ archi;
   \item esiste una corrispondenza biunivoca tra grafi e matrici
     distanza
   \end{itemize}
@@ -399,7 +406,7 @@ Relatore: & Prof. Roberto Grossi
 
   Un oracolo deve saper distinugere tra $2 ^\wedge {\binom{ N}{2}}$
   casi \pause
-  \begin{block}{Lower bound}
+  \begin{block}{\textit{Lower bound}}
     Un oracolo per distanze deve utilizzare almeno $N^2 / 2 + o(N^2)$
     bit
   \end{block}
@@ -445,7 +452,8 @@ Relatore: & Prof. Roberto Grossi
     bit totali
   \item vettore $r$: $O\pa{N \log\pa{N}}$ bit 
   \item al variare di $s\in V$ una struttura dati associata a $L_s$:
-    $2\log\pa{3} N^2 + o(N^2)$ bit totali
+    $2\log\pa{3} N^2 + o(N^2)$ bit totali {\color{white}
+      \ref{frame:wavelettree}}
   \end{itemize}
   Asintoticamente lo spazio utilizzato è dato dalla struttura per
   $L_s$.
@@ -475,14 +483,34 @@ Relatore: & Prof. Roberto Grossi
 \end{frame}
 
 \begin{frame}{}
-  \begin{itemize}
-  \item Partendo dagli spanner vengono costruiti oracoli per ottenere
-    distanze approssimate;
-  \item la struttura sparsa degli spanner permette di ridurre lo
-    spazio utilizzato dall'oracolo;
-  \item esitono anche algoritmi che trovano approssimazioni della
-    distanza senza elaborare tutto il grafo.
-  \end{itemize}
+\setlength{\tabcolsep}{2pt}
+  \begin{tabular}{c| c| c|c|c}
+    \textbf{autore} & \textbf{preprocessing} & \textbf{spazio} & \textbf{tempo} & \textbf{approx} \\
+    \hline 
+    \multirow{3}{*}{
+    \begin{tabular}{c}
+      Thorup-Zwick\\
+      STOC 2001
+    \end{tabular}}
+  & $O\pa{kMN^{1/k}}$ & $O\pa{kN^{1+1/k}}$ &
+  $O\pa{k}$ & 2k-1 \\
+  & $O\pa{MN^{1/2}}$ & $O\pa{N^{3/2}}$ & $O(1)$ & $3$\\
+  & $O\pa{M\log N}$ & $O\pa{N\log{N}}$ & $O\pa{\log N}$  & $\log N$ \\
+\hline
+     \begin{tabular}{c}
+       Baswana-Gaur\\
+       Sen-Upadhyay\\
+       LNCS 2008
+     \end{tabular}
+     & 
+     \begin{tabular}{c}
+       $O\big( M + kN^{3/2}$\\
+       $N^{1/(2k)}$\\
+       $N^{1/\pa{2k-2}}\big)$
+     \end{tabular}
+     & $O\pa{kN^{1+1/k}}$ & $O\pa{k}$ & $\pa{2k-1,2}$ 
+  \end{tabular}
+\setlength{\tabcolsep}{6pt}
 \end{frame}
 
 
@@ -502,7 +530,7 @@ Relatore: & Prof. Roberto Grossi
   in modo ricorsivo.
   \vfill \pause
 
-  Spazio utilizzato: $O\pa{NM}$ bit.
+  Spazio utilizzato: $O\pa{NM}$.
 \end{frame}
 
 \begin{frame}{Un non oracolo}
@@ -641,7 +669,76 @@ Relatore: & Prof. Roberto Grossi
 \end{frame}
 
 \begin{frame}{Prodotto $\min - + $ fra interi}
-  
+\label{frame:prodottointeri}
+  \begin{overprint}
+    \onslide<1>
+    \begin{equation*}
+      \overbrace{
+        \begin{pmatrix}
+          a_{11}  & \cdots & a_{1N} \\
+          \vdots & \ddots & \vdots \\
+          a_{N1} & \cdots & a_{NN} 
+        \end{pmatrix}} ^{A} *
+      \overbrace{
+        \begin{pmatrix}
+          b_{11}  & \cdots & b_{1N} \\
+          \vdots & \ddots & \vdots \\
+          b_{N1} & \cdots & b_{NN} 
+        \end{pmatrix}} ^{B} =
+      \overbrace{
+        \begin{pmatrix}
+          c_{11}  & \cdots & c_{1N} \\
+          \vdots & \ddots & \vdots \\
+          c_{N1} & \cdots & c_{NN} 
+        \end{pmatrix}} ^{C}
+    \end{equation*}
+    \onslide<2->
+    \begin{equation*}
+      \overbrace{
+        \begin{pmatrix}
+          x^{a_{11}}  & \cdots & x^{a_{1N}} \\
+          \vdots & \ddots & \vdots \\
+          x^{a_{N1}} & \cdots & x^{a_{NN}} 
+        \end{pmatrix}} ^{A'} \cdot
+      \overbrace{
+        \begin{pmatrix}
+          x^{b_{11}}  & \cdots & x^{b_{1N}} \\
+          \vdots & \ddots & \vdots \\
+          x^{b_{N1}} & \cdots & x^{b_{NN}} 
+        \end{pmatrix}} ^{B'} =
+      \overbrace{
+      \begin{pmatrix}
+        c'_{11}  & \cdots & c'_{1N} \\
+        \vdots & \ddots & \vdots \\
+        c'_{N1} & \cdots & c'_{NN} 
+      \end{pmatrix}}^{C'}
+    \end{equation*}
+  \end{overprint}
+  \begin{overprint}
+    \onslide<2-> \[ c'_{ij} = \sum _k x^{a_{ik} + b_{kj}} \]
+  \end{overprint}
+  \[ c_{ij} = \min _k \set{ a_{ik} + b_{kj} } \]
+  \begin{overprint}
+    \onslide<3-> \[ c_{ij} = \mathrm{first}\pa{c_{ij}} \]
+  \end{overprint}
+\end{frame}
+
+\begin{frame}{Wavelet Tree}
+  \label{frame:wavelettree}
+  \begin{myteo}
+    Sia $S \in\Sigma ^n$. Il Wavelet Tree costruito su $S$ occupa
+    $nH_0(S) + o(n)$ bit e risponde in $\log \abs{\Sigma}$ tempo a:
+    \begin{itemize}
+    \item Ottieni il carattere $S[i]$
+    \item $Rank_c (S,i)$: il numero di occorenze del carattere~ $c\in
+      \Sigma$ nella stringa $S[0:i]$
+    \item $Select _c (S,i)$: la posizione dell'$i$-esima occorrenza
+      di~ $c\in \Sigma$ in~ $S$
+    \end{itemize}
+  \end{myteo}
+
+  \[ \sum _{i=0} ^ {k} L[i] = \sum _{\sigma \in \Sigma} \sigma Rank
+  _\sigma (S,k) \]
 \end{frame}
 
 
